@@ -1,0 +1,12 @@
+Test Description
+==================
+The DFR hardware provides a self-test mechanism to generate an Event on any
+channel of all the Event cards. This test walks an Event through all of the
+Event channels and automatically verifies that each channel is functional.
+
+Test Results
+==================
+All of the Event channels in this DFR are shown below. A '.' indicates a Normal
+state. A '*' indicates the Event channel has been activated. The correct response
+should show an '*' in channel 1, then channel 2, and so on, for every Event
+channel in the DFR. Only one Event channel should be active at a time.

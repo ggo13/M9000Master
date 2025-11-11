@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -e /etc/init.d/m9k-station ]
+then
+  echo Make link for tab command line completion
+  ln -s /lib/init/upstart-job /etc/init.d/m9k-station
+fi
+
+sudo service m9k-station start
+

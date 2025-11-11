@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo service m9k-backup stop
+# sudo rm -rf /home/dfr/m9k/M9kBackup
+# sudo rm -r /data/m9k/log/StationMaster/M9kBackup	
+
+exit 0

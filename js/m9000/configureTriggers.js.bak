@@ -1,0 +1,1995 @@
+var lastSelectedRow = null;
+$(document).ready(function() {
+	isAllMeasurementsEnabled();
+	isAllExportsChecked();
+	isAllPmuChecked();
+	isAllDdrsChecked();
+	isAllDAlarmChecked();
+	hideAssistance();
+	checkForReinit();
+	$('#enableAssist').show();
+	$('#buttonsTop').show();
+	$('#buttonsBottom').show();
+	if (!isDfrAddedOrRemoved) {
+		$('#navMenu').show();
+	}
+	setFocus();
+
+	enableShiftSelectCheckboxes();
+	handleDurationInput();
+	highlightSelectedRows();
+	
+	// Validate the new measurement form
+	$.validator.addMethod("numericOnly", function(value, element) {
+        return this.optional(element) || /^\d+$/.test(value);
+    }, "Please enter only numeric digits (0-9).");
+    
+       $.validator.addMethod("range1to100", function(value, element) {
+        let number = parseInt(value, 10);
+        return this.optional(element) || (!isNaN(number) && number >= 1 && number <= 100);
+    }, "Please enter a number between 1 and 100.");
+    
+    
+    $("#newMeasurementsForm").validate({
+            rules: {
+                newMeasurementsCount: {
+                    required: true,
+                    numericOnly: true,
+                    range1to100: true  // Apply custom rule
+                }
+            },
+            messages: {
+                newMeasurementsCount: {
+                    required: "Please enter the number of measurements.",
+                    numericOnly: "Please enter a valid number.",
+                    range1to100: "Please enter a number between 1 and 100."
+                }
+            },
+        errorPlacement: function(error, element) {
+            error.appendTo("#formErrors"); // All errors go to a single container
+        }
+         });
+	$("#newMeasurementsCount").on("keyup change", function() {
+    	$("#btnAddNewMeasurements").prop("disabled", !$("#newMeasurementsForm").valid());
+    	if ($("#newMeasurementsForm").valid())
+        {
+                $("#btnAddNewMeasurements").css({ opacity: 1, pointerEvents: "auto" });
+        }
+        else
+        {
+                $("#btnAddNewMeasurements").css({ opacity: 0.5, pointerEvents: "none" });
+        }
+	});
+	$('[id$="AddMeasurements"]').click(function(e) {
+		e.preventDefault();
+		$('#newMeasurementsDialog').dialog('close');
+		$.ajax({
+			type: "POST",
+			url: "/M9000Master/triggerChannelsAddMeasurements.action",
+			data: $("#triggerChannels").serialize(),
+			success: function(data, status, request) {
+				// alert("On click event "+data);
+				$('#measurementTable tbody').append(data);
+				enableShiftSelectCheckboxes();
+				handleDurationInput();
+				highlightSelectedRows();
+				var form = document.forms["triggerChannels"];
+				if (form.elements['enableAssist'].checked) {
+					showAssistance();
+				}
+				else {
+					hideAssistance();
+				}
+				$('#AddMeasurement').focus();
+
+			},
+			error: function(data, status, request) {
+				alert("Issues!" + data);
+			}
+		});
+	});
+
+	$('#triggerChannels').submit(function(e) {
+		$("#triggerChannels :disabled").removeAttr('disabled');
+	});
+	$("body").css("cursor", "default");
+	$(".traverseMenu").css('cursor', 'pointer');
+	if (userRole != 'admin') {
+		$("#triggerChannels :input").prop("disabled", true);
+	}
+
+	$("table.configureTable tr[id^=tr_]").bind("paste", function(e) {
+		var clipboardText = e.originalEvent.clipboardData.getData("text/plain");;
+		if (clipboardText.split(/\r\n|\r|\n/).length > 1) {
+			e.stopPropagation();
+			e.preventDefault();
+			handlePasteEvent(e);
+		}
+	});
+
+	$("#checkUncheck").click(function() {
+		var checkBoxes = $("input[type='checkbox'][name$='exportStatus']:not(:disabled)");
+		checkBoxes.prop("checked", this.checked).trigger("change");
+	});
+
+//	Check or uncheck all checkboxes
+	$("#ddrCheckUncheck").click(function() {
+		var checkBoxes = $("input[type='checkbox'][name$='ddrStatus']:not(:disabled)");
+		checkBoxes.prop("checked", this.checked);
+	});
+
+	$("#dAlarmCheckUncheck").click(function() {
+		var checkBoxes = $("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled)");
+		checkBoxes.prop("checked", this.checked);
+	});
+
+	$('input[type="checkbox"][name$="exportStatus"]:not(:disabled)').on('change', function() {
+		changeExportState(this, this.checked)
+	});
+    var fewqPmuStatusChkBoxes = $('[id^="lst"][id$="freqPmuStatus"]');
+    fewqPmuStatusChkBoxes.click(function()
+    {
+            $("*").css("cursor", "progress");
+            if (this.checked)
+            {
+                    fewqPmuStatusChkBoxes.not(this).attr("checked", !this.checked);
+                    fewqPmuStatusChkBoxes.not(this).attr("disabled", this.checked);
+            }
+            else
+            {
+                    fewqPmuStatusChkBoxes.each(function() {
+                            var obj = $(this).attr("id");
+                            var objPrefix = obj.substring(0, obj.indexOf('.')+1);
+            //              console.log("object" + objPrefix+"type");
+            //              console.log($(jqSelector(objPrefix+"type")).val()+ " ? "+($(jqSelector(objPrefix+"type")).val() != 'Frequency'));
+                            if ($(jqSelector(objPrefix+"type")).val() != 'Frequency')
+                            {
+                                    $(jqSelector(objPrefix+"freqPmuStatus")).attr("disabled", true);
+                            }
+                            else
+                            {
+                                    $(jqSelector(objPrefix+"freqPmuStatus")).attr("disabled", false);
+                            }
+                    });
+            }
+            $("*").css("cursor", "default");
+    });	
+
+  $.subscribe('cancelMeasurementsTopic', function(event, data) {
+		event.preventDefault();
+		console.log("Cancel New Measurements dialog ");
+		$('#newMeasurementsDialog').dialog('close');
+		$('#btnBottomNext').focus();
+	});
+
+    $.subscribe('newMeasurementsTopic', function(event, data) {
+		console.log("New Measurements success topic here!!",data);
+		var newContent = $('#dummyTarget').html();
+
+		// Append the content to the table body
+		$('#measurementBody').append(newContent);
+
+		// Optionally, remove the dummy target after appending
+		$('#dummyTarget').empty();
+
+			enableShiftSelectCheckboxes();
+				handleDurationInput();
+				highlightSelectedRows();
+				updateNewAlgorithms();
+				console.log("Total measurements count: "+(($('#measurementBody tr').length)-1));
+				$('#totalMeasurementsCount').val(($('#measurementBody tr').length)-1);
+				totalMeasurementsCount = ($('#measurementBody tr').length)-1;
+				var form = document.forms["triggerChannels"];
+				if (form.elements['enableAssist'].checked) {
+					showAssistance();
+				}
+				else {
+					hideAssistance();
+				}
+			//$('#newMeasurementsDialog').dialog('close');
+				$('#btnAddMeasurement').focus();
+			var target = $('#btnAddMeasurement');
+			$("#newMeasurementsDialog").dialog("option", "position", {
+				my: "center bottom",
+				at: "center bottom-10",
+				of: target
+			});
+			$("#successMsg").text("Successfully added "+$("#newMeasurementsCount").val() + " " + $("#newMeasurementsType").val()+" measurement(s)");	
+		$("#successMsg")	
+                .css("background-color", "yellow") // Initial highlight color
+                .animate({ backgroundColor: "#9999CC" }, 5000);
+
+			$("#newMeasurementsDialog").focus();
+				//$('#btnAddMeasurement').focus();
+		});
+	$.subscribe('newMeasurementsErrorTopic', function(event, data) {
+			$('#newMeasurementsDialog').dialog('close');
+			$('#userMsgError').val(data);
+			$('#userMsgError').focus();
+		});
+		
+		// Show busy cursor when form is being processed
+$.subscribe('showBusyCursor', function() {
+    $('body').css('cursor', 'wait');  // Set busy cursor
+});
+
+// Hide busy cursor when processing is done (success or error)
+$.subscribe('hideBusyCursor', function() {
+    $('body').css('cursor', 'auto');  // Reset cursor back to normal
+});
+
+$('#btnReinit').click(function() {
+                if (confirm('Are you sure you want to reinitialize all measurement ids?')) {
+	                $('#booReorderMeasurementIds').val(true);
+	                $("#triggerChannels :disabled").removeAttr('disabled');
+	                // Submit the form
+	                $('#triggerChannels').submit();
+	                }
+            });
+            
+	$('#deleteSelected').click(function() {
+		if (confirm("Virtual Measurements and Fault location logic might be affected by these deleted measurements. Are you sure you want to delete selected measurements?")) {
+			// Collect data for all selected entities
+			let selectedMeasurementsToDelete = [];
+
+			$('input[type="checkbox"][id^="globalSelect_"]:checked').each(function() {
+				let row = $(this).closest('tr'); // Get the parent row
+				console.log("row " + row);
+				let id = row.find('label[id$="id"]').text();
+				console.log("id " + id);
+				let type = row.find('[id$="type"]').val();
+				let chassis = row.find('[id$="chassis"]').val();
+				let inputChannelName = row.find('[id$="inputChannelName"]').val();
+				let measurementName = id + ' - ' + inputChannelName;
+				// Store the entity details in an object
+				let entity = {
+					id: id,
+					type: type,
+					chassis: chassis,
+					measurementName: measurementName
+				};
+				selectedMeasurementsToDelete.push(entity); // Add entity object to the array
+			});
+
+			if (selectedMeasurementsToDelete.length === 0) {
+				alert("Please select at least one entity to delete.");
+				return;
+			}
+
+			console.log("Selected entities to delete:", selectedMeasurementsToDelete); // For debugging
+
+			// Perform an AJAX call to send selected entities data to the delete action
+			$.ajax({
+				url: 'deleteSelectedMeasurementsAction', // Replace with the URL for your delete action
+				type: 'POST',
+				data: JSON.stringify({ selectedMeasurementsToDelete: selectedMeasurementsToDelete }),
+				contentType: 'application/json',
+				success: function(response) {
+					// On successful deletion, remove deleted rows from the table
+					$('input[type="checkbox"][id^="globalSelect_"]:checked').closest('tr').remove();
+				},
+				error: function(xhr, status, error) {
+					console.error("Error deleting entities:", error);
+					alert("An error occurred while deleting the selected entities.");
+				}
+			});
+		}
+	});
+     
+	$(window).on("scroll resize", function() {
+		if ($("#myDialog").data("ui-dialog")) {
+		if ($("#newMeasurementsDialog").dialog("isOpen")) {
+			var target = $('#btnAddMeasurement');
+			$("#newMeasurementsDialog").dialog("option", "position", {
+				my: "center bottom",
+				at: "center bottom-10",
+				of: target
+			});
+			console.log("Focussing on dialog now");
+			$("#newMeasurementsDialog").focus();
+		}
+		else {
+			console.log("Dialog is not open");
+		}
+		}
+	});
+  
+        
+});
+
+//$(function() {
+//$('#measurementTable tr').not(':first').hover(function() {
+//  $(this).css('background-color', '#FFFF99');
+//  $(this).contents('td').css({'border': '1px solid #bdbdeb', 'border-left': 'none', 'border-right': 'none'});
+//  $(this).contents('td:first').css('border-left', '1px solid #bdbdeb');
+//  $(this).contents('td:last').css('border-right', '1px solid #bdbdeb');
+//},
+//function() {
+//  $(this).css('background-color', '#FFFFFF');
+//  $(this).contents('td').css('border', 'none');
+//});
+//});
+
+
+function enableShiftSelectCheckboxes()
+{
+			$('input:checkbox[id^="globalSelect"]').shiftSelectable();
+			$('input:checkbox[id$="status"]').shiftSelectable();
+			$('input:checkbox[id$="pmuStatus"]').shiftSelectable();
+			$('input:checkbox[id$="freqPmuStatus"]').shiftSelectable();
+			$('input:checkbox[id$="exportStatus"]').shiftSelectable();
+			$('input:checkbox[id$="ddrStatus"]').shiftSelectable();
+			$('input:checkbox[id$="disturbanceAlarm"]').shiftSelectable();
+			$('input:checkbox[id$="freqPmuStatus"]').change(function(){
+				if ($(this).is(':enabled')) {
+					$(this).attr("disabled", false);
+				}
+				});
+
+}
+
+function handleDurationInput()
+{
+	$("[id$='duration']").on("input", function() {
+		var form = document.forms["triggerChannels"];
+	        var idStr = $(this).attr('id');
+			console.log("ROC duration "+this.value+" id: "+idStr);
+	        var rocNegLimit = idStr.substring(0,idStr.indexOf(".")+1)+"tripRocNeg";
+	        var rocPosLimit = idStr.substring(0,idStr.indexOf(".")+1)+"tripRocPos";
+	        var disableTripRoc = idStr.substring(0,idStr.indexOf(".")+1)+"disableTripRoc";
+	        console.log("disableTripRoc "+disableTripRoc+" val "+form.elements[disableTripRoc].value);
+	        if ($.isNumeric(this.value) && parseInt(this.value) > 0)
+	        {
+	       	 	$(jqSelector(rocNegLimit)).prop("disabled",false);
+	       	 	$(jqSelector(rocPosLimit)).prop("disabled",false);
+	       	 	form.elements[disableTripRoc].value=false;
+			}
+	        else
+	        {
+	       	 	$(jqSelector(rocNegLimit)).prop("disabled",true);
+	       	 	$(jqSelector(rocPosLimit)).prop("disabled",true);
+	       	 	form.elements[disableTripRoc].value=true;
+	        }
+
+	 	});
+
+}
+
+function highlightSelectedRows()
+{
+	$("#measurementTable tr:not(#assistRowDiv)").click(function() {
+		$(this).find('td').css({'background-color': '#4747a6','color':'cyan'});
+	    if (lastSelectedRow != null && !$(this).is(lastSelectedRow))
+	    {
+	             lastSelectedRow.find('td').css({'background-color':'#EEEEFF','color':'black'});
+	    }
+	    lastSelectedRow = $(this);
+
+	//	$(this).siblings().find('td').css({'background-color':'#EEEEFF','color':'black'});
+	});
+
+}
+
+	function populate_default_trigger_name()
+	{
+		if(confirm("This will populate descriptions with default values . Do you wish to continue?")){
+			var iIndex = 0;
+			var form = document.forms["triggerChannels"];
+			var sourceValue,sourceName,secondIndex,sourceTriggerName,objName,objId,newName,index,prefix;
+			var objPrefix = 'lstTriggerChannels['+ iIndex +'].';
+			var obj= objPrefix+"channel";
+			var objName = objPrefix+"name";
+			console.log("First DEBUG-M: obj "+form.elements[obj].value);
+			while (form.elements[obj] != null)
+			{
+				 objName = "globalSelect_"+iIndex;
+                           if (form.elements[objName].checked)
+                           {
+
+                               sourceValue = form.elements[obj].value;
+                               console.log("DEBUG-M: source value  "+sourceValue);
+                               index = sourceValue.indexOf("ANALOG")-1;
+                               prefix = 'A';
+                               if (index < 0)
+                               {
+                                       index = sourceValue.indexOf("LINEGROUP")-1;
+                                       prefix = '';
+                               }
+                               sourceName = sourceValue.substring(0, index);
+                               console.log("sourceName: "+sourceName);
+                               secondIndex = sourceValue.indexOf("-", index+1);
+                               sourceTriggerName = sourceValue.substring(secondIndex+1);
+                               console.log("DEBUG-M: sourceTriggerName "+sourceTriggerName);
+                               objName = objPrefix+"name";
+                               objId = objPrefix+"type";
+                               // newName = prefix+sourceName+" - "+sourceTriggerName+" - "+form.elements[objId].value;
+                               newName = sourceTriggerName+" - "+form.elements[objId].value;
+                               // if (index < 0)
+                               // {
+                       //              index = sourceValue.indexOf("LINEGROUP")-1;
+                       //              prefix = '';
+                       //      }
+                       //      if (sourceName == sourceTriggerName)
+                       //      {
+                       //              newName = prefix+sourceName+" - "+form.elements[objId].value;
+                       //      }
+                               console.log("DEBUG-M: new name "+newName);
+                               form.elements[objName].value= newName;
+                          }
+			iIndex = iIndex + 1;
+			objPrefix = 'lstTriggerChannels['+ iIndex +'].';
+			objName = objPrefix+"name";
+			obj=objPrefix+"channel";
+			}
+		}
+	}
+	function hideAssistance()
+	{
+		$('#assistRowDiv').hide();
+		$('#globalSelectDiv').hide();
+		$('[id^="td_globalSelect_"]').hide();
+        $('[id^="globalSelect_"]').hide();
+
+/*		 // $('#measurementTable tr td:nth-child(1)').hide();
+		var form = document.forms["triggerChannels"];
+		var i = 0;
+		var objPrefix = 'lstTriggerChannels['+ i +'].';
+		var objName = objPrefix+"channel";
+
+		while (form.elements[objName] != null)
+		{
+		   objName = "globalSelect_"+i;
+		   $('#td_'+objName).hide();
+
+		   $('#'+objName).hide();
+		   i++;
+		   objPrefix = 'lstTriggerChannels['+ i +'].';
+		   objName = objPrefix+"channel";
+		}
+*/
+	}
+	function showAssistance()
+	{
+		$('#assistRowDiv').show();
+		$('#globalSelectDiv').show();
+        $('[id^="td_globalSelect_"]').show();
+        $('[id^="globalSelect_"]').show();
+		
+/* 		// $('#measurementTable tr td:nth-child(1)').show();
+		var form = document.forms["triggerChannels"];
+		var i = 0;
+		var objPrefix = 'lstTriggerChannels['+ i +'].';
+		var objName = objPrefix+"channel";
+
+		// while (form.elements[objName] != null)
+		while (i < totalMeasurementsCount)
+		{
+		   objName = "globalSelect_"+i;
+		   $('#td_'+objName).show();
+		   $('#'+objName).show();
+		   i++;
+		   objPrefix = 'lstTriggerChannels['+ i +'].';
+		   objName = objPrefix+"channel";
+		}
+*/
+	}
+	function show_triggerType(obj) {
+		obj = obj.name.substring(0, obj.name.indexOf('.'));
+		name = "Trigger_Type_"+obj;
+		$.publish(name);
+
+	}
+
+	function set_trigger(obj, value) {
+		var form = document.forms["triggerChannels"];
+		var objPrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+		var objTripOver = objPrefix+"tripIfOver";
+		var objTripUnder = objPrefix+"tripIfUnder";
+		var objName;
+		if (value == 'Never')
+		{
+			objName = objPrefix+"triggerStatus";
+			form.elements[objName].value = false;
+
+			objName = objPrefix+"chatterLimit";
+			form.elements[objName].disabled = true;
+			form.elements[objName].value='';
+			objName = objPrefix+"chatterRate";
+			form.elements[objName].disabled = true;
+			form.elements[objName].value='';
+			objName = objPrefix+"triggerLimit";
+			form.elements[objName].disabled = true;
+			form.elements[objName].value='';
+			objName = objPrefix+"disableTripOver";
+			form.elements[objName].value=true;
+			objName = objPrefix+"disableTripUnder";
+			form.elements[objName].value=true;
+			form.elements[objTripOver].disabled = true;
+			form.elements[objTripUnder].disabled = true;
+			objName = objPrefix+"duration";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"tripRocNeg";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"tripRocPos";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"disturbanceAlarm";
+			form.elements[objName].disabled = true;
+
+		}
+		else
+		{
+			if (value == 'Over')
+			{
+				form.elements[objTripOver].disabled = false;
+				form.elements[objTripUnder].disabled = true;
+				form.elements[objTripUnder].value = '';
+				objName = objPrefix+"disableTripOver";
+				form.elements[objName].value=false;
+				objName = objPrefix+"disableTripUnder";
+				form.elements[objName].value=true;
+
+			}
+			else if (value == 'Under')
+			{
+				form.elements[objTripOver].disabled = true;
+				form.elements[objTripOver].value = '';
+				form.elements[objTripUnder].disabled = false;
+				objName = objPrefix+"disableTripOver";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disableTripUnder";
+				form.elements[objName].value=false;
+
+			}
+			else if (value == 'Both')
+			{
+				form.elements[objTripOver].disabled = false;
+				form.elements[objTripUnder].disabled = false;
+				objName = objPrefix+"disableTripOver";
+				form.elements[objName].value=false;
+				objName = objPrefix+"disableTripUnder";
+				form.elements[objName].value=false;
+
+			}
+			else if (value == 'ROC')
+			{
+				form.elements[objTripOver].disabled = true;
+				form.elements[objTripUnder].disabled = true;
+				objName = objPrefix+"disableTripOver";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disableTripUnder";
+				form.elements[objName].value=true;
+			}
+			var duration = form.elements[objPrefix+"duration"].value;
+			form.elements[objPrefix+"duration"].disabled = false;
+			objName = objPrefix+"disableDuration";
+			form.elements[objName].value=false;
+			console.log("ROC duration value "+duration);
+			if (duration > 0)
+			{
+				form.elements[objPrefix+"tripRocNeg"].disabled = false;
+				form.elements[objPrefix+"tripRocPos"].disabled = false;
+				objName = objPrefix+"disableTripRoc";
+				form.elements[objName].value=false;
+			}
+			else
+			{
+				form.elements[objPrefix+"tripRocNeg"].disabled = true;
+				form.elements[objPrefix+"tripRocPos"].disabled = true;
+				objName = objPrefix+"disableTripRoc";
+				form.elements[objName].value=true;
+			}
+
+
+				objName = objPrefix+"triggerStatus";
+				form.elements[objName].value = true;
+
+			objName = objPrefix+"chatterLimit";
+			form.elements[objName].disabled = false;
+			form.elements[objName].value=chatterLimit
+			objName = objPrefix+"chatterRate";
+			form.elements[objName].disabled = false;
+			form.elements[objName].value=chatterRate
+			objName = objPrefix+"triggerLimit";
+			form.elements[objName].disabled = false;
+			form.elements[objName].value=triggerLimit
+			objName = objPrefix+"disturbanceAlarm";
+			form.elements[objName].disabled = false;
+
+		}
+	}
+
+
+	function populate_trigger_name(obj, sourceValue)
+	{
+		var form = document.forms["triggerChannels"];
+		var objPrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+		var index = sourceValue.indexOf("ANALOG")-1;
+		var prefix = 'A';
+		if (index < 0)
+		{
+			index = sourceValue.indexOf("LINEGROUP")-1;
+			prefix = '';
+		}
+		var sourceName = sourceValue.substring(0, index);
+		var secondIndex = sourceValue.indexOf("-", index+1);
+		var sourceTriggerName = sourceValue.substring(secondIndex+1);
+		var objName = objPrefix+"name";
+		var objId = objPrefix+"type";
+		var newName = prefix+sourceName+" - "+sourceTriggerName+" - "+form.elements[objId].value;
+		if (sourceName == sourceTriggerName)
+		{
+			newName = prefix+sourceName+" - "+form.elements[objId].value;
+		}
+		form.elements[objName].value= newName;
+	}
+
+	function update_trigger_name(obj, value)
+	{
+		var form = document.forms["triggerChannels"];
+		var objPrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+
+		var objName = objPrefix+"name";
+		var oldVal = form.elements[objName].value
+		var index = oldVal.lastIndexOf("-");
+		var sourceTriggerName = oldVal.substring(0, index).trim();
+
+		var newName = sourceTriggerName+" - "+value;
+		form.elements[objName].value= newName;
+	}
+
+	function update_access(elementName, value) {
+		//dojo.event.topic.publish("show_harmonic");
+		var objPrefix = elementName.substring(0, elementName.indexOf('.')+1);
+		var form = document.forms["triggerChannels"];
+
+			if (value == 'Delete')
+			{
+				disable(objPrefix);
+				form.elements[objPrefix+"status"].checked = false;
+				form.elements[objPrefix+"status"].disabled = true;
+				return;
+			}
+			if (form.elements[objPrefix+"status"].disabled == true)
+			{
+				form.elements[objPrefix+"status"].checked = true;
+				form.elements[objPrefix+"status"].disabled = false;
+				enable(objPrefix);
+			}
+
+			if (value == 'Magnitude' || value == 'Harmonic')
+			{
+				form.elements[objPrefix+"harmonic"].disabled = false;
+				form.elements[objPrefix+"disableHarmonic"].value = false;
+			}
+			else
+			{
+				form.elements[objPrefix+"harmonic"].disabled = true;
+				form.elements[objPrefix+"disableHarmonic"].value = true;
+			}
+			if (value == 'Frequency')
+			{
+				if (form.elements[objPrefix+"pmuStatus"].checked == true)
+				{
+					if ($('[id^="lst"][id$="freqPmuStatus"]:checked').length == 0)
+                    {
+                            form.elements[objPrefix+"freqPmuStatus"].disabled = false;
+                    }
+                    else
+                    {
+                            form.elements[objPrefix+"freqPmuStatus"].disabled = true;
+                    }
+				}
+			}
+			else
+			{
+				form.elements[objPrefix+"freqPmuStatus"].checked = false;
+				form.elements[objPrefix+"freqPmuStatus"].disabled = true;
+			}
+
+			if (value == 'Rms')
+			{
+				form.elements[objPrefix+"exportStatus"].disabled = true;
+				form.elements[objPrefix+"exportStatus"].checked= true;
+
+				form.elements[objPrefix+"ddrStatus"].disabled = true;
+				form.elements[objPrefix+"ddrStatus"].checked= true;
+			}
+			else
+			{
+				form.elements[objPrefix+"exportStatus"].disabled = false;
+				form.elements[objPrefix+"exportStatus"].checked = false;
+
+				form.elements[objPrefix+"ddrStatus"].disabled = true;
+				form.elements[objPrefix+"ddrStatus"].checked= false;
+			}
+
+			if (value == 'Phasor')
+			{
+				objName = objPrefix+"start";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value = 'Never';
+				var objName = objPrefix+"duration";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"tripRocNeg";
+				form.elements[objName].disabled = true;
+				objName = objPrefix+"tripRocPos";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"triggerStatus";
+				form.elements[objName].value = false;
+
+				objName = objPrefix+"chatterLimit";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"chatterRate";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"triggerLimit";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"tripIfOver";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"tripIfUnder";
+				form.elements[objName].disabled = true;
+				form.elements[objName].value='';
+				objName = objPrefix+"disableTripOver";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disableTripUnder";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disableTripRoc";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disableDuration";
+				form.elements[objName].value=true;
+				objName = objPrefix+"disturbanceAlarm";
+				form.elements[objName].disabled = true;
+			}
+			else
+			{
+				objName = objPrefix+"start";
+				form.elements[objName].disabled = false;
+			}
+		}
+	function updateActiveStatus(value) {
+		if (value==true)
+		{
+			checkAllActiveStatus();
+		}
+		else
+		{
+			uncheckAllActiveStatus();
+		}
+	}
+
+	function checkAllActiveStatus() {
+		var form = document.forms["triggerChannels"];
+		var i = 0;
+		var objPrefix = 'lstTriggerChannels['+ i +'].';
+		var objName = objPrefix+"status";
+		while (form.elements[objName] != null)
+		{
+			if (form.elements[objName].disabled == false && form.elements[objName].checked == false)
+			{
+				form.elements[objName].checked=true;
+				enable(objPrefix);
+			}
+			i = i + 1;
+			objPrefix = 'lstTriggerChannels['+ i +'].';
+			objName = objPrefix+"status";
+		}
+	}
+	function uncheckAllActiveStatus() {
+		var form = document.forms["triggerChannels"];
+		var i = 0;
+		var objPrefix = 'lstTriggerChannels['+ i +'].';
+		var objName = objPrefix+"status";
+		while (form.elements[objName] != null)
+		{
+			if (form.elements[objName].disabled == false && form.elements[objName].checked == true)
+			{
+				form.elements[objName].checked=false;
+				disable(objPrefix);
+			}
+			i = i + 1;
+			objPrefix = 'lstTriggerChannels['+ i +'].';
+			objName = objPrefix+"status";
+		}
+	}
+
+	function isAllMeasurementsEnabled() {
+		var form = document.forms["triggerChannels"];
+		var i = 0;
+		var objPrefix = 'lstTriggerChannels['+ i +'].';
+		var objName = objPrefix+"status";
+
+		if (form.elements[objName] != null)
+		{
+			form.elements["activeCheckUncheck"].checked=true;
+		}
+		while (form.elements[objName] != null)
+		{
+			if (form.elements[objName].checked == false)
+			{
+				form.elements["activeCheckUncheck"].checked=false;
+				break;
+			}
+			i = i + 1;
+			objPrefix = 'lstTriggerChannels['+ i +'].';
+			objName = objPrefix+"status";
+		}
+
+	}
+		function changeState(obj, value) {
+			var objNamePrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+			if (value==true)
+			{
+				enable(objNamePrefix);
+			}
+			else
+			{
+				disable(objNamePrefix);
+			}
+			isAllMeasurementsEnabled();
+		}
+		function enableAllBeforeSubmit()
+		{
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"name";
+
+			while (form.elements[objName] != null)
+			{
+				enable(objPrefix);
+				objName = objPrefix+"exportStatus";
+				form.elements[objName].disabled = false;
+				objName = objPrefix+"ddrStatus";
+				form.elements[objName].disabled = false;
+				objName = objPrefix+"disturbanceAlarm";
+				form.elements[objName].disabled = false;
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"name";
+			}
+		}
+		function disable(objPrefix) {
+			var objName = objPrefix+"name";
+			var form = document.forms["triggerChannels"];
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"channel";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"phase";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"type";
+			if (form.elements[objName].value != 'Delete')
+			{
+				form.elements[objName].disabled = true;
+			}
+			objName = objPrefix+"start";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"duration";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"tripIfOver";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"tripIfUnder";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"disableTripOver";
+			form.elements[objName].value=true;
+			objName = objPrefix+"disableTripUnder";
+			form.elements[objName].value=true;
+			objName = objPrefix+"disableTripRoc";
+			form.elements[objName].value=true;
+			objName = objPrefix+"disableDuration";
+			form.elements[objName].value=true;
+
+			objName = objPrefix+"triggerStatus";
+			form.elements[objName].value = false;
+
+			objName = objPrefix+"chatterLimit";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"chatterRate";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"triggerLimit";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"harmonic";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"average";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"pmuStatus";
+			form.elements[objName].disabled = true;
+			var index = objPrefix.substring(objPrefix.indexOf('[')+1, objPrefix.indexOf(']'));
+			objName = objPrefix+"freqPmuStatus";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"exportStatus";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"ddrStatus";
+			form.elements[objName].disabled = true;
+			objName = objPrefix+"disturbanceAlarm";
+			form.elements[objName].disabled = true;
+		}
+
+		function enable(objPrefix) {
+			var objName = objPrefix+"name";
+			var form = document.forms["triggerChannels"];
+			form.elements[objName].disabled = false;
+			var objChannelName = objPrefix+"channel";
+			form.elements[objChannelName].disabled = false;
+			var value = form.elements[objChannelName].value;
+			var type = value.substring(value.indexOf('-')+1);
+			objName = objPrefix+"phase";
+			form.elements[objName].disabled = false;
+			var objTypeName = objPrefix+"type";
+			form.elements[objTypeName].disabled = false;
+			objName = objPrefix+"start";
+			form.elements[objName].disabled = false;
+			if (form.elements[objName].value != 'Never' )
+			{
+				if (form.elements[objName].value == 'Over' || form.elements[objName].value == 'Both')
+				{
+					form.elements[objPrefix+"tripIfOver"].disabled = false;
+					objName = objPrefix+"disableTripOver";
+					form.elements[objName].value=false;
+
+				}
+				if (form.elements[objName].value == 'Under' || form.elements[objName].value == 'Both')
+				{
+					form.elements[objPrefix+"tripIfUnder"].disabled = false;
+					objName = objPrefix+"disableTripUnder";
+					form.elements[objName].value=false;
+
+				}
+
+				// START: 29-July-2015 Enable ROC and duration for all conditions except for never
+				var duration = form.elements[objPrefix+"duration"].value;
+				form.elements[objPrefix+"duration"].disabled = false;
+				objName = objPrefix+"disableDuration";
+				form.elements[objName].value=false;
+
+				if (duration)
+				{
+					if (Number.isInteger(duration) && parseInt(duration) > 0)
+					{
+						form.elements[objPrefix+"tripRocNeg"].disabled = false;
+						form.elements[objPrefix+"tripRocPos"].disabled = false;
+						objName = objPrefix+"disableTripRoc";
+						form.elements[objName].value=true;
+					}
+				}
+
+
+
+//				objName = objPrefix+"duration";
+//				form.elements[objName].disabled = false;
+//				objName = objPrefix+"tripIfGt";
+//				form.elements[objName].disabled = false;
+				objName = objPrefix+"triggerStatus";
+				form.elements[objName].value = true;
+				objName = objPrefix+"chatterLimit";
+				form.elements[objName].disabled = false;
+				objName = objPrefix+"chatterRate";
+				form.elements[objName].disabled = false;
+				objName = objPrefix+"triggerLimit";
+				form.elements[objName].disabled = false;
+				objName = objPrefix+"disturbanceAlarm";
+				form.elements[objName].disabled = false;
+			}
+			objName = objPrefix+"harmonic";
+			if (form.elements[objTypeName].value == 'Magnitude'  || form.elements[objTypeName].value == 'Harmonic')
+			{
+				form.elements[objName].disabled = false;
+				form.elements[objPrefix+"disableHarmonic"].value = false;
+			}
+			objName = objPrefix+"average";
+			form.elements[objName].disabled = false;
+			objName = objPrefix+"pmuStatus";
+			form.elements[objName].disabled = false;
+			objName = objPrefix+"exportStatus";
+			if (form.elements[objPrefix+"type"].value == 'Rms')
+			{
+				form.elements[objName].disabled = true;
+				form.elements[objName].checked=true;
+
+				form.elements[objPrefix+"ddrStatus"].disabled = true;
+				form.elements[objPrefix+"ddrStatus"].checked=true;
+
+			}
+			else
+			{
+				form.elements[objName].disabled = false;
+				form.elements[objPrefix+"ddrStatus"].disabled = false;
+
+			}
+			
+			isAllExportsChecked();
+			isAllDdrsChecked();
+			isAllDAlarmChecked();
+//			if (form.elements[objName].checked == false)
+//			{
+//				objName = objPrefix+"exportStatus";
+//				form.elements[objName].disabled = false;
+//				if (form.elements[objName].checked == true)
+//				{
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = false;
+//				}
+//
+//			}
+//			else
+			if (form.elements[objName].checked == true)
+			{
+				var index = objPrefix.substring(objPrefix.indexOf('[')+1, objPrefix.indexOf(']'));
+				if (form.elements[objPrefix+"type"].value == 'Frequency')
+				{
+					form.elements[objPrefix+"freqPmuStatus"].disabled = false;
+				}
+				else
+				{
+					form.elements[objPrefix+"freqPmuStatus"].disabled = true;
+				}
+			}
+
+		}
+
+		function submitForm(sourceValue)
+		{
+			document.getElementById("checkBrowserClicks").value="false";
+			// START: 14-Sept-2020 - Release 1.0.9.3 uses jquery to enable disabled components. 
+			// It didn't work here. Explicitly enabling here
+//			enableAllBeforeSubmit();
+			$("#triggerChannels :disabled").removeAttr('disabled');
+			// END: 14-Sept-2020
+			var booAnalogValue = document.getElementById("booAnalog").value;
+			var booDigitalValue = document.getElementById("booDigital").value;
+			document.forms["triggerChannels"].booAnalog.value=booAnalogValue;
+			document.forms["triggerChannels"].booDigital.value=booDigitalValue;
+			document.getElementById("sourceTab").value=sourceValue;
+			document.forms["triggerChannels"].sourceTab.value=sourceValue;
+			document.getElementById("originTab").value="Measurements";
+			document.forms["triggerChannels"].originTab.value="Measurements";
+			document.forms["triggerChannels"].submit();
+		}
+
+		function updateExportStatus(value) {
+			if (value==true)
+			{
+				checkAllExports();
+			}
+			else
+			{
+				uncheckAllExports();
+			}
+		}
+
+		function checkAllExports() {
+			var form = document.forms["triggerChannels"];
+
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+			while (form.elements[objName] != null)
+			{
+//				if (form.elements[objName].disabled == false && form.elements[objPrefix+"pmuStatus"].checked == false)
+				if (form.elements[objName].disabled == false && form.elements[objPrefix+"exportStatus"].disabled == false)
+				{
+					objName = objPrefix+"exportStatus";
+					form.elements[objName].checked = true;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = false;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+
+		}
+		function uncheckAllExports() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+//				if (form.elements[objName].disabled == false  && form.elements[objPrefix+"pmuStatus"].checked == false)
+				if (form.elements[objName].disabled == false && form.elements[objPrefix+"exportStatus"].disabled == false)
+				{
+					objName = objPrefix+"exportStatus";
+					form.elements[objName].checked = false;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = true;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+		}
+		function isAllExportsChecked() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"exportStatus";
+
+			if (form.elements[objName] != null)
+			{
+				form.elements["checkUncheck"].checked=true;
+			}
+			while (form.elements[objName] != null)
+			{
+				if (form.elements[objName].checked == false)
+				{
+					form.elements["checkUncheck"].checked=false;
+					break;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"exportStatus";
+			}
+
+		}
+		function changeExportState(obj, value) {
+			var form = document.forms["triggerChannels"];
+			var objNamePrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+			var objName = objNamePrefix+"ddrStatus";
+			if (value==true)
+			{
+				form.elements[objName].disabled = false;
+			}
+			else
+			{
+				form.elements[objName].checked = false;
+				form.elements[objName].disabled = true;
+			}
+			
+			objName = objNamePrefix+"disturbanceAlarm";
+			if (value==true && form.elements[objNamePrefix+"start"].value != 'Never')
+			{
+				form.elements[objName].disabled = false;
+			}
+			else
+			{
+				form.elements[objName].checked = false;
+				form.elements[objName].disabled = true;
+			}
+			isAllExportsChecked();
+		}
+
+		function updatePmuStatus(value) {
+			if (value==true)
+			{
+				checkAllPmus();
+			}
+			else
+			{
+				uncheckAllPmus();
+			}
+		}
+
+		function checkAllPmus() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+			while (form.elements[objName] != null)
+			{
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objPrefix+"pmuStatus"].checked = true;
+//					objName = objPrefix+"exportStatus";
+//					form.elements[objName].checked = true;
+//					form.elements[objName].disabled = true;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].value=dataRate;
+//					form.elements[objName].disabled = true;
+					if (form.elements[objPrefix+"type"].value == 'Frequency')
+					{
+					 form.elements[objPrefix+"freqPmuStatus"].disabled = false;
+					}
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+
+		}
+		function uncheckAllPmus() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objPrefix+"pmuStatus"].checked = false;
+//					objName = objPrefix+"exportStatus";
+//					form.elements[objName].disabled = false;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = false;
+					form.elements[objPrefix+"freqPmuStatus"].disabled = true;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+		}
+
+		function isAllPmuChecked() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"pmuStatus";
+
+			if (form.elements[objName] != null)
+			{
+				form.elements["pmuCheckUncheck"].checked=true;
+			}
+			while (form.elements[objName] != null)
+			{
+				if (form.elements[objPrefix+"channel"].disabled == false && form.elements[objName].checked == false)
+				{
+					form.elements["pmuCheckUncheck"].checked=false;
+					break;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"pmuStatus";
+			}
+
+		}
+		function changePmuState(obj, value) {
+			var form = document.forms["triggerChannels"];
+			var objNamePrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+			var index = obj.name.substring(obj.name.indexOf('[')+1, obj.name.indexOf(']'));
+			if (value==true)
+			{
+//				form.elements[objNamePrefix+"exportStatus"].checked=true;
+//				form.elements[objNamePrefix+"exportStatus"].disabled = true;
+//				form.elements[objNamePrefix+"exportRate"].value=<%=pmuDataRate%>;
+//				form.elements[objNamePrefix+"exportRate"].disabled = true;
+				if (form.elements[objNamePrefix+"type"].value == 'Frequency')
+				{
+					form.elements[objNamePrefix+"freqPmuStatus"].disabled = false;
+				}
+			}
+			else
+			{
+//				form.elements[objNamePrefix+"exportStatus"].disabled = false;
+//				form.elements[objNamePrefix+"exportStatus"].checked=false;
+//				form.elements[objNamePrefix+"exportRate"].disabled = true;
+//				form.elements[objNamePrefix+"exportRate"].value='';
+				form.elements[objNamePrefix+"freqPmuStatus"].disabled = true;
+			}
+			isAllPmuChecked();
+		}
+
+		function updateDdrStatus(value) {
+			if (value==true)
+			{
+				checkAllDdrs();
+			}
+			else
+			{
+				uncheckAllDdrs();
+			}
+		}
+
+		function checkAllDdrs() {
+			var form = document.forms["triggerChannels"];
+
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+			while (form.elements[objName] != null)
+			{
+//				if (form.elements[objName].disabled == false && form.elements[objPrefix+"pmuStatus"].checked == false)
+				if (form.elements[objName].disabled == false && form.elements[objPrefix+"ddrStatus"].disabled == false)
+				{
+					objName = objPrefix+"ddrStatus";
+					form.elements[objName].checked = true;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = false;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+
+		}
+		function uncheckAllDdrs() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+//				if (form.elements[objName].disabled == false  && form.elements[objPrefix+"pmuStatus"].checked == false)
+				if (form.elements[objName].disabled == false && form.elements[objPrefix+"ddrStatus"].disabled == false)
+				{
+					objName = objPrefix+"ddrStatus";
+					form.elements[objName].checked = false;
+//					objName = objPrefix+"exportRate";
+//					form.elements[objName].disabled = true;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"channel";
+			}
+		}
+		function isAllDdrsChecked() {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"ddrStatus";
+
+			if (form.elements[objName] != null)
+			{
+				form.elements["ddrCheckUncheck"].checked=true;
+			}
+			while (form.elements[objName] != null)
+			{
+				if (form.elements[objName].checked == false)
+				{
+					form.elements["ddrCheckUncheck"].checked=false;
+					break;
+				}
+				i = i + 1;
+				objPrefix = 'lstTriggerChannels['+ i +'].';
+				objName = objPrefix+"ddrStatus";
+			}
+
+		}
+		function changeDdrState(obj, value) {
+//			var form = document.forms["triggerChannels"];
+//			var objNamePrefix = obj.name.substring(0, obj.name.indexOf('.')+1);
+//			var objName = objNamePrefix+"exportRate";
+//			if (value==true)
+//			{
+//				form.elements[objName].disabled = false;
+//			}
+//			else
+//			{
+//				form.elements[objName].disabled = true;
+//			}
+			isAllDdrsChecked();
+		}
+
+		function confirmationDialog(msg)
+		{
+			var retVal = confirm(msg);
+			// START: 14-Sept-2020 - JQUERY code on the ready takes care of enabling before submit
+//			if (retVal == true)
+//			{
+//				enableAllBeforeSubmit();
+////				document.body.style.cursor='wait';
+//
+//			}
+			// END: 14-Sept-2020
+			return retVal;
+		}
+
+		  function setFocus() {
+			  var form = document.forms["triggerChannels"];
+			  var objName = 'lstTriggerChannels['+ addedIndex +'].name';
+			  if (newAdded == true)
+				{
+				  form.elements[objName].focus();
+				}
+		  }
+
+
+		$.subscribe("addNewMeasurementToTableTopic", function(event,data){
+			alert("Event "+event.innerHTML+ "Data "+data);
+			if(data == null)
+			{
+				return;
+			}
+			var startIndex = data.innerHTML.indexOf("<tr");
+			var lastIndex = data.innerHTML.lastIndexOf("</tr>");
+			$('#addMeasurement').focus();
+			var newRow=data.innerHTML.substring(startIndex,lastIndex);
+			alert("New row "+newRow);
+			$('#measurementTable tbody').append(newRow);
+//			$(data).appendTo(measurementTable);
+			// var objName = 'globalSelect_'+ "<%=addedIndex%>";
+			var form = document.forms["triggerChannels"];
+			if (form.elements['enableAssist'].checked)
+			{
+				showAssistance();
+			}
+			else
+			{
+				hideAssistance();
+			}
+			$('#addMeasurement').focus();
+		});
+
+		function updateGlobalName(value){
+		var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+			   	objName = objPrefix+"name";
+			   	if (form.elements[objName].disabled == false)
+				{
+			   		form.elements[objName].value=value;
+			   	}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+function updateGlobalChannel(srcObj){
+                        var value = srcObj.value;
+                var index = srcObj.selectedIndex;
+                        var i = 0;
+                        var form = document.forms["triggerChannels"];
+                        var i = 0;
+                        var objPrefix = 'lstTriggerChannels['+ i +'].';
+                        var objName = objPrefix+"channel";
+                        console.log("Selected index: "+index);
+                        while (form.elements[objName] != null)
+                        {
+                           objName = "globalSelect_"+i;
+                           if (form.elements[objName].checked)
+                           {
+                                objName = objPrefix+"channel";
+                                if (form.elements[objName].disabled == false)
+                                {
+                                        form.elements[objName].value=value;
+                                        //show_triggerType(form.elements[objName]);
+                                        populate_trigger_name(form.elements[objName], value);
+                                        $.publish("reloadTriggerType_"+i);
+                                }
+                           }
+                           i++;
+                           objPrefix = 'lstTriggerChannels['+ i +'].';
+                           objName = objPrefix+"channel";
+                           index++;
+                           if (index >= lstSrcChannels.length)
+                                {
+                                        index = 0;
+                                }
+                                value =lstSrcChannels[index];
+                        console.log("Value from the list: "+value+" index value "+index);
+                        }
+                }
+
+		function updateGlobalChannelUnused(srcObj){
+			var value = srcObj.value;
+		var index = srcObj.selectedIndex;
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"channel";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+					//show_triggerType(form.elements[objName]);
+					$.publish("reloadTriggerType_"+i);
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+
+		function updateGlobalAlgorithms(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"type";
+				if (form.elements[objName].disabled == false)
+				{
+					var oldVal = form.elements[objName].value;
+					form.elements[objName].value=value;
+					if (form.elements[objName].value == null || form.elements[objName].value == '')
+					{
+						form.elements[objName].value = oldVal;
+					}
+					else
+					{
+						update_access(form.elements[objName].name, value);
+						update_trigger_name(form.elements[objName], value);
+					}
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+
+		function updateTriggersStart(value){
+		var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"start";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+					set_trigger(form.elements[objName], value);
+
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateTriggersUpperLimit(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"tripIfOver";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateAverage(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"average";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateHarmonic(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"harmonic";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+
+		function updateTriggersLowerLimit(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"tripIfUnder";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateChatterLimit(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"chatterLimit";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateChatterRate(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"chatterRate";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateTriggersLimit(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"triggerLimit";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateExportRate(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"exportRate";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateDuration(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"duration";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateTripRocNeg(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"tripRocNeg";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+		function updateTripRocPos(value){
+			var i = 0;
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   if (form.elements[objName].checked)
+			   {
+				objName = objPrefix+"tripRocPos";
+				if (form.elements[objName].disabled == false)
+				{
+					form.elements[objName].value=value;
+				}
+			   }
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+
+
+		function updateAssistance(value) {
+			if (value==true)
+			{
+				showAssistance();
+			}
+			else
+			{
+				hideAssistance();
+			}
+		}
+
+		function selectAllToEdit(value) {
+			var form = document.forms["triggerChannels"];
+			var i = 0;
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+			while (form.elements[objName] != null)
+			{
+			   objName = "globalSelect_"+i;
+			   form.elements[objName].checked = value;
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+		}
+		
+		function updateDAlarmStatus(value) {
+			if (value==true)
+			{
+				checkAllDAlarms();
+			}
+			else
+			{
+				uncheckAllDAlarms();
+			}
+		}
+		
+function isAllDAlarmChecked() {
+	var form = document.forms["triggerChannels"];
+	console.log("Checked ddrchk boxes: " + $("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled):checked").length);
+	console.log("Total ddrAlarms:" + $("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled)").length);
+
+	if ($("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled)").length > 0 
+		&& ($("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled):checked").length == $("input[type='checkbox'][name$='disturbanceAlarm']:not(:disabled)").length)) {
+		form.elements["dAlarmCheckUncheck"].checked = true;
+	}
+	else {
+		form.elements["dAlarmCheckUncheck"].checked = false;
+	}
+
+}
+		
+function checkAllDAlarms() {
+/*	var form = document.forms["triggerChannels"];
+	var i = 0;
+	var objPrefix = 'lstTriggerChannels[' + i + '].';
+	var objName = objPrefix + "channel";
+*///	while (form.elements[objName] != null) {
+		//				if (form.elements[objName].disabled == false && form.elements[objPrefix+"pmuStatus"].checked == false)
+		$("#measurementTable tr[id^='tr_']").each(function() {
+			if ($(this).attr("disabled") == "false" && $(this).find("[id$='start']").val() != 'Never')
+			{
+				 $(this).find("[id$='disturbanceAlarm']").attr("checked", true);
+			}
+		});
+			
+/*		if (form.elements[objName].disabled == false && form.elements[objPrefix + "start"].value != 'Never') {
+			objName = objPrefix + "disturbanceAlarm";
+			form.elements[objName].checked = true;
+			//					objName = objPrefix+"exportRate";
+			//					form.elements[objName].disabled = false;
+		}
+		i = i + 1;
+		objPrefix = 'lstTriggerChannels[' + i + '].';
+		objName = objPrefix + "channel";
+*///	}
+
+}
+function uncheckAllDAlarms() {
+	var form = document.forms["triggerChannels"];
+	var i = 0;
+	var objPrefix = 'lstTriggerChannels[' + i + '].';
+	var objName = objPrefix + "channel";
+
+	while (form.elements[objName] != null) {
+		//				if (form.elements[objName].disabled == false  && form.elements[objPrefix+"pmuStatus"].checked == false)
+		if (form.elements[objName].disabled == false) {
+			objName = objPrefix + "disturbanceAlarm";
+			form.elements[objName].checked = false;
+			//					objName = objPrefix+"exportRate";
+			//					form.elements[objName].disabled = true;
+		}
+		i = i + 1;
+		objPrefix = 'lstTriggerChannels[' + i + '].';
+		objName = objPrefix + "channel";
+	}
+}
+function updateNewAlgorithms(){
+			var i = totalMeasurementsCount;
+			var form = document.forms["triggerChannels"];
+			var objPrefix = 'lstTriggerChannels['+ i +'].';
+			var objName = objPrefix+"channel";
+
+/*			while (form.elements[objName] != null)
+			{
+					update_access(form.elements[objName], form.elements[objPrefix+"type"].value);
+			   i++;
+			   objPrefix = 'lstTriggerChannels['+ i +'].';
+			   objName = objPrefix+"channel";
+			}
+*/			
+	// Loop through the newly added measurements and update the correspoding access
+	$("#measurementTable tr[id^='tr_']").slice(totalMeasurementsCount).each(function() {
+		var channelElementName = $(this).find("[id$='channel']").attr("name");
+		var algorithmValue = $(this).find("[id$='type']").val();
+		update_access(channelElementName, algorithmValue);
+	});
+
+		}
+function deleteMeasurement(measurementToDelete, rowIdToDelete) {
+            console.log("measurementToDelete "+measurementToDelete.id+" rowIdToDelete "+rowIdToDelete);
+            if (confirm('Virtual Measurements and Fault location logic might be affected by these deleted measurements. Are you sure you want to delete?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'deleteMeasurementAction',
+                    contentType: 'application/json',  // Sending JSON
+                    data: JSON.stringify({measurementToDelete: measurementToDelete}) ,
+                    success: function(response) {
+                        console.log('Response from server:', response);
+                        $('#tr_' + rowIdToDelete).remove();  // Remove the row from the table
+                        checkForReinit();
+                    },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error:', textStatus, errorThrown);
+                alert("Error deleting.");
+            }
+                        });
+            }
+        }
+        
+function checkForReinit() {
+	 let values = [];
+	$('[id$="id"]').each(function() {
+		let value = parseInt($(this).val(), 10); // Parse value as integer
+		if (!isNaN(value)) {
+			values.push(value);
+		}
+	});
+
+	// Step 2: Sort the values and check for discontinuity
+	values.sort((a, b) => a - b); // Sort numerically
+	let discontinuous = false;
+	if (values[0] != 1) {
+		discontinuous = true;
+	} else {
+		for (let i = 1; i < values.length; i++) {
+			if (values[i] !== values[i - 1] + 1) { // Check if current value is exactly one more than previous
+				discontinuous = true;
+				break;
+			}
+		}
+	}
+
+	// Step 3: Output result
+	if (discontinuous) {
+		$('#btnReinit').show();
+	} else {
+		$('#btnReinit').hide();
+	}
+}

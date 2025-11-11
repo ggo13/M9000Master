@@ -1,0 +1,19 @@
+[Unit]
+Description=M9000 Backup Continuous Data
+After=mysql.service
+
+[Service]
+User=dfr
+Group=dfr
+Environment='UMASK=0777'
+# ExecStartPre=/usr/bin/mkdir -p /data/m9k/log/StationMaster/
+#ExecStartPre=/bin/bash -c 'mkdir -p /data/m9k/log/StationMaster'
+WorkingDirectory=/home/dfr/m9k/M9kBackup/scripts/
+ExecStart=/home/dfr/m9k/M9kBackup/scripts/m9k-backup-launch.sh 
+StandardOutput=append:/data/m9k/log/m9k-backup.out
+StandardError=append:/data/m9k/log/m9k-backup.out
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

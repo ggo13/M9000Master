@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ sudo systemctl stop tomcat9
+sudo rm -rf /var/lib/tomcat9/webapps/M9000*
+sudo rm -r /var/lib/tomcat9/work/Catalina/localhost/M9000Master/
+exit 0

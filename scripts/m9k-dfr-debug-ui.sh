@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -cp .:../lib/M9kStation.jar:../lib/commons-configuration-1.6.jar:../lib/commons-lang-2.4.jar:../lib/commons-collections-3.2.1.jar:../lib/log4j-1.2.16.jar:../lib/commons-logging-1.1.1.jar com.usi.m9000.station.commands.M9kStationDebugTestDFR $1

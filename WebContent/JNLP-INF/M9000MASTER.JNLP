@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase=
+"http://localhost:8080/M9000Master" 
+    href="M9000MASTER.JNLP">
+    <information>
+        <title>M9000 Master</title>
+        <vendor>USI inc.</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.7+"
+              href="http://java.sun.com/products/autodl/j2se"/>
+        <jar href="M9kApplet.jar"
+            main="true" />
+
+    </resources>
+    <application-desc
+         name="Dynamic Tree Demo Application"
+         main-class=
+           "com.usi.m9000.applets.M9kComtradeViewerApplet"
+         width="300"
+         height="300">
+     </application-desc>
+     <update check="background"/>
+</jnlp>  

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+  
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n</Property>
+        <Property name="APP_LOG_ROOT">/data/m9k/log/StationMaster</Property>
+    </Properties>
+      
+    <Appenders>
+      
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+          
+        <!-- File Appenders on need basis -->
+         
+        <RollingFile name="infoLog" fileName="${APP_LOG_ROOT}/faultLocation-Info.log"
+            filePattern="${APP_LOG_ROOT}/faultLocation-Info-%d{yyyy-MM-dd}-%i.log">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10mb" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+        <RollingFile name="errorLog" fileName="${APP_LOG_ROOT}/faultLocation-Errors.log"
+            filePattern="${APP_LOG_ROOT}/faultLocation-Errors-%d{yyyy-MM-dd}-%i.log">
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10mb" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+          
+    </Appenders>
+  
+    <Loggers>
+      
+        <!-- Logger name="com.usi.m9000" additivity="false" level="error" includeLocation="true">
+            <AppenderRef ref="errorLog" />
+            <AppenderRef ref="Console"  />
+        </Logger>
+          
+        <Logger name="com.usi.m9000" additivity="false" level="debug" includeLocation="true">
+            <AppenderRef ref="infoLog"  />
+            <AppenderRef ref="Console"/>
+        </Logger-->
+                  
+        <Root level="all">
+            <AppenderRef ref="errorLog" />
+			<AppenderRef ref="infoLog"  />
+            
+        	<AppenderRef ref="Console"/>
+        </Root>
+  
+    </Loggers>
+  
+</Configuration>

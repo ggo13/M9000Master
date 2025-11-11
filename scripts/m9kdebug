@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ~/m9k/M9kDfrDebug/scripts
+./m9k-dfr-debug-ui.sh $1
+

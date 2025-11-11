@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.usi.com" xmlns:ns1="http://www.usi.com">
+    <xs:element name="SubStation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Host"/>
+                <xs:element ref="ns1:TriggerGroup"/>
+                <xs:element minOccurs="0" ref="ns1:Pdc"/>
+                <xs:element ref="ns1:StationProperties"/>
+                <xs:element ref="ns1:DFRs"/>
+                <xs:element ref="ns1:GlobalLineGroups"/>
+                <xs:element ref="ns1:GroupTriggers"/>
+                <xs:element ref="ns1:Pmus"/>
+                <xs:element ref="ns1:Measurements"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:int"/>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Host" type="xs:string"/>
+    <xs:element name="TriggerGroup">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:ServerPort"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:DFRIP"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ServerPort" type="xs:int"/>
+    <xs:element name="DFRIP" type="xs:NMTOKEN"/>
+    <xs:element name="Pdc">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:System"/>
+                <xs:element ref="ns1:Pmus"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="StationProperties">
+        <xs:complexType>
+            <xs:sequence>
+            	<xs:element ref="ns1:AdvancedSettingsChangeTracker"/>
+                <xs:element ref="ns1:Alarms"/>
+                <xs:element ref="ns1:TriggerDuration"/>
+                <xs:element ref="ns1:Health"/>
+                <xs:element ref="ns1:contOscDaysToRetain"/>
+                <xs:element ref="ns1:contMeasurementsDaysToRetain"/>
+                <xs:element ref="ns1:contOscExportTimeLimit"/>
+                <xs:element ref="ns1:contMeasurementsExportTimeLimit"/>
+                <xs:element minOccurs="0" ref="ns1:enableEventTest"/>
+                <xs:element minOccurs="0" ref="ns1:ddrDeckTimeLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Alarms">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:Alarm"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Alarm">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:AlarmName"/>
+                <xs:element ref="ns1:Relay"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AdvancedSettingsChangeTracker" type="xs:int"/>
+    <xs:element name="AlarmName" type="xs:string"/>
+    <xs:element name="Relay" type="xs:string"/>
+    <xs:element name="TriggerDuration" type="xs:int"/>
+    <xs:element name="Health">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Temperature"/>
+                <xs:element ref="ns1:Disk"/>
+                <xs:element ref="ns1:V5"/>
+                <xs:element ref="ns1:V3_3"/>
+                <xs:element ref="ns1:V2_5"/>
+                <xs:element ref="ns1:V1_5"/>
+                <xs:element ref="ns1:V1_2"/>
+                <xs:element ref="ns1:V1_8"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Temperature">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Disk">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+                <xs:element ref="ns1:CleanupLimit"/>
+                <xs:element ref="ns1:StopRecordingLimit"/>
+                <xs:element ref="ns1:MinDaysOfFaultsToRetain"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="CleanupLimit" type="xs:int"/>
+    <xs:element name="StopRecordingLimit" type="xs:int"/>
+    <xs:element name="MinDaysOfFaultsToRetain" type="xs:int"/>
+    <xs:element name="V5">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V3_3">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V2_5">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V1_5">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V1_2">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="V1_8">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="contOscDaysToRetain" type="xs:int"/>
+    <xs:element name="contMeasurementsDaysToRetain" type="xs:int"/>
+    <xs:element name="contOscExportTimeLimit" type="xs:int"/>
+    <xs:element name="contMeasurementsExportTimeLimit" type="xs:int"/>
+    <xs:element name="enableEventTest" type="xs:int"/>
+    <xs:element name="ddrDeckTimeLimit" type="xs:int"/>
+    <xs:element name="DFRs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:DFR"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DFR">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:DEVICE"/>
+                <xs:element ref="ns1:IPAddress"/>
+                <xs:element ref="ns1:System"/>
+                <xs:element ref="ns1:DataPool"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DEVICE" type="xs:string"/>
+    <xs:element name="IPAddress" type="xs:NMTOKEN"/>
+    <xs:element name="DataPool">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Channels"/>
+                <xs:element minOccurs="0" ref="ns1:LineGroups"/>
+                <xs:element minOccurs="0" ref="ns1:Algorithms"/>
+                <xs:element minOccurs="0" ref="ns1:Exports"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Channels">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:Events"/>
+                <xs:element minOccurs="0" ref="ns1:Analogs"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Events">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:EventInput"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EventInput">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Channel"/>
+                <xs:element ref="ns1:_Phase"/>
+                <xs:element ref="ns1:_EventName"/>
+                <xs:element ref="ns1:_EnableDfr"/>
+                <xs:element ref="ns1:_EnableSer"/>
+                <xs:element ref="ns1:_NormalState"/>
+                <xs:element minOccurs="0" ref="ns1:_TriggerModeDfr"/>
+                <xs:element minOccurs="0" ref="ns1:_RecordMode"/>
+                <xs:element minOccurs="0" ref="ns1:_MinValidEventSamples"/>
+                <xs:element ref="ns1:_DebounceMs"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_EventName" type="xs:string"/>
+    <xs:element name="_EnableDfr" type="xs:int"/>
+    <xs:element name="_EnableSer" type="xs:int"/>
+    <xs:element name="_NormalState" type="xs:string"/>
+    <xs:element name="_TriggerModeDfr" type="xs:string"/>
+    <xs:element name="_RecordMode" type="xs:string"/>
+    <xs:element name="_MinValidEventSamples" type="xs:int"/>
+    <xs:element name="_DebounceMs" type="xs:double"/>
+    <xs:element name="Analogs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:AnalogInput"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AnalogInput">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_CircuitName"/>
+                <xs:element ref="ns1:_Range"/>
+                <xs:element ref="ns1:_Channel"/>
+                <xs:element ref="ns1:_Phase"/>
+                <xs:element ref="ns1:_InputType"/>
+                <xs:sequence minOccurs="0">
+                    <xs:element ref="ns1:_ExternalShunt"/>
+                    <xs:element ref="ns1:_PhaseOffset"/>
+				    <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:_Input"/>
+				    <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:_InputAdd"/>
+				    <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:_InputSub"/>
+				    <xs:element ref="ns1:_Virtual"/>
+				    <xs:element ref="ns1:_VirtualScale"/>
+                </xs:sequence>
+                <xs:element ref="ns1:_TransformerPrimary"/>
+                <xs:element ref="ns1:_TransformerSecondary"/>
+                <xs:element ref="ns1:_Export"/>
+                <xs:sequence minOccurs="0">
+                    <xs:element ref="ns1:_Transducer"/>
+                    <xs:element ref="ns1:_TransducerUnits"/>
+                    <xs:element ref="ns1:_InP1"/>
+                    <xs:element ref="ns1:_InP2"/>
+                    <xs:element ref="ns1:_OutP1"/>
+                    <xs:element ref="ns1:_OutP2"/>
+                </xs:sequence>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_CircuitName" type="xs:string"/>
+    <xs:element name="_Range" type="xs:double"/>
+    <xs:element name="_ExternalShunt" type="xs:double"/>
+    <xs:element name="_PhaseOffset" type="xs:double"/>
+    <xs:element name="_InputAdd" type="xs:string"/>
+    <xs:element name="_InputSub" type="xs:string"/>
+    <xs:element name="_TransformerPrimary" type="xs:int"/>
+    <xs:element name="_TransformerSecondary" type="xs:int"/>
+    <xs:element name="_Virtual" type="xs:int"/>
+    <xs:element name="_VirtualScale" type="xs:double"/>
+    <xs:element name="_Export" type="xs:int"/>
+    <xs:element name="_Transducer" type="xs:int"/>
+    <xs:element name="_TransducerUnits" type="xs:string"/>
+    <xs:element name="_InP1" type="xs:double"/>
+    <xs:element name="_InP2" type="xs:double"/>
+    <xs:element name="_OutP1" type="xs:double"/>
+    <xs:element name="_OutP2" type="xs:double"/>
+    <xs:element name="LineGroups">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:LineGroup"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="LineGroup">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Id"/>
+                <xs:element ref="ns1:_LineGroupName"/>
+                <xs:element ref="ns1:_AutoCalc"/>
+                <xs:element ref="ns1:_PositiveResistance"/>
+                <xs:element ref="ns1:_PositiveReactance"/>
+                <xs:element ref="ns1:_ZeroResistance"/>
+                <xs:element ref="ns1:_ZeroReactance"/>
+                <xs:element ref="ns1:_LineMiles"/>
+                <xs:element minOccurs="0" ref="ns1:_DecisionLogic"/>
+                <xs:element minOccurs="0" ref="ns1:_Comments"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:_Input"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:NMTOKEN"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Algorithms">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Monitor"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:And"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:Not"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:Average"/>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element ref="ns1:Frequency"/>
+                    <xs:element ref="ns1:Limits"/>
+                    <xs:element ref="ns1:Magnitude"/>
+                    <xs:element ref="ns1:NegativeSequence"/>
+                    <xs:element ref="ns1:Output"/>
+                    <xs:element ref="ns1:Phase"/>
+                    <xs:element ref="ns1:PositiveSequence"/>
+                    <xs:element ref="ns1:Power"/>
+                    <xs:element ref="ns1:Rms"/>
+                    <xs:element ref="ns1:Watts"/>
+                    <xs:element ref="ns1:ZeroSequence"/>
+                    <xs:element ref="ns1:VirtualMeasurement"/>
+                </xs:choice>
+                <xs:element ref="ns1:Triggers"/>
+                <xs:element minOccurs="0" ref="ns1:Pmus"/>
+				
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Monitor">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Every"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_Every" type="xs:int"/>
+    <xs:element name="And">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:_Input"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Not">
+        <xs:complexType>
+            <xs:sequence>
+				<xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Average">
+        <xs:complexType>
+            <xs:sequence>
+				<xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Frequency">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Limits">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_HighLimit"/>
+                <xs:element ref="ns1:_LowLimit"/>
+                <xs:element minOccurs="0" ref="ns1:_RateOfChangeLimit"/>
+                <xs:element minOccurs="0" ref="ns1:_RateOfChangeLimitPos"/>
+                <xs:element minOccurs="0" ref="ns1:_RateOfChangeLimitNeg"/>
+                <xs:element minOccurs="0" ref="ns1:_Duration"/>                
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_RateOfChangeLimit" type="xs:string"/>
+    <xs:element name="_RateOfChangeLimitPos" type="xs:string"/>
+    <xs:element name="_RateOfChangeLimitNeg" type="xs:string"/>
+    <xs:element name="_Duration" type="xs:string"/>
+    <xs:element name="Magnitude">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_Harmonic"/>
+                <xs:element minOccurs="0" ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_Harmonic" type="xs:int"/>
+    <xs:element name="NegativeSequence">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_InputType"/>
+                <xs:element minOccurs="0" ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Output">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Channel"/>
+                <xs:element ref="ns1:_Input"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Phase">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element minOccurs="0" ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PositiveSequence">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element minOccurs="0" ref="ns1:_Average"/>
+                <xs:element ref="ns1:_InputType"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Power">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_PowerType"/>
+                <xs:element ref="ns1:_Inputs"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_PowerType" type="xs:string"/>
+    <xs:element name="_Inputs" type="xs:string"/>
+    <xs:element name="Rms">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_Average"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Watts">
+        <xs:complexType>
+            <xs:sequence>
+				<xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_Average"/>
+                <xs:element ref="ns1:_InputType"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ZeroSequence">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Input"/>
+                    <xs:element minOccurs="0"  ref="ns1:_Average"/>
+                    <xs:element ref="ns1:_InputType"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:NMTOKEN"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Triggers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_TriggerOutHold"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:Trigger"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Trigger">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_TriggerName"/>
+                <xs:element ref="ns1:_Enable"/>
+                <xs:element minOccurs="0" ref="ns1:_Type"/>
+                <xs:element ref="ns1:_ChanId"/>
+                <xs:element ref="ns1:_Phase"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_ChatterLimit"/>
+                <xs:element ref="ns1:_ChatterRate"/>
+                <xs:element ref="ns1:_TriggerLimit"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_TriggerName" type="xs:string"/>
+    <xs:element name="_ChanId" type="xs:int"/>
+    <xs:element name="VirtualMeasurement">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_Description"/>
+                <xs:element ref="ns1:_Average"/>
+                <xs:element ref="ns1:_Scale"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:VirtualMeasurementInput"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="VirtualMeasurementInput">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Scale"/>
+                <xs:element ref="ns1:_Input"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Exports">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:Export"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Export">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_ExportName"/>
+                <xs:element ref="ns1:_MeasurementType"/>
+                <xs:element ref="ns1:_Enable"/>
+                <xs:element ref="ns1:_Id"/>
+                <xs:element ref="ns1:_Phase"/>
+                <xs:element ref="ns1:_Units"/>
+                <xs:element ref="ns1:_Input"/>
+                <xs:element ref="ns1:_SampleRate"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_ExportName" type="xs:string"/>
+    <xs:element name="_MeasurementType" type="xs:string"/>
+    <xs:element name="_Units" type="xs:string"/>
+    <xs:element name="_SampleRate" type="xs:int"/>
+    <xs:element name="GlobalLineGroups">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:GlobalLineGroup"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GlobalLineGroup">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Id"/>
+                <xs:element ref="ns1:_LineGroupName"/>
+                <xs:element ref="ns1:_AutoCalc"/>
+                <xs:element ref="ns1:_PositiveResistance"/>
+                <xs:element ref="ns1:_PositiveReactance"/>
+                <xs:element ref="ns1:_ZeroResistance"/>
+                <xs:element ref="ns1:_ZeroReactance"/>
+                <xs:element ref="ns1:_LineMiles"/>
+                <xs:element minOccurs="0" ref="ns1:_DecisionLogic"/>
+                <xs:element minOccurs="0" ref="ns1:_Comments"/>
+                <xs:element ref="ns1:LgAnalogs"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:NMTOKEN"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="LgAnalogs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:_AnalogChannels"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_AnalogChannels">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_ChannelId"/>
+                <xs:element ref="ns1:_RecId"/>
+                <xs:element ref="ns1:_ExpId"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_ChannelId" type="xs:int"/>
+    <xs:element name="_RecId" type="xs:int"/>
+    <xs:element name="_ExpId" type="xs:int"/>
+    <xs:element name="GroupTriggers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_TriggerOutHold"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:GroupTrigger"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GroupTrigger">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Id"/>
+                <xs:element ref="ns1:_Enable"/>
+                <xs:element ref="ns1:_Type"/>
+                <xs:element ref="ns1:_InputType"/>
+                <xs:element ref="ns1:_LineGroupId"/>
+                <xs:element ref="ns1:_LineGroupName"/>
+                <xs:element ref="ns1:_ChatterLimit"/>
+                <xs:element ref="ns1:_ChatterRate"/>
+                <xs:element ref="ns1:_TriggerLimit"/>
+                <xs:element minOccurs="0" ref="ns1:_HighLimit"/>
+                <xs:sequence minOccurs="0">
+                    <xs:element ref="ns1:_LowLimit"/>
+                    <xs:element ref="ns1:_export"/>
+                </xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_exportRate"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_LineGroupId" type="xs:int"/>
+    <xs:element name="_export" type="xs:int"/>
+    <xs:element name="_exportRate" type="xs:int"/>
+    <xs:element name="Measurements">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_TriggerOutHold"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:Measurement"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Measurement">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:_Dfr"/>
+                <xs:element ref="ns1:_Name"/>
+                <xs:element ref="ns1:_Status"/>
+                <xs:element minOccurs="0" ref="ns1:_ExportStatus"/>
+                <xs:element ref="ns1:_PmuStatus"/>
+                <xs:element minOccurs="0" ref="ns1:_DdrStatus"/>
+                <xs:element minOccurs="0" ref="ns1:_DisturbanceAlarm"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_Name" type="xs:string"/>
+    <xs:element name="_Status" type="xs:string"/>
+    <xs:element name="_ExportStatus" type="xs:string"/>
+    <xs:element name="_PmuStatus" type="xs:string"/>
+    <xs:element name="_DdrStatus" type="xs:string"/>
+    <xs:element name="_DisturbanceAlarm" type="xs:string"/>
+    <xs:element name="System">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element ref="ns1:_PdcStationName"/>
+                    <xs:element ref="ns1:_StationId"/>
+                    <xs:element ref="ns1:_ServerPort"/>
+                    <xs:element ref="ns1:_CommandServerPort"/>
+                    <xs:element ref="ns1:_NetworkProtocol"/>
+                    <xs:element ref="ns1:_MaxWait"/>
+                    <xs:element ref="ns1:_Verbose"/>
+                    <xs:element ref="ns1:_DataRate"/>
+                    <xs:element ref="ns1:_LineFreq"/>
+                    <xs:element ref="ns1:_VerboseConcentrator"/>
+                    <xs:element ref="ns1:UdpServers"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="ns1:DfrId"/>
+                    <xs:element ref="ns1:RecordingDeviceId"/>
+                    <xs:element ref="ns1:SampleRate"/>
+                    <xs:element ref="ns1:LineFrequency"/>
+                    <xs:element ref="ns1:ExportRate"/>
+                    <xs:element ref="ns1:AnalogsCount"/>
+                    <xs:element ref="ns1:DigitalsCount"/>
+                    <xs:element ref="ns1:StationName"/>
+                    <xs:element ref="ns1:PrefaultTime"/>
+                    <xs:element ref="ns1:PostfaultTime"/>
+                    <xs:element ref="ns1:LtrPrefaultTime"/>
+                    <xs:element ref="ns1:LtrPostfaultTime"/>
+                    <xs:element ref="ns1:DatabaseConnectString"/>
+                    <xs:element ref="ns1:ChatterLimit"/>
+                    <xs:element ref="ns1:ChatterRate"/>
+                    <xs:element ref="ns1:TriggerLimit"/>
+                    <xs:element ref="ns1:CrossRecordServerPort"/>
+                    <xs:element ref="ns1:DatabaseDataType"/>
+                    <xs:element ref="ns1:ExportAnalogBufferTime"/>
+                    <xs:element ref="ns1:ExportAnalogSampleRate"/>
+                    <xs:element ref="ns1:ExportBufferTime"/>
+                    <xs:element ref="ns1:ContinuousOscillographyEnable"/>
+                    <xs:element ref="ns1:AntiAliasFilterDelay"/>
+                    <xs:element ref="ns1:DisableAllDatabaseUse"/>
+                    <xs:element ref="ns1:InitSound"/>
+                    <xs:element ref="ns1:Ps"/>
+                    <xs:element ref="ns1:SignalTooLowFactor"/>
+                    <xs:element ref="ns1:EventDebounce"/>
+                    <xs:element ref="ns1:ConfigSerialNumber"/>
+                    <xs:element ref="ns1:MonitorWettingVoltage"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_PdcStationName" type="xs:string"/>
+    <xs:element name="_StationId" type="xs:int"/>
+    <xs:element name="_ServerPort" type="xs:int"/>
+    <xs:element name="_CommandServerPort" type="xs:int"/>
+    <xs:element name="_NetworkProtocol" type="xs:string"/>
+    <xs:element name="_MaxWait" type="xs:int"/>
+    <xs:element name="_Verbose" type="xs:int"/>
+    <xs:element name="_DataRate" type="xs:int"/>
+    <xs:element name="_LineFreq" type="xs:int"/>
+    <xs:element name="_VerboseConcentrator" type="xs:int"/>
+    <xs:element name="UdpServers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:_UdpServerPort"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_UdpServerPort" type="xs:int"/>
+    <xs:element name="DfrId" type="xs:int"/>
+    <xs:element name="RecordingDeviceId" type="xs:string"/>
+    <xs:element name="SampleRate" type="xs:int"/>
+    <xs:element name="LineFrequency" type="xs:int"/>
+    <xs:element name="ExportRate" type="xs:int"/>
+    <xs:element name="AnalogsCount" type="xs:int"/>
+    <xs:element name="DigitalsCount" type="xs:int"/>
+    <xs:element name="StationName" type="xs:string"/>
+    <xs:element name="PrefaultTime" type="xs:int"/>
+    <xs:element name="PostfaultTime" type="xs:int"/>
+    <xs:element name="LtrPrefaultTime" type="xs:int"/>
+    <xs:element name="LtrPostfaultTime" type="xs:int"/>
+    <xs:element name="DatabaseConnectString" type="xs:string"/>
+    <xs:element name="ChatterLimit" type="xs:int"/>
+    <xs:element name="ChatterRate" type="xs:double"/>
+    <xs:element name="TriggerLimit" type="xs:int"/>
+    <xs:element name="CrossRecordServerPort" type="xs:int"/>
+    <xs:element name="DatabaseDataType" type="xs:string"/>
+    <xs:element name="ExportAnalogBufferTime" type="xs:int"/>
+    <xs:element name="ExportAnalogSampleRate" type="xs:int"/>
+    <xs:element name="ExportBufferTime" type="xs:int"/>
+    <xs:element name="ContinuousOscillographyEnable" type="xs:int"/>
+    <xs:element name="AntiAliasFilterDelay" type="xs:double"/>
+    <xs:element name="DisableAllDatabaseUse" type="xs:int"/>
+    <xs:element name="InitSound" type="xs:int"/>
+    <xs:element name="Ps" type="xs:string"/>
+    <xs:element name="SignalTooLowFactor" type="xs:double"/>
+    <xs:element name="EventDebounce" type="xs:double"/>
+    <xs:element name="ConfigSerialNumber" type="xs:int"/>
+    <xs:element name="MonitorWettingVoltage" type="xs:int"/>
+    <xs:element name="Pmus">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:Pmu"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Pmu">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_PmuName"/>
+                <xs:element ref="ns1:_PmuId"/>
+                <xs:element minOccurs="0" ref="ns1:_PmuServerIp"/>
+                <xs:element ref="ns1:_PmuPort"/>
+                <xs:element minOccurs="0" ref="ns1:_PmuUdpPort"/>
+                <xs:sequence minOccurs="0">
+                    <xs:element ref="ns1:_PmuEnable"/>
+                    <xs:element ref="ns1:_PmuDataRate"/>
+                    <xs:element ref="ns1:_PmuPhasorMode"/>
+                    <xs:element ref="ns1:_PmuStreamType"/>
+                    <xs:element ref="ns1:_UdpPort"/>
+                </xs:sequence>
+                <xs:choice>
+                    <xs:element ref="ns1:PmuInputs"/>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:PmuInput"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:NMTOKEN"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_PmuName" type="xs:string"/>
+    <xs:element name="_PmuId" type="xs:int"/>
+    <xs:element name="_PmuServerIp" type="xs:NMTOKEN"/>
+    <xs:element name="_PmuPort" type="xs:int"/>
+    <xs:element name="_PmuUdpPort" type="xs:int"/>
+    <xs:element name="_PmuDataRate" type="xs:int"/>
+    <xs:element name="_PmuPhasorMode" type="xs:string"/>
+    <xs:element name="_PmuStreamType" type="xs:string"/>
+    <xs:element name="_UdpPort" type="xs:int"/>
+    <xs:element name="PmuInputs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:PmuInput"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_Channel" type="xs:int"/>
+    <xs:element name="_Phase" type="xs:string"/>
+    <xs:element name="_InputType" type="xs:string"/>
+    <xs:element name="_Input" type="xs:string"/>
+    <xs:element name="_Id" type="xs:int"/>
+    <xs:element name="_LineGroupName" type="xs:string"/>
+    <xs:element name="_AutoCalc" type="xs:string"/>
+    <xs:element name="_PositiveResistance" type="xs:double"/>
+    <xs:element name="_PositiveReactance" type="xs:double"/>
+    <xs:element name="_ZeroResistance" type="xs:double"/>
+    <xs:element name="_ZeroReactance" type="xs:double"/>
+    <xs:element name="_LineMiles" type="xs:double"/>
+    <xs:element name="_DecisionLogic" type="xs:string"/>
+    <xs:element name="_Description" type="xs:string"/>
+    <xs:element name="_Comments" type="xs:string"/>
+    <xs:element name="_HighLimit" type="xs:string"/>
+    <xs:element name="_LowLimit" type="xs:string"/>
+    <xs:element name="_Average" type="xs:int"/>
+    <xs:element name="_TriggerOutHold" type="xs:int"/>
+    <xs:element name="_Enable" type="xs:int"/>
+    <xs:element name="_Type" type="xs:string"/>
+    <xs:element name="_ChatterLimit" type="xs:int"/>
+    <xs:element name="_ChatterRate" type="xs:double"/>
+    <xs:element name="_TriggerLimit" type="xs:int"/>
+    <xs:element name="_Scale" type="xs:double"/>
+    <xs:element name="_Dfr" type="xs:int"/>
+    <xs:element name="_PmuEnable" type="xs:int"/>
+    <xs:element name="PmuInput">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:_PmuInputName"/>
+                <xs:element minOccurs="0" ref="ns1:_PmuInputType"/>
+                <xs:element minOccurs="0" ref="ns1:_PmuEnable"/>
+                <xs:choice>
+                    <xs:element ref="ns1:_Input"/>
+                    <xs:sequence>
+                        <xs:element ref="ns1:_Dfr"/>
+                        <xs:element ref="ns1:_Id"/>
+                    </xs:sequence>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="_PmuInputName" type="xs:string"/>
+    <xs:element name="_PmuInputType" type="xs:string"/>
+</xs:schema>

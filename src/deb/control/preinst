@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo service tomcat6 stop
+sudo rm -rf /var/lib/tomcat6/webapps/M9000*
+sudo rm -r /var/lib/tomcat6/work/Catalina/localhost/M9000Master/
+sudo service m9k-station stop
+# sudo rm -rf /home/dfr/m9k/M9kStation
+# sudo rm /data/m9k/log/StationMaster/Station*	
+
+exit 0

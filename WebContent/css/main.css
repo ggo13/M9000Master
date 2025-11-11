@@ -1,0 +1,316 @@
+@CHARSET "UTF-8";
+h1 {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	color: blue;
+	text-align: right;
+	font-weight: bold;
+}
+h4 {
+	font: 18px verdana, arial, helvetica, sans-serif;
+	background-color: #9999CC;
+	text-align: center;
+	font-weight: bold;
+}
+html, body {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	background-color: #FFFFFF;
+	text-align: center;
+}
+table.wwFormTable {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 32%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+}
+table.wwFormTable th {
+}
+table.wwFormTable tr td {
+	background-color: #EEEEFF;
+	margin: 5px;
+	padding: 5px;
+}
+table.inlineTable {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+}
+table.inlineTable th {
+	background-color: #EEEEFF;
+	font: 12px verdana, arial, helvetica, sans-serif;
+}
+table.inlineTable tr td {
+	background-color: #EEEEFF;
+}
+table.configureTable {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 30%;
+	margin-top:0;
+}
+.ui-dialog .ui-dialog-titlebar {
+	font: 18px verdana, arial, helvetica, sans-serif;
+	background-color: #9999CC;
+	text-align: center;
+	font-weight: bold;
+}
+table.configureTable th {
+	background: #9999CC;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+table.configureTable tr td {
+	background-color: #EEEEFF;
+}
+table.lineGroupsTable {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 45%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+}
+table.decisionDialog {
+	font: 12px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 100%;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+}
+.titleLabel {
+	font: 15px arial, helvetica, sans-serif, bolder;
+	background-color: #9999CC;
+	font-weight: bold;
+	text-align: center;
+	width: 100%;
+}
+#customBorder {
+	background-color: red;
+}
+.tdLabel {
+	/*
+	border-width: 1px;
+	border-color: #afa;
+	border-style: solid;
+	*/
+	font-weight: bold;
+	text-align: right;
+}
+.traverseMenu {
+	background-color: #EEEEFF;
+	font: bold #EEEEFF 12px verdana, arial, helvetica, sans-serif;
+}
+.label {
+}
+.errorMessage {
+	color: red;
+	font-size: 0.8em;
+}
+.submit {
+	background-color: #9999CC;
+}
+#headerDiv {
+	border-style: solid;
+	border-width: 1px 1px 0px;
+	border-color: black;
+	padding: 5px;
+	background-color: #7a7;
+	/* height: 22px; */
+	height: 1.8em;
+	/* margin-bottom: 12px; */
+}
+#buttonBar {
+	border-width: 0px 1px 1px;
+	border-style: solid;
+	border-color: black;
+	color: white;
+	margin-bottom: 12px;
+	background-color: #7a7;
+	height: 1.6em;
+	padding: 5px;
+}
+#appName {
+	color: white;
+	font-size: 1.8em;
+}
+#pageTitle {
+	font-size: 1.4em;
+	color: #dfd;
+	clear: none;
+}
+#appName, #pageTitle {
+	float: right;
+}
+#menuContainer {
+	float: left;
+}
+#brandingContainer {
+	float: right;
+	text-align: right;
+}
+#container {
+	display: table;
+}
+#row {
+	display: table-row;
+}
+#left, #right, #middle {
+	display: table-cell;
+}
+.error {
+	color: red;
+}
+.errorContainer {
+	color: red;
+	font-size: 1.2em;
+	background-color: #c2c2e6;
+	margin-bottom: 8px;
+	text-align: center;
+	border: 1px solid #E6E6E6;
+	border-color: #9999CC;
+	margin: 0 auto;
+}
+.flex-container {
+  display: table;
+}
+.boxLeft {
+  width: 7%;
+  display: table-cell;
+  text-align: center;
+}
+.boxRight {
+  width: 93%;
+  display: table-cell;
+  text-align: center;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #9999CC;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+table.configureSubrow{
+	font: 10px verdana, arial, helvetica, sans-serif;
+	border-width: 1px;
+	border-color: #9999CC;
+	border-style: solid;
+	color: #242;
+	background-color: #EEEEFF;
+	width: 30%;
+	margin-top:0;
+}
+table.configureSubrow th {
+	background: #9999CC;
+	position: sticky;
+	top: 0;
+}
+table.configureSubrow tr td {
+	background-color: #EEEEFF;
+}
+
+table.datatable th {
+	background: #9999CC;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+table.datatable tr td {
+	background-color: #EEEEFF;
+}
+table.datatable tbody tr.selected td
+{
+	background-color: #2b1854 !important;
+	color: white !important;
+}
+
+table.datatable tbody tr:hover td{
+    background-color: #4646a5 !important;
+    color: white !important;
+}
+
+.highlighted-link
+{
+        border-radius: 25px;
+        background-color: #2b1854 !important;
+        color: white !important;
+        border-radius: 25px;
+        width: 160px;
+        height: 20px;
+}
+.type-button {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.buttons-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

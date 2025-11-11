@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd /home/dfr/m9k/deliverables/db-upgrade-[[db-script-version]]
+
+./m9k-upgrade-db.sh

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/dfr/m9k/deliverables/remote-master-db-setup-[[db-script-version]]
+
+./m9k-remote-master-db-setup.sh
+

@@ -1,0 +1,4 @@
+function updateHealthStatus()
+{
+	$.publish('updateStationHealthTopic');
+}

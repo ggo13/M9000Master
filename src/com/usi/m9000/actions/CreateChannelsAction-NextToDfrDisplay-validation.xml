@@ -1,0 +1,176 @@
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<!-- field name="stationDetails.systemRecordingDeviceName"> <field-validator 
+		type="requiredstring" short-circuit="true"> <param name="trim">true</param> 
+		<message key="errors.required" /> </field-validator> </field> <field name="stationDetails.systemRecordingDeviceId"> 
+		<field-validator type="conversion" short-circuit="true"> <param name="repopulateField">true</param> 
+		<message key="errors.number"/> </field-validator> <field-validator type="regex" 
+		short-circuit="true"> <param name="expression">^[0-9]+$</param> <message 
+		key="errors.number"/> </field-validator> <field-validator type="int"> <param 
+		name="min">0</param> <param name="max">1000</param> <message key="errors.range"/> 
+		</field-validator> <field-validator type="required" short-circuit="true"> 
+		<message key="errors.required" /> </field-validator> </field -->
+
+	<field name="stationDetails.systemPrefaultTime">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.systemPostfaultTime">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.systemLtrPrefaultTime">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.systemLtrPostfaultTime">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.chatterLimit">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.chatterRate">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="double" short-circuit="true">
+			<param name="minInclusive">0.00001</param>
+			<!-- param name="maxInclusive">50.1</param -->
+			<message>Chatter Rate need to be greater than
+				${minInclusive}</message>
+		</field-validator>
+	</field>
+	<field name="stationDetails.signalTooLowFactor">
+		<field-validator type="conversion" short-circuit="true">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<!-- field-validator type="double" short-circuit="true">
+			<param name="min">0</param>
+			<param name="max">100</param>
+			<message key="errors.range" />
+		</field-validator -->		
+		<field-validator type="double" short-circuit="true">
+			<param name="minInclusive">0</param>
+			<param name="maxInclusive">100</param>
+			<message>Min. Full Scale need to be between 
+				${minInclusive} and ${maxInclusive} %</message>
+		</field-validator>
+		
+		
+		<field-validator type="required" short-circuit="true">
+			<message key="errors.required" />
+		</field-validator>
+	</field>
+	<field name="stationDetails.triggerLimit">
+		<field-validator type="required">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="conversion">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+	</field>
+		<field name="stationDetails.triggerDuration">
+		<field-validator type="conversion" short-circuit="true">
+			<param name="repopulateField">true</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="regex" short-circuit="true">
+			<param name="expression">^[0-9]+$</param>
+			<message key="errors.number" />
+		</field-validator>
+		<field-validator type="required" short-circuit="true">
+			<message key="errors.required" />
+		</field-validator>
+		<field-validator type="double" short-circuit="true">
+			<param name="minInclusive">1</param>
+			<param name="maxInclusive">300</param>
+			<message>Please set Trigger duration anywhere between 1 second to maximum 300 seconds</message>
+		</field-validator>
+	</field>
+	
+	<!-- <field name="stationDetails.ipAddress"> <field-validator type="regex" 
+		short-circuit="true"> <param name="expression">(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)</param> 
+		<message key="errors.ipaddress"/></field-validator> <field-validator type="required" 
+		short-circuit="true"> <message key="errors.required" /> </field-validator> 
+		</field> -->
+
+	<!-- <field name="stationDetails.pmuId"> <field-validator type="regex" short-circuit="true"> 
+		<param name="expression"><![CDATA[^[0-9]+$]]></param> <message key="errors.number"/> 
+		</field-validator> <field-validator type="int"> <param name="min">1</param> 
+		<param name="max">65534</param> <message key="errors.range"/> </field-validator> 
+		<field-validator type="required" short-circuit="true"> <message key="errors.required" 
+		/> </field-validator> </field> <field name="stationDetails.pdcTcpPort"> <field-validator 
+		type="regex" short-circuit="true"> <param name="expression"><![CDATA[^[0-9]+$]]></param> 
+		<message key="errors.number"/> </field-validator> <field-validator type="int"> 
+		<param name="min">1024</param> <param name="max">65535</param> <message key="errors.range"/> 
+		</field-validator> <field-validator type="required" short-circuit="true"> 
+		<message key="errors.required" /> </field-validator> </field> <field name="stationDetails.pdcUdpPort"> 
+		<field-validator type="regex" short-circuit="true"> <param name="expression"><![CDATA[^[0-9]+$]]></param> 
+		<message key="errors.number"/> </field-validator> <field-validator type="int"> 
+		<param name="min">1024</param> <param name="max">65535</param> <message key="errors.range"/> 
+		</field-validator> <field-validator type="required" short-circuit="true"> 
+		<message key="errors.required" /> </field-validator> </field> <field name="stationDetails.pdcMaxWait"> 
+		<field-validator type="regex" short-circuit="true"> <param name="expression"><![CDATA[^[0-9]+$]]></param> 
+		<message key="errors.number"/> </field-validator> <field-validator type="int"> 
+		<param name="min">1</param> <param name="max">65534</param> <message key="errors.range"/> 
+		</field-validator> <field-validator type="required" short-circuit="true"> 
+		<message key="errors.required" /> </field-validator> </field> -->
+</validators>

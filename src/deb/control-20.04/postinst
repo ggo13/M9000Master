@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FILE=/etc/systemd/system/m9k-station.service
+if [ -f  "$FILE" ]
+then
+echo "$FILE already exists. About to start services..."
+fi
+sudo systemctl daemon-reload
+sudo systemctl start tomcat9 
+sudo systemctl start m9k-station
+

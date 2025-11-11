@@ -1,0 +1,13 @@
+#!/bin/bash
+# cd ~/m9k/
+# mysql -u dfr -pusi < /home/dfr/m9k/deliverables/db-patch-for-ser-cal-report/db-patch-ser-cal-report.sql
+
+if [ ! -e /etc/init.d/m9k-station ]
+then
+  echo Make link for tab command line completion
+  ln -s /lib/init/upstart-job /etc/init.d/m9k-station
+fi
+
+sudo service tomcat6 start
+sudo service m9k-station start
+

@@ -1,0 +1,22 @@
+#!/bin/bash
+# Exports the config as sql file so that it can be imported directly into mysql
+mkdir -p /data/m9k/backup-config
+file_path='/data/m9k/backup-config'
+if [ $? -eq 1 ]
+then
+  echo "Unable to create /data/m9k/backup-config/ folder. Saving it in /tmp folder "
+  file_path='/tmp'
+fi
+file_name="$file_path/exported_config_$(date +%m-%d-%Y_%H%M%S).sql"
+echo "Please enter the mysql access password below"
+mysqldump -uroot -p m9000 station_details > $file_name
+if [ $? -ne 0 ]
+then
+  echo "Failed to back up config file"
+  rm $file_name
+  exit 1
+else
+  echo "Successfully exported the config to $file_name"
+  exit 0
+fi
+

@@ -1,0 +1,29 @@
+company=USI
+timeCode=-5t
+type=ASCII
+dataDir=C:/M9000/Data/
+contDataDir=C:/M9000/Data/Continuous/
+
+#In seconds
+run-frequency=5 
+
+#Trigger Limit (To calculate Deck Time) in Seconds
+trigger-limit=10
+
+# Long Term Trigger Limit  in Seconds
+ltr-trigger-limit=300
+
+# wait latency 
+latency-delay=1
+
+#Thread pool to cross record and merge
+thread-pool-size=100
+
+#dataDir=//mifile/USI Files/R&D Projects/New DFR/Comtrade/M9kShare/
+#contDataDir=//195.1.1.73/M9K/Data/Continuous/
+
+# Cross Trigger for Station. Cross triggers station if Y, and doesn't if N  
+cross-trigger-station=Y 
+
+# Fault Data cross record request wait time Milli seconds
+fault-cross-req-wait-time=45000

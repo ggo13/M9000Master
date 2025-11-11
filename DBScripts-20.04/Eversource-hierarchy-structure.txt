@@ -1,0 +1,9 @@
+First Level:  Eversource Energy
+
+Second Level:  Massachusetts, Connecticut, New Hampshire, Other
+
+Third Level:  Western MA, Eastern MA, Connecticut, and New Hampshire
+
+Fourth Level:  Substations ~ 100
+
+Fifth Level:  Devices

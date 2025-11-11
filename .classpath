@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-dbcp-1.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool-1.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javaws.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jcalendar-1.3.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsch-0.1.55.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xercesImpl-2.9.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/M9kHealthXml.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jquery-datatables-plugin-4.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jquery-plugin-4.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jquery-grid-plugin-4.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jquery-chart-plugin-4.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-5.2.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/dynamicreports-core-6.12.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-convention-plugin-2.5.31.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-core-2.5.31.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-json-plugin-2.5.31.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-configuration-1.8.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlunit-core-2.2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jasperreports-6.12.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-api-2.20.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-core-2.20.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2-api-2.20.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-lib-2.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/struts2-jfreechart-plugin-2.5.31.jar"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-web-2.20.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq-all-5.15.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/HikariCP-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/M9000XMLConfig.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-5.2.1.jar"/>
+	<classpathentry kind="src" path="target/generated-sources/annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="m2e-apt" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="m2e-apt" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

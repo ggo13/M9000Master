@@ -1,0 +1,2539 @@
+<?xml version = '1.0' encoding = 'UTF-8' ?>
+	<SubStation id="100" name="substation1" xmlns="http://www.usi.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<Host>UTS-DESKTOP</Host>
+		<TriggerGroup>
+			<ServerPort>9980</ServerPort>
+			<DFRIP>192.168.1.101</DFRIP>
+			<DFRIP>192.168.1.102</DFRIP>
+			<DFRIP>192.168.1.103</DFRIP>
+			<DFRIP>192.168.1.72</DFRIP>
+		</TriggerGroup>
+<Pdc id="00001">
+	<System>
+		<_PdcStationName>Mega Concentrator Extraordinaire!</_PdcStationName>                  
+		<_StationId>1234</_StationId>                 
+		<_ServerPort>4712</_ServerPort>                         
+		<_CommandServerPort>9978</_CommandServerPort>
+		<_NetworkProtocol>udp</_NetworkProtocol>
+		<_MaxWait>300</_MaxWait>   
+		<_Verbose>8</_Verbose>
+		<_DataRate>60</_DataRate>
+		<_LineFreq>60</_LineFreq>
+		<_VerboseConcentrator>8</_VerboseConcentrator>
+		<UdpServers>
+			<_UdpServerPort>4713</_UdpServerPort>
+			<_UdpServerPort>4714</_UdpServerPort>
+			<_UdpServerPort>4715</_UdpServerPort>
+			<_UdpServerPort>4716</_UdpServerPort>
+		</UdpServers>
+	</System>
+
+	<Pmus>
+		<Pmu>
+			<_PmuId>101</_PmuId>
+			<_PmuServerIp>192.168.1.103</_PmuServerIp>
+			<_PmuPort>4712</_PmuPort>
+			<_PmuUdpPort>4713</_PmuUdpPort>
+			<_PmuEnable>1</_PmuEnable>
+			<_PmuStreamType>tcp</_PmuStreamType>
+		</Pmu>
+		<Pmu>
+			<_PmuId>102</_PmuId>
+			<_PmuServerIp>192.168.1.104</_PmuServerIp>
+			<_PmuPort>4712</_PmuPort>
+			<_PmuUdpPort>4713</_PmuUdpPort>
+			<_PmuEnable>1</_PmuEnable>
+			<_PmuStreamType>tcp</_PmuStreamType>
+		</Pmu>
+	</Pmus>
+</Pdc>
+<StationProperties>
+	<AdvancedSettingsChangeTracker>1</AdvancedSettingsChangeTracker>
+		<Alarms>
+			<Alarm>
+				<AlarmName>ONLINE</AlarmName>
+				<Relay>RELAY_1</Relay>
+			</Alarm>
+			<Alarm>
+				<AlarmName>CLOCK</AlarmName>
+				<Relay>RELAY_2</Relay>
+			</Alarm>
+			<Alarm>
+				<AlarmName>TRIGGER</AlarmName>
+				<Relay>RELAY_3</Relay>
+			</Alarm>
+		</Alarms>
+		<TriggerDuration>10</TriggerDuration>
+		<Health>
+			<Temperature>
+				<_HighLimit>70</_HighLimit>
+				<_LowLimit>0</_LowLimit>
+			</Temperature>
+			<Disk>
+				<_HighLimit>70</_HighLimit>
+				<_LowLimit>0</_LowLimit>
+				<CleanupLimit>92</CleanupLimit>
+				<StopRecordingLimit>95</StopRecordingLimit>
+				<MinDaysOfFaultsToRetain>30</MinDaysOfFaultsToRetain>
+			</Disk>
+			<V5>
+				<_HighLimit>5.2</_HighLimit>
+				<_LowLimit>4.8</_LowLimit>
+			</V5>
+			<V3_3>
+				<_HighLimit>3.4</_HighLimit>
+				<_LowLimit>3.2</_LowLimit>
+			</V3_3>
+			<V2_5>
+				<_HighLimit>2.6</_HighLimit>
+				<_LowLimit>2.4</_LowLimit>
+			</V2_5>
+			<V1_5>
+				<_HighLimit>1.6</_HighLimit>
+				<_LowLimit>1.4</_LowLimit>
+			</V1_5>
+			<V1_2>
+				<_HighLimit>1.3</_HighLimit>
+				<_LowLimit>1.1</_LowLimit>
+			</V1_2>
+			<V1_8>
+				<_HighLimit>1.9</_HighLimit>
+				<_LowLimit>1.7</_LowLimit>
+			</V1_8>
+		</Health>
+		<contOscDaysToRetain>5</contOscDaysToRetain>
+		<contMeasurementsDaysToRetain>30</contMeasurementsDaysToRetain>
+		<contOscExportTimeLimit>120</contOscExportTimeLimit>
+		<contMeasurementsExportTimeLimit>300</contMeasurementsExportTimeLimit>
+		<enableEventTest>1</enableEventTest>
+		<ddrDeckTimeLimit>300</ddrDeckTimeLimit>
+</StationProperties>		
+		<DFRs>
+		<DFR id="00001">
+            <DEVICE>/dev/m9kdrv></DEVICE>
+			<IPAddress>192.168.1.101</IPAddress>
+            <System>
+						<DfrId>23</DfrId>
+                        <RecordingDeviceId>USI_M9k</RecordingDeviceId>
+                        <SampleRate>24000</SampleRate>
+                        <LineFrequency>60</LineFrequency>
+                        <ExportRate>10</ExportRate>
+                        <AnalogsCount>32</AnalogsCount>
+                        <DigitalsCount>128</DigitalsCount>
+                        <StationName>Central Station</StationName>
+                        <PrefaultTime>492</PrefaultTime>
+                        <PostfaultTime>500</PostfaultTime>
+                        <LtrPrefaultTime>40</LtrPrefaultTime>
+                        <LtrPostfaultTime>40</LtrPostfaultTime>
+                        <DatabaseConnectString>host=UTS-DESKTOP;user=dfr;password=usi;db=m9000;compress=false;auto-reconnect=true</DatabaseConnectString>
+						<ChatterLimit>5</ChatterLimit>
+						<ChatterRate>2.0</ChatterRate>				
+						<TriggerLimit>10000</TriggerLimit>
+                        <CrossRecordServerPort>9977</CrossRecordServerPort>
+                        <DatabaseDataType>ASCII</DatabaseDataType>
+                        <ExportAnalogBufferTime>60</ExportAnalogBufferTime>            <!-- In seconds  -->
+                        <ExportAnalogSampleRate>1200</ExportAnalogSampleRate>
+                        <ExportBufferTime>600</ExportBufferTime>                    <!-- In seconds  -->
+                        <ContinuousOscillographyEnable>0</ContinuousOscillographyEnable>
+                        <AntiAliasFilterDelay>35.29</AntiAliasFilterDelay>          <!-- In microSeconds -->
+                        <DisableAllDatabaseUse>0</DisableAllDatabaseUse>
+                        <InitSound>1</InitSound>
+                        <Ps>P</Ps>
+                        <SignalTooLowFactor>1.0</SignalTooLowFactor>
+                        <EventDebounce>1.23</EventDebounce>
+                        <ConfigSerialNumber>RandomString</ConfigSerialNumber>
+                        <MonitorWettingVoltage>1</MonitorWettingVoltage>
+            </System>
+            <DataPool name='DataPool'>
+                        <Channels name='Channels'>
+                                    <Events name='Events'>
+                                                <EventInput name='E1'>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>Either</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_MinValidEventSamples>8</_MinValidEventSamples>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E2'>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0.4</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E3'>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>1.20</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E4'>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E5'>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E6'>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E7'>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E8'>
+                                                            <_Channel>8</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E9'>
+                                                            <_Channel>9</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E10'>
+                                                            <_Channel>10</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E11'>
+                                                            <_Channel>11</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E12'>
+                                                            <_Channel>12</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E13'>
+                                                            <_Channel>13</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E14'>
+                                                            <_Channel>14</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E15'>
+                                                            <_Channel>15</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E16'>
+                                                            <_Channel>16</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E17'>
+                                                            <_Channel>17</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                    </Events>
+                                    <Analogs name='Analogs'>
+ 
+                                                <AnalogInput name='A1'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A2'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>3</_Range>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A3'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A4'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A5'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A6'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                            <_Transducer>1</_Transducer>
+ 						      	    <_TransducerUnits>Hz</_TransducerUnits>
+							    <_InP1>0.004</_InP1>
+							    <_InP2>0.020</_InP2>
+							    <_OutP1>0</_OutP1>
+							    <_OutP2>100</_OutP2>
+
+                                                </AnalogInput>
+                                                <AnalogInput name='A7'>
+                                                            <_CircuitName>Line</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Virtual>1</_Virtual>
+                                                            <_VirtualScale>0.3333</_VirtualScale>
+                                                            <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                        		    		<_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        		    		<_InputAdd>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputAdd>
+                                        		    		<_InputSub>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputSub>
+                                        		    		<_InputAdd>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputAdd>
+                                        		    		<_InputSub>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputSub>                                        		    		
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+ 
+                                    </Analogs>
+                        </Channels>
+                        
+                        <LineGroups name='LineGroups'>
+                                    <LineGroup name='345kV'>
+                                        <_Id>1</_Id>
+                                        <_LineGroupName>Cap Bank 3</_LineGroupName>
+						                <_AutoCalc>no</_AutoCalc>
+						                <_PositiveResistance>0.00</_PositiveResistance>
+						                <_PositiveReactance>0.00</_PositiveReactance>
+						                <_ZeroResistance>0.00</_ZeroResistance>
+						                <_ZeroReactance>0.00</_ZeroReactance>
+						                <_LineMiles>0.00</_LineMiles>
+						                <_DecisionLogic>logic!$amp;</_DecisionLogic>
+						                <_Comments>LinegroupId=1</_Comments>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </LineGroup>
+ 
+                                    <LineGroup name='500kV'>
+						                <_Id>2</_Id>
+						                <_LineGroupName>Cap Bank 3</_LineGroupName>
+                                    	<_AutoCalc>no</_AutoCalc>
+						                <_PositiveResistance>0.00</_PositiveResistance>
+						                <_PositiveReactance>0.00</_PositiveReactance>
+						                <_ZeroResistance>0.00</_ZeroResistance>
+						                <_ZeroReactance>0.00</_ZeroReactance>
+						                <_LineMiles>0.00</_LineMiles>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </LineGroup>
+                        </LineGroups>
+ 
+                        <Algorithms name='Algorithms'>
+ 					<Monitor name='System'><_Every>10</_Every></Monitor>         <!-- In seconds  -->
+					<And name='A_very_nice_AND'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<And name='A_very_nice_AND'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<Not name='RMS7_limit_for_freq_not'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Limits(RMS7 limit for freq)/_Value</_Input>
+					</Not>
+					<Not name='RMS1_limit_for_freq_not'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Limits(RMS1 limit for freq)/_Value</_Input>
+					</Not>
+					<Average name='Average0'>
+						<_Description>NewVM</_Description>
+						<_Input>@Channels/Analogs/Analog0/Value</_Input>
+					</Average>
+					<Average name='Average2'>
+						<_Description>NewVM</_Description>
+						<_Input>@Channels/Analogs/Analog2/Value</_Input>
+					</Average>
+					<Limits name='System_5V'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/5v</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Limits name='System_2_5V'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/2.5v</_Input>
+						<_HighLimit>4</_HighLimit>
+						<_LowLimit>3</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+		                <_Duration>10</_Duration>								
+					</Limits>
+					<Limits name='System_Fan_RPM'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/FanRPM</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Output name='Global-Trigger'>
+						<_Description>NewVM</_Description>
+						<_Channel>0</_Channel>
+						<_Input>@Algorithms(Algorithms)/Triggers(Global Trigger)/_Object</_Input>
+					</Output>
+
+					<Output name='RMS1-Limit'>
+						<_Description>NewVM</_Description>
+						<_Channel>1</_Channel>
+						<_Input>@Algorithms(Algorithms)/Limits(RMS1 limit)/_Object</_Input>
+					</Output>
+
+ 					<Watts name='LG1'>
+ 						<_Description>NewVM</_Description>
+ 						<_Description>NewVM</_Description>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+ 					<Watts name='LG2'>
+ 						<_Description>NewVM</_Description>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+					<ZeroSequence name='ZS-LG2'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						 <_Average>1</_Average>
+						<_InputType>Current</_InputType>
+					</ZeroSequence>
+					<ZeroSequence name='ZS-LG1'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</ZeroSequence>
+					<PositiveSequence name='LG1'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						 <_Average>1</_Average>
+						<_InputType>Voltage</_InputType>
+					</PositiveSequence>
+					<PositiveSequence name='LG2'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</PositiveSequence>
+					<NegativeSequence name='NS-LG1'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+						 <_Average>1</_Average>
+					</NegativeSequence>
+					<NegativeSequence name='NS-LG2'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</NegativeSequence>
+					<Power name='345kV VARS'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+						<_PowerType>Reactive</_PowerType>
+						<_Inputs>A</_Inputs>
+					</Power>
+
+					  <Power name='345kV Watts'>
+					  	<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+						<_PowerType>Real</_PowerType>
+						<_Inputs>All</_Inputs>
+					  </Power>
+
+					  <Power name='345kV Watts Apparent'>
+					  	<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+						<_PowerType>Apparent</_PowerType>
+						<_Inputs>A</_Inputs>
+					  </Power>
+
+                                    <Rms name='A2'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                                <_Average>10</_Average>
+                                    </Rms>
+                                    <Rms name='A7'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>60</_Average>
+                                    </Rms>
+                                    <Magnitude name='A1-Mag-60Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>1</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Magnitude name='A1-Mag-120Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>2</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-120Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 120Hz)/_Object</_Input>
+                                                <_HighLimit>60</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+                                    <Magnitude name='A1-Mag-180Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>3</_Harmonic>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-180Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 180Hz)/_Object</_Input>
+                                                <_HighLimit>50</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                                                                                
+                                    </Limits>                      
+ 
+                                    <Phase name='A1'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A2'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A3'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A4'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A5'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A6'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                    </Phase>
+                                    <Frequency name='A7'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Frequency name='A7_Filtered'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>20</_Average>
+                                    </Frequency>
+                                    <Frequency name='A2'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Frequency name='A3'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Limits name='A7-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A7)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                                                                                
+                                    </Limits>                      
+                                    <Limits name='A2-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A2)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                                                                                
+                                    </Limits>                      
+ 
+                                    <ZeroSequence name='345kV'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+                                                <_InputType>Voltage</_InputType>
+                                    </ZeroSequence>
+ 
+                                    <Triggers name='GlobalTrigger'>
+                                                <_TriggerOutHold>6000</_TriggerOutHold>
+                                                <Trigger name='A7RMS'>
+                                                            <_TriggerName>ABCD123</_TriggerName>
+                                                            <_Enable>1</_Enable>
+                                                            <_ChanId>1</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Algorithms(Algorithms)/Limits(A7 RMS)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E1'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>2</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E1)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E2'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>3</_ChanId>
+                                                            <_Phase>B</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E2)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                    </Triggers>
+                        
+                                    <Pmus name="PMUs">                         
+                                                <Pmu name="345kV">
+                                                            <_PmuName>DFR1</_PmuName>
+                                                            <_PmuId>100</_PmuId>
+                                                            <_PmuPort>4712</_PmuPort>
+                                                            <_PmuStreamType>tcp</_PmuStreamType>
+                                                            <_UdpPort>4713</_UdpPort>
+                                                            <_PmuPhasorMode>Rectangular</_PmuPhasorMode>                <!-- Rectangular or Polar     -->
+                                                            <_PmuDataRate>60</_PmuDataRate>
+                                                            <_PmuEnable>1</_PmuEnable>
+                                                            <PmuInput name="PMUFreq">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>
+                                                                        <_PmuInputType>Freq</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A7 Filtered)/_Object</_Input>
+                                                            </PmuInput>
+ 
+                                                            <PmuInput name="345kVPhaseAV">
+                                                                    <_PmuInputName>A1-Description</_PmuInputName>    
+                                                            		<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A1)/_Object</_Input>
+                                                            </PmuInput>
+ 
+                                                            <PmuInput name="345kVPhaseBV">
+                                                            	    <_PmuInputName>A1-Description</_PmuInputName>        
+                                                            		<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A2)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kVPhaseCV">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A3)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kVPhaseAI">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A4)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kVPhaseBI">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A5)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kV Phase C I">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A6)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Line Voltage">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A7)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kV ZeroSeq V">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/ZeroSequence(345kV)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Line Freq">
+                                                                <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A7)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Line Freq (Filt)">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A7 Filtered)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="A Freq">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A2)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="B Freq">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A3)/_Object</_Input>
+                                                            </PmuInput>
+ 
+                                                            <PmuInput name="A RMS">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Rms(A2)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Some Event">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E1)/_Object</_Input>
+                                                            </PmuInput> 
+                                                            <PmuInput name="Event 2">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E2)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 3">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E3)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 4">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E4)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 5">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E5)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 6">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E6)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 7">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E7)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 8">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E8)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 9">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E9)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 10">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E10)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 11">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E11)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 12">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E12)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 13">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E13)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 14">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E14)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 15">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E15)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 16">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                 		           	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E16)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="Event 17">
+                                                                        <_PmuInputName>A1-Description</_PmuInputName>          
+                                                            	<_PmuInputType>Analog</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Channels(Channels)/Events(Events)/EventInput(E17)/_Object</_Input>
+                                                            </PmuInput>
+                                                </Pmu>
+                                                <Pmu name="765kV">
+                                                            <_PmuName>DFR1</_PmuName>
+                                                            <_PmuId>101</_PmuId>
+                                                            <_PmuPort>4713</_PmuPort>
+                                                            <_PmuStreamType>tcp</_PmuStreamType>
+                											<_UdpPort>4713</_UdpPort>
+                                                            <_PmuDataRate>60</_PmuDataRate>
+                                                            <_PmuEnable>0</_PmuEnable>
+                                                </Pmu>
+                                    </Pmus>           
+					      <VirtualMeasurement name="my-first-vm">
+					      	<_Description>NewVM</_Description>
+					        <_Average>2</_Average>
+					        <_Scale>2.5</_Scale>
+					        <VirtualMeasurementInput name="LP-power">
+					           <_Scale>3.0</_Scale>
+					           <_Input>@Algorithms(Algorithms)/Power(29-LG_1)/_Object</_Input>
+					        </VirtualMeasurementInput>
+					        <VirtualMeasurementInput name="HP-power">
+					           <_Scale>3.0</_Scale>
+					           <_Input>@Algorithms(Algorithms)/Power(30-LG_1)/_Object</_Input>
+					        </VirtualMeasurementInput>
+					      </VirtualMeasurement>
+                        </Algorithms>
+                        
+                        <Exports name='Exports'>
+							<Export name='A1-RMS-Beaver-Creek-345kV'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>RMS</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>1</_Id>
+								<_Phase>A</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Rms(RMS1)/_Value</_Input>
+								<_SampleRate>30</_SampleRate>
+							</Export>
+							<Export name='A2'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>Frequency</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>2</_Id>
+								<_Phase>B</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Rms(RMS2)/_Value</_Input>
+								<_SampleRate>15</_SampleRate>
+							</Export>
+							<Export name='A3'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>Phasor</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>3</_Id>
+								<_Phase>C</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Rms(RMS3)/_Value</_Input>
+								<_SampleRate>10</_SampleRate>
+							</Export>
+                        </Exports>
+            </DataPool>
+		</DFR>
+		<DFR id="00002">
+            <DEVICE>/dev/m9kdrv></DEVICE>
+			<IPAddress>192.168.1.101</IPAddress>
+            <System>
+            <DfrId>23</DfrId>
+                        <RecordingDeviceId>USI_M9k</RecordingDeviceId>
+                        <SampleRate>24000</SampleRate>
+                        <LineFrequency>60</LineFrequency>
+                        <ExportRate>10</ExportRate>
+                        <AnalogsCount>32</AnalogsCount>
+                        <DigitalsCount>128</DigitalsCount>
+                        <StationName>Central Station</StationName>
+                        <PrefaultTime>492</PrefaultTime>
+                        <PostfaultTime>500</PostfaultTime>
+                        <LtrPrefaultTime>40</LtrPrefaultTime>
+                        <LtrPostfaultTime>40</LtrPostfaultTime>
+                        <DatabaseConnectString>host=195.1.1.11;user=dfr;password=usi;db=m9000;compress=false;auto-reconnect=true</DatabaseConnectString>
+			<ChatterLimit>5</ChatterLimit>
+			<ChatterRate>2.2</ChatterRate>				
+			<TriggerLimit>10000</TriggerLimit>
+                        <CrossRecordServerPort>9977</CrossRecordServerPort>
+                        <DatabaseDataType>ASCII</DatabaseDataType>
+                        <ExportAnalogBufferTime>600</ExportAnalogBufferTime>            <!-- In seconds  -->
+                        <ExportAnalogSampleRate>1200</ExportAnalogSampleRate>
+                        <ExportBufferTime>600</ExportBufferTime>                    <!-- In seconds  -->
+                        <ContinuousOscillographyEnable>0</ContinuousOscillographyEnable>
+                        <AntiAliasFilterDelay>35.29</AntiAliasFilterDelay>          <!-- In microSeconds -->
+                        <DisableAllDatabaseUse>0</DisableAllDatabaseUse>
+                         <InitSound>1</InitSound>
+                         <Ps>P</Ps>
+                         <SignalTooLowFactor>1.0</SignalTooLowFactor>
+                         <EventDebounce>1.23</EventDebounce>
+                         <ConfigSerialNumber>RandomString</ConfigSerialNumber>
+                         <MonitorWettingVoltage>0</MonitorWettingVoltage>
+            </System>
+            <DataPool name='DataPool'>
+                        <Channels name='Channels'>
+                                    <Events name='Events'>
+                                                <EventInput name='E1'>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>Either</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_MinValidEventSamples>8</_MinValidEventSamples>
+                                                            <_DebounceMs>1.45</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E2'>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E3'>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E4'>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E5'>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E6'>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E7'>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E8'>
+                                                            <_Channel>8</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E9'>
+                                                            <_Channel>9</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E10'>
+                                                            <_Channel>10</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E11'>
+                                                            <_Channel>11</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E12'>
+                                                            <_Channel>12</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E13'>
+                                                            <_Channel>13</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E14'>
+                                                            <_Channel>14</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E15'>
+                                                            <_Channel>15</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E16'>
+                                                            <_Channel>16</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E17'>
+                                                            <_Channel>17</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                    </Events>
+                                    <Analogs name='Analogs'>
+ 
+                                                <AnalogInput name='A1'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                            <_Transducer>1</_Transducer>
+ 						      	    <_TransducerUnits>Hz</_TransducerUnits>
+							    <_InP1>0.004</_InP1>
+							    <_InP2>0.020</_InP2>
+							    <_OutP1>0</_OutP1>
+							    <_OutP2>100</_OutP2>                                                            
+                                                </AnalogInput>
+                                                <AnalogInput name='A2'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>3</_Range>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A3'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A4'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A5'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A6'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A7'>
+                                                            <_CircuitName>Line</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+ 
+                                    </Analogs>
+                        </Channels>
+                        
+                        <LineGroups name='LineGroups'>
+                                    <LineGroup name='345kV'>
+						                <_Id>1</_Id>
+						                <_LineGroupName>Cap Bank 3</_LineGroupName>
+                                    	<_AutoCalc>no</_AutoCalc>
+						                <_PositiveResistance>0.00</_PositiveResistance>
+						                <_PositiveReactance>0.00</_PositiveReactance>
+						                <_ZeroResistance>0.00</_ZeroResistance>
+						                <_ZeroReactance>0.00</_ZeroReactance>
+						                <_LineMiles>0.00</_LineMiles>
+						                <_DecisionLogic>logic!$amp;</_DecisionLogic>
+						                <_Comments>LinegroupId=1</_Comments>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </LineGroup>
+ 
+                                    <LineGroup name='500kV'>
+                                        <_Id>2</_Id>
+                                        <_LineGroupName>Cap Bank 3</_LineGroupName>
+						                <_AutoCalc>no</_AutoCalc>
+						                <_PositiveResistance>0.00</_PositiveResistance>
+						                <_PositiveReactance>0.00</_PositiveReactance>
+						                <_ZeroResistance>0.00</_ZeroResistance>
+						                <_ZeroReactance>0.00</_ZeroReactance>
+						                <_LineMiles>0.00</_LineMiles>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                        <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </LineGroup>
+                        </LineGroups>
+ 
+                        <Algorithms name='Algorithms'>
+ 					<Monitor name='System'><_Every>10</_Every></Monitor>         <!-- In seconds  -->
+					<And name='A_very_nice_AND'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<And name='A_very_nice_AND'>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<Average name='Average0'>
+						<_Description>NewVM</_Description>
+						<_Input>@Channels/Analogs/Analog0/Value</_Input>
+					</Average>
+					<Average name='Average2'>
+						<_Input>@Channels/Analogs/Analog2/Value</_Input>
+					</Average>
+					<Limits name='System-5V'>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/5v</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+												
+					</Limits>
+					<Limits name='System-2_5V'>
+						<_Description>NewVM</_Description>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/2.5v</_Input>
+						<_HighLimit>4</_HighLimit>
+						<_LowLimit>3</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Limits name='System-Fan-RPM'>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/FanRPM</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Output name='GlobalTrigger'>
+						<_Description>NewVM</_Description>
+						<_Channel>0</_Channel>
+						<_Input>@Algorithms(Algorithms)/Triggers(Global Trigger)/_Object</_Input>
+					</Output>
+
+					<Output name='RMS1Limit'>
+						<_Channel>1</_Channel>
+						<_Input>@Algorithms(Algorithms)/Limits(RMS1 limit)/_Object</_Input>
+					</Output>
+
+					<Output name='Mag1-60Hz-limit'>
+						<_Channel>2</_Channel>
+						<_Input>@Algorithms(Algorithms)/Limits(Mag1 60Hz limit)/_Object</_Input>
+					</Output>
+ 					<Watts name='LG1'>
+ 						<_Description>NewVM</_Description>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+ 					<Watts name='LG2'>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+					<ZeroSequence name='ZS-LG1'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</ZeroSequence>
+					<ZeroSequence name='ZS-LG2'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</ZeroSequence>
+					<PositiveSequence name='LG1'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</PositiveSequence>
+					<PositiveSequence name='LG2'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</PositiveSequence>
+					<NegativeSequence name='NS-LG1'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</NegativeSequence>
+					<NegativeSequence name='NS-LG2'>
+						<_Description>NewVM</_Description>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</NegativeSequence>
+					
+                                    <Rms name='A2'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                                <_Average>10</_Average>
+                                    </Rms>
+                                    <Rms name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>60</_Average>
+                                    </Rms>
+                                    <Magnitude name='A1-Mag-60Hz'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>1</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Magnitude name='A1-Mag-120Hz'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>2</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-120Hz'>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 120Hz)/_Object</_Input>
+                                                <_HighLimit>60</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+                                    <Magnitude name='A1-Mag-180Hz'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>3</_Harmonic>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-180Hz'>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 180Hz)/_Object</_Input>
+                                                <_HighLimit>50</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+ 
+                                    <Phase name='A1'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A2'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A3'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A4'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A5'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A6'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                    </Phase>
+                                    <Limits name='A7-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A7)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+                                    <Limits name='A2-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A2)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+ 
+                                    <ZeroSequence name='345kV'>
+                                    	<_Description>NewVM</_Description>
+                                                <_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+                                                <_InputType>Voltage</_InputType>
+                                    </ZeroSequence>
+ 					<Power name='345kV VARS'>
+ 						<_Description>NewVM</_Description>
+ 						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+ 						<_PowerType>Reactive</_PowerType>
+ 						<_Inputs>A</_Inputs>
+ 					</Power>
+ 
+ 					  <Power name='345kV Watts'>
+ 						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+ 						<_PowerType>Real</_PowerType>
+ 						<_Inputs>All</_Inputs>
+ 					  </Power>
+ 
+ 					  <Power name='345kV Watts Apparent'>
+ 						<_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+ 						<_PowerType>Apparent</_PowerType>
+ 						<_Inputs>A</_Inputs>
+ 					  </Power>
+
+                                    <Triggers name='GlobalTrigger'>
+                                                <_TriggerOutHold>6000</_TriggerOutHold>
+                                                <Trigger name='A7RMS'>
+                                                            <_TriggerName>ABCD123</_TriggerName>                              
+                                                            <_Enable>1</_Enable>
+                                                            <_ChanId>1</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Algorithms(Algorithms)/Limits(A7 RMS)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E1'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>2</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E1)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E2'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>3</_ChanId>
+                                                            <_Phase>B</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E2)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.0</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                    </Triggers>
+                        
+                                    <Pmus name="PMUs">                         
+                                                <Pmu name="345kV">
+                                                            <_PmuName>DFR1</_PmuName>
+                                                            <_PmuId>100</_PmuId>
+                                                            <_PmuPort>4712</_PmuPort>
+                                                            <_PmuStreamType>udp</_PmuStreamType>
+                                                            <_UdpPort>4713</_UdpPort>
+                                                            <_PmuPhasorMode>Rectangular</_PmuPhasorMode>                <!-- Rectangular or Polar     -->
+                                                            <_PmuDataRate>60</_PmuDataRate>
+                                                            <_PmuEnable>1</_PmuEnable>
+                                                            <PmuInput name="PMU-Freq">
+                                                                        <_PmuInputType>Freq</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Frequency(A7 Filtered)/_Object</_Input>
+                                                            </PmuInput>
+ 
+                                                            <PmuInput name="345kV-Phase-A-V">
+                                                                        <_PmuInputType>Phase</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A1)/_Object</_Input>
+                                                            </PmuInput>
+ 
+                                                            <PmuInput name="345kV-Phase-B V">
+                                                                        <_PmuInputType>Phase</_PmuInputType>
+                                                                        <_PmuEnable>1</_PmuEnable>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A2)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kV-Phase-C-V">
+                                                                        <_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A3)/_Object</_Input>
+                                                            </PmuInput>
+                                                            <PmuInput name="345kV-Phase-A-I">
+                                                                        <_PmuInputType>Phase</_PmuInputType>
+                                                                        <_Input>@Algorithms(Algorithms)/Phase(A4)/_Object</_Input>
+                                                            </PmuInput>
+                                                </Pmu>
+                                                <Pmu name="765kV">
+                                                            <_PmuName>DFR1</_PmuName>
+                                                            <_PmuId>101</_PmuId>
+                                                            <_PmuPort>4713</_PmuPort>
+                                                            <_PmuStreamType>tcp</_PmuStreamType>
+                											<_UdpPort>4713</_UdpPort>
+                                                            <_PmuDataRate>60</_PmuDataRate>
+                                                            <_PmuEnable>0</_PmuEnable>
+                                                </Pmu>
+                                    </Pmus>
+						      <VirtualMeasurement name="my-first-vm">
+						        <_Average>2</_Average>
+						        <_Scale>-2.5</_Scale>
+						        <VirtualMeasurementInput name="LP-power">
+						           <_Scale>3.0</_Scale>
+						           <_Input>@Algorithms(Algorithms)/Power(29-LG_1)/_Object</_Input>
+						        </VirtualMeasurementInput>
+						        <VirtualMeasurementInput name="HP-power">
+						           <_Scale>-0.30</_Scale>
+						           <_Input>@Algorithms(Algorithms)/Power(30-LG_1)/_Object</_Input>
+						        </VirtualMeasurementInput>
+						      </VirtualMeasurement>
+                        </Algorithms>
+                        
+                        <Exports name='Exports'>
+							<Export name='A1-RMS-Beaver-Creek-345kV'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>RMS</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>1</_Id>
+								<_Phase>A</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Rms(RMS1)/_Value</_Input>
+								<_SampleRate>30</_SampleRate>
+							</Export>
+							<Export name='A2-RMS-BeaverCreek345kV'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>RMS</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>2</_Id>
+								<_Phase>B</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Rms(RMS2)/_Value</_Input>
+								<_SampleRate>15</_SampleRate>
+							</Export>
+							<Export name='System-5V'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>RMS</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>4</_Id>
+								<_Phase>n/a</_Phase>
+								<_Units>V</_Units>
+								<_Input>@Algorithms(Algorithms)/Monitor(System)/5v</_Input>
+								<_SampleRate>1</_SampleRate>
+							</Export>
+							<Export name='System-Fan-Speed'>
+								<_ExportName>Measurement Name</_ExportName>
+								<_MeasurementType>RMS</_MeasurementType>
+								<_Enable>1</_Enable>
+								<_Id>5</_Id>
+								<_Phase>n/a</_Phase>
+								<_Units>RPM</_Units>
+								<_Input>@Algorithms(Algorithms)/Monitor(System)/FanRPM</_Input>
+								<_SampleRate>1</_SampleRate>
+							</Export>
+                        </Exports>
+            </DataPool>
+		</DFR>		
+		<DFR id="00002">
+            <DEVICE>/dev/m9kdrv></DEVICE>
+			<IPAddress>192.168.1.101</IPAddress>
+            <System>
+            <DfrId>23</DfrId>
+                        <RecordingDeviceId>USI_M9k</RecordingDeviceId>
+                        <SampleRate>24000</SampleRate>
+                        <LineFrequency>60</LineFrequency>
+                        <ExportRate>10</ExportRate>
+                        <AnalogsCount>32</AnalogsCount>
+                        <DigitalsCount>128</DigitalsCount>
+                        <StationName>Central Station</StationName>
+                        <PrefaultTime>492</PrefaultTime>
+                        <PostfaultTime>500</PostfaultTime>
+                        <LtrPrefaultTime>40</LtrPrefaultTime>
+                        <LtrPostfaultTime>40</LtrPostfaultTime>
+                        <DatabaseConnectString>host=195.1.1.11;user=dfr;password=usi;db=m9000;compress=false;auto-reconnect=true</DatabaseConnectString>
+						<ChatterLimit>5</ChatterLimit>
+						<ChatterRate>0.2</ChatterRate>				
+						<TriggerLimit>10000</TriggerLimit>
+                        <CrossRecordServerPort>9977</CrossRecordServerPort>
+                        <DatabaseDataType>ASCII</DatabaseDataType>
+                        <ExportAnalogBufferTime>600</ExportAnalogBufferTime>            <!-- In seconds  -->
+                        <ExportAnalogSampleRate>1200</ExportAnalogSampleRate>
+                        <ExportBufferTime>600</ExportBufferTime>                    <!-- In seconds  -->
+                        <ContinuousOscillographyEnable>0</ContinuousOscillographyEnable>
+                        <AntiAliasFilterDelay>35.29</AntiAliasFilterDelay>          <!-- In microSeconds -->
+                        <DisableAllDatabaseUse>0</DisableAllDatabaseUse>
+                         <InitSound>1</InitSound>
+                         <Ps>P</Ps>
+                         <SignalTooLowFactor>1.0</SignalTooLowFactor>
+            </System>
+            <DataPool name='DataPool'>
+                        <Channels name='Channels'>
+                                    <Analogs name='Analogs'>
+ 
+                                                <AnalogInput name='A1'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A2'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>3</_Range>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A3'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A4'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A5'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A6'>
+                                                            <_CircuitName>Cripple Creek</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_InputType>CurrentAcExternalShunt</_InputType>
+                                                            <_ExternalShunt>0.050</_ExternalShunt>
+                                                            <_PhaseOffset>0.1</_PhaseOffset>
+                                                            <_TransformerPrimary>10</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+                                                <AnalogInput name='A7'>
+                                                            <_CircuitName>Line</_CircuitName>
+                                                            <_Range>5</_Range>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_InputType>VoltageAc</_InputType>
+                                                            <_Virtual>1</_Virtual>
+                                                            <_VirtualScale>0.4333</_VirtualScale>
+									   	 					<_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+		                                        		    <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                        		    		<_InputAdd>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputAdd>
+                                        		    		<_InputSub>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputSub>
+                                        		    		<_InputAdd>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputAdd>
+                                        		    		<_InputSub>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_InputSub>		                                        		    
+                                                            <_TransformerPrimary>100</_TransformerPrimary>
+                                                            <_TransformerSecondary>1</_TransformerSecondary>
+                                                            <_Export>1</_Export>
+                                                </AnalogInput>
+ 
+                                    </Analogs>
+                        </Channels>
+                        
+                         <Algorithms name='Algorithms'>
+ 					<Monitor name='System'><_Every>10</_Every></Monitor>         <!-- In seconds  -->
+					<And name='A_very_nice_AND'>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<And name='A_very_nice_AND'>
+						<_Input>@Algorithms/RMS0 limit/Value</_Input>
+						<_Input>@Algorithms/RMS1 limit/Value</_Input>
+					</And>
+					<Average name='Average0'>
+						<_Input>@Channels/Analogs/Analog0/Value</_Input>
+					</Average>
+					<Average name='Average2'>
+						<_Input>@Channels/Analogs/Analog2/Value</_Input>
+					</Average>
+					<Limits name='System-5V'>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/5v</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Limits name='System-2_5V'>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/2.5v</_Input>
+						<_HighLimit>4</_HighLimit>
+						<_LowLimit>3</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Limits name='System-Fan-RPM'>
+						<_Input>@Algorithms(Algorithms)/Monitor(System)/FanRPM</_Input>
+						<_HighLimit>6</_HighLimit>
+						<_LowLimit>4</_LowLimit>
+		                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+		                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+		                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>		                		                
+		                <_Duration>10</_Duration>
+					</Limits>
+					<Output name='GlobalTrigger'>
+						<_Channel>0</_Channel>
+						<_Input>@Algorithms(Algorithms)/Triggers(Global Trigger)/_Object</_Input>
+					</Output>
+
+					<Output name='RMS1-Limit'>
+						<_Channel>1</_Channel>
+						<_Input>@Algorithms(Algorithms)/Limits(RMS1 limit)/_Object</_Input>
+					</Output>
+
+					<Output name='Mag1-60Hz-limit'>
+						<_Channel>2</_Channel>
+						<_Input>@Algorithms(Algorithms)/Limits(Mag1 60Hz limit)/_Object</_Input>
+					</Output>
+ 					<Watts name='LG1'>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+ 					<Watts name='LG2'>
+                        <_Input>@LineGroups(LineGroups)/LineGroup(Cripple Creek Lateral)/_Object</_Input>
+						<_Average>1</_Average>
+						<_InputType>C</_InputType>
+					</Watts>
+					<ZeroSequence name='ZS-LG1'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</ZeroSequence>
+					<ZeroSequence name='ZS-LG2'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</ZeroSequence>
+					<PositiveSequence name='LG1'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</PositiveSequence>
+					<PositiveSequence name='LG2'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</PositiveSequence>
+					<NegativeSequence name='NS-LG1'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG1)/_Object</_Input>
+						<_InputType>Voltage</_InputType>
+					</NegativeSequence>
+					<NegativeSequence name='NS-LG2'>
+						<_Input>@LineGroups(LineGroups)/LineGroup(LG2)/_Object</_Input>
+						<_InputType>Current</_InputType>
+					</NegativeSequence>
+					
+                                    <Rms name='A2'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                                <_Average>10</_Average>
+                                    </Rms>
+                                    <Rms name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>60</_Average>
+                                    </Rms>
+                                    <Magnitude name='A1-Mag-60Hz'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>1</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Magnitude name='A1-Mag-120Hz'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>2</_Harmonic>
+                                                <_Average>10</_Average>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-120Hz'>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 120Hz)/_Object</_Input>
+                                                <_HighLimit>60</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+                                    <Magnitude name='A1-Mag-180Hz'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Harmonic>3</_Harmonic>
+                                    </Magnitude>
+                                    <Limits name='A1-Mag-180Hz'>
+                                                <_Input>@Algorithms(Algorithms)/Magnitude(A1 Mag 180Hz)/_Object</_Input>
+                                                <_HighLimit>50</_HighLimit>
+                                                <_LowLimit>0</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+ 
+                                    <Phase name='A1'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A1)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Phase>
+                                    <Phase name='A2'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A3'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A4'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A4)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A5'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A5)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A6'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A6)/_Object</_Input>
+                                    </Phase>
+                                    <Phase name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                    </Phase>
+                                    <Frequency name='A7'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Frequency name='A7-Filtered'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A7)/_Object</_Input>
+                                                <_Average>20</_Average>
+                                    </Frequency>
+                                    <Frequency name='A2'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A2)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Frequency name='A3'>
+                                                <_Input>@Channels(Channels)/Analogs(Analogs)/AnalogInput(A3)/_Object</_Input>
+                                                <_Average>1</_Average>
+                                    </Frequency>
+                                    <Limits name='A7-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A7)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+                                    <Limits name='A2-RMS'>
+                                                <_Input>@Algorithms(Algorithms)/Rms(A2)/_Object</_Input>
+                                                <_HighLimit>300</_HighLimit>
+                                                <_LowLimit>250</_LowLimit>
+						                <_RateOfChangeLimit>17.2</_RateOfChangeLimit>
+						                <_RateOfChangeLimitPos>17.2</_RateOfChangeLimitPos>
+						                <_RateOfChangeLimitNeg>-17.2</_RateOfChangeLimitNeg>
+						                <_Duration>10</_Duration>
+                                    </Limits>                      
+ 
+                                    <ZeroSequence name='345kV'>
+                                                <_Input>@LineGroups(LineGroups)/LineGroup(345kV)/_Object</_Input>
+                                                <_InputType>Voltage</_InputType>
+                                                <_Average>1</_Average>
+                                    </ZeroSequence>
+ 
+                                    <Triggers name='Global-Trigger'>
+                                                <_TriggerOutHold>6000</_TriggerOutHold>
+                                                <Trigger name='A7-RMS'>
+                                                            <_TriggerName>ABD123</_TriggerName>                                    
+                                                            <_Enable>1</_Enable>
+                                                            <_ChanId>1</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Algorithms(Algorithms)/Limits(A7 RMS)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.2</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E1'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>2</_ChanId>
+                                                            <_Phase>A</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E1)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.2</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                                <Trigger name='E2'>
+                                                            <_Enable>1</_Enable>
+                                                            <_Type>E</_Type>
+                                                            <_ChanId>3</_ChanId>
+                                                            <_Phase>B</_Phase>
+                                                            <_Input>@Channels(Channels)/Events(Events)/EventInput(E2)/_Object</_Input>
+                                                            <_ChatterLimit>5</_ChatterLimit>
+                                                            <_ChatterRate>2.2</_ChatterRate>
+                                                            <_TriggerLimit>800</_TriggerLimit>
+                                                </Trigger>
+                                    </Triggers>
+					      <VirtualMeasurement name="my-first-vm">
+					        <_Average>2</_Average>
+					        <_Scale>-0.25</_Scale>
+					        <VirtualMeasurementInput name="LP-power">
+					           <_Scale>3.0</_Scale>
+					           <_Input>@Algorithms(Algorithms)/Power(29-LG_1)/_Object</_Input>
+					        </VirtualMeasurementInput>
+					        <VirtualMeasurementInput name="HP-power">
+					           <_Scale>3.0</_Scale>
+					           <_Input>@Algorithms(Algorithms)/Power(30-LG_1)/_Object</_Input>
+					        </VirtualMeasurementInput>
+					      </VirtualMeasurement>                                                            
+                        </Algorithms>
+                        
+            </DataPool>
+		</DFR>		
+		<DFR id="00004">
+            <DEVICE>/dev/m9kdrv></DEVICE>
+			<IPAddress>192.168.1.101</IPAddress>
+            <System>
+            <DfrId>23</DfrId>
+                        <RecordingDeviceId>USI_M9k</RecordingDeviceId>
+                        <SampleRate>24000</SampleRate>
+                        <LineFrequency>60</LineFrequency>
+                        <ExportRate>10</ExportRate>
+                        <AnalogsCount>32</AnalogsCount>
+                        <DigitalsCount>128</DigitalsCount>
+                        <StationName>Central Station</StationName>
+                        <PrefaultTime>492</PrefaultTime>
+                        <PostfaultTime>500</PostfaultTime>
+                        <LtrPrefaultTime>40</LtrPrefaultTime>
+                        <LtrPostfaultTime>40</LtrPostfaultTime>
+                        <DatabaseConnectString>host=195.1.1.11;user=dfr;password=usi;db=m9000;compress=false;auto-reconnect=true</DatabaseConnectString>
+						<ChatterLimit>5</ChatterLimit>
+						<ChatterRate>1.2</ChatterRate>				
+						<TriggerLimit>10000</TriggerLimit>
+                        <CrossRecordServerPort>9977</CrossRecordServerPort>
+                        <DatabaseDataType>ASCII</DatabaseDataType>
+                        <ExportAnalogBufferTime>600</ExportAnalogBufferTime>            <!-- In seconds  -->
+                        <ExportAnalogSampleRate>1200</ExportAnalogSampleRate>
+                        <ExportBufferTime>600</ExportBufferTime>                    <!-- In seconds  -->
+                        <ContinuousOscillographyEnable>0</ContinuousOscillographyEnable>
+                        <AntiAliasFilterDelay>35.29</AntiAliasFilterDelay>          <!-- In microSeconds -->
+                        <DisableAllDatabaseUse>0</DisableAllDatabaseUse>
+                         <InitSound>1</InitSound>
+                         <Ps>P</Ps>
+                         <SignalTooLowFactor>1.0</SignalTooLowFactor>
+            </System>
+            <DataPool name='DataPool'>
+                        <Channels name='Channels'>
+                                    <Events name='Events'>
+                                                <EventInput name='E1'>
+                                                            <_Channel>1</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>Either</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_MinValidEventSamples>8</_MinValidEventSamples>
+                                                            <_DebounceMs>2.4</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E2'>
+                                                            <_Channel>2</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E3'>
+                                                            <_Channel>3</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Cripple Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E4'>
+                                                            <_Channel>4</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_RecordMode>Both</_RecordMode>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E5'>
+                                                            <_Channel>5</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E6'>
+                                                            <_Channel>6</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Skunk bog Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E7'>
+                                                            <_Channel>7</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E8'>
+                                                            <_Channel>8</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E9'>
+                                                            <_Channel>9</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Blue Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E10'>
+                                                            <_Channel>10</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E11'>
+                                                            <_Channel>11</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E12'>
+                                                            <_Channel>12</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Swamp Creek Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E13'>
+                                                            <_Channel>13</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E14'>
+                                                            <_Channel>14</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E15'>
+                                                            <_Channel>15</_Channel>
+                                                            <_Phase>C</_Phase>
+                                                            <_EventName>Duck Butter Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Open</_NormalState>
+                                                            <_TriggerModeDfr>NormalToAbnormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E16'>
+                                                            <_Channel>16</_Channel>
+                                                            <_Phase>A</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                                <EventInput name='E17'>
+                                                            <_Channel>17</_Channel>
+                                                            <_Phase>B</_Phase>
+                                                            <_EventName>Levee Road Breaker</_EventName>
+                                                            <_EnableDfr>1</_EnableDfr>
+                                                            <_EnableSer>1</_EnableSer>
+                                                            <_NormalState>Closed</_NormalState>
+                                                            <_TriggerModeDfr>AbnormalToNormal</_TriggerModeDfr>
+                                                            <_DebounceMs>0</_DebounceMs>
+                                                </EventInput>
+                                    </Events>
+                        </Channels>
+                        
+ 
+            </DataPool>
+		</DFR>		
+	</DFRs>
+        <GlobalLineGroups name='GlobalLineGroups'>
+            <GlobalLineGroup name='345kV'>
+                <_Id>1</_Id>
+                <_LineGroupName>Cap Bank 3</_LineGroupName>
+                <_AutoCalc>yes</_AutoCalc>
+                <_PositiveResistance>0.00</_PositiveResistance>
+                <_PositiveReactance>0.00</_PositiveReactance>
+                <_ZeroResistance>0.00</_ZeroResistance>
+                <_ZeroReactance>0.00</_ZeroReactance>
+                <_LineMiles>0.00</_LineMiles>
+                <_DecisionLogic>logic!$amp;</_DecisionLogic>
+                <LgAnalogs name="LineGroupInput">
+	                <_AnalogChannels name="lg-analog1">
+		                <_ChannelId>1</_ChannelId>
+		                <_RecId>1</_RecId>
+		                <_ExpId>2</_ExpId>
+	                </_AnalogChannels>
+	                <_AnalogChannels name="lg-analog2">
+		                <_ChannelId>2</_ChannelId>
+		                <_RecId>3</_RecId>
+		                <_ExpId>4</_ExpId>
+	                </_AnalogChannels>
+                </LgAnalogs>
+            </GlobalLineGroup>
+ 
+            <GlobalLineGroup name='500kV'>
+                <_Id>2</_Id>
+                <_LineGroupName>Cap Bank 3</_LineGroupName>
+                <_AutoCalc>no</_AutoCalc>
+                <_PositiveResistance>0.00</_PositiveResistance>
+                <_PositiveReactance>0.00</_PositiveReactance>
+                <_ZeroResistance>0.00</_ZeroResistance>
+                <_ZeroReactance>0.00</_ZeroReactance>
+                <_LineMiles>0.00</_LineMiles>
+                <LgAnalogs name="LineGroupInput">
+	                <_AnalogChannels name="lg-analog1">
+		                <_ChannelId>1</_ChannelId>
+		                <_RecId>2</_RecId>
+		                <_ExpId>4</_ExpId>
+	                </_AnalogChannels>
+	                <_AnalogChannels name="lg-analog2">
+		                <_ChannelId>2</_ChannelId>
+		                <_RecId>4</_RecId>
+		                <_ExpId>6</_ExpId>
+	                </_AnalogChannels>
+                </LgAnalogs>
+          </GlobalLineGroup>
+
+       </GlobalLineGroups>
+       <GroupTriggers name='Global-Group-Trigger'>
+            <_TriggerOutHold>6000</_TriggerOutHold>
+            <GroupTrigger name='GroupTrigger'>
+                        <_Id>1</_Id>
+                        <_Enable>1</_Enable>
+                        <_Type>NegativeSequence</_Type>
+                        <_InputType>Current</_InputType>
+                        <_LineGroupId>1</_LineGroupId>
+                        <_LineGroupName>LG_Analog1</_LineGroupName>
+                        <_ChatterLimit>5</_ChatterLimit>
+                        <_ChatterRate>2.2</_ChatterRate>
+                        <_TriggerLimit>800</_TriggerLimit>
+						<_HighLimit>"6"</_HighLimit>
+						<_LowLimit>"4"</_LowLimit>
+						<_export>1</_export>
+						<_exportRate>60</_exportRate>
+             </GroupTrigger>
+            <GroupTrigger name='GroupTrigger'>
+                        <_Id>1</_Id>
+                        <_Enable>1</_Enable>
+                        <_Type>NegativeSequence</_Type>
+                        <_InputType>Current</_InputType>
+                        <_LineGroupId>1</_LineGroupId>
+                        <_LineGroupName>LG_Analog1</_LineGroupName>
+                        <_ChatterLimit>5</_ChatterLimit>
+                        <_ChatterRate>2.2</_ChatterRate>
+                        <_TriggerLimit>800</_TriggerLimit>
+						<_LowLimit>4</_LowLimit>
+						<_export>0</_export>
+			</GroupTrigger>
+            <GroupTrigger name='GroupTrigger'>
+                        <_Id>1</_Id>
+                        <_Enable>1</_Enable>
+                        <_Type>NegativeSequence</_Type>
+                        <_InputType>Current</_InputType>
+                        <_LineGroupId>1</_LineGroupId>
+                        <_LineGroupName>LG_Analog1</_LineGroupName>
+                        <_ChatterLimit>5</_ChatterLimit>
+                        <_ChatterRate>2.2</_ChatterRate>
+                        <_TriggerLimit>800</_TriggerLimit>
+						<_HighLimit>6</_HighLimit>
+             </GroupTrigger>
+        </GroupTriggers>
+       <Pmus name="PMUs">              
+           <Pmu name="345kV">
+                <_PmuName>DFR1</_PmuName>
+                <_PmuId>100</_PmuId>
+                <_PmuPort>4712</_PmuPort>
+                <_PmuStreamType>tcp</_PmuStreamType>
+                <_UdpPort>4713</_UdpPort>
+                <_PmuPhasorMode>Rectangular</_PmuPhasorMode>         <!-- Rectangular or Polar -->
+                <_PmuDataRate>60</_PmuDataRate>
+                <_PmuEnable>1</_PmuEnable>
+                <PmuInputs>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>1</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>2</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>3</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuInputType>Freq</_PmuInputType>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>4</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>5</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>6</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>8</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                </PmuInputs>
+           </Pmu>
+           <Pmu name="230kV">
+                <_PmuName>DFR1</_PmuName>
+                <_PmuId>200</_PmuId>
+                <_PmuPort>4713</_PmuPort>
+                <_PmuStreamType>tcp</_PmuStreamType>
+                <_UdpPort>4713</_UdpPort>
+                <_PmuPhasorMode>Rectangular</_PmuPhasorMode>         <!-- Rectangular or Polar -->
+                <_PmuDataRate>60</_PmuDataRate>
+                <_PmuEnable>1</_PmuEnable>
+                <PmuInputs>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>1</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>2</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>3</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuInputType>Freq</_PmuInputType>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>4</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>5</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>6</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>8</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                     <PmuInput>
+                           <_PmuEnable>1</_PmuEnable>
+                           <_Dfr>12</_Dfr>
+                           <_Id>7</_Id>
+                     </PmuInput>
+                </PmuInputs>
+           </Pmu>
+        </Pmus>
+        <Measurements>
+            <_TriggerOutHold>6000</_TriggerOutHold>
+	         <Measurement id="1">
+	         	         <_Dfr>1</_Dfr>
+	                  <_Name>Measurement Name</_Name>
+	                  <_Status>Enable</_Status>
+					<_ExportStatus>Disable</_ExportStatus>
+					<_PmuStatus>Enable</_PmuStatus>
+					<_DdrStatus>Enable</_DdrStatus>
+					<_DisturbanceAlarm>Enable</_DisturbanceAlarm>
+	         </Measurement>       
+	         <Measurement id="2">
+	         	         <_Dfr>2</_Dfr>
+	                  <_Name>Measurement Name</_Name>
+	                  <_Status>Enable</_Status>
+                    <_ExportStatus>Disable</_ExportStatus>
+					<_PmuStatus>Enable</_PmuStatus>
+					<_DdrStatus>Enable</_DdrStatus>
+					<_DisturbanceAlarm>Disable</_DisturbanceAlarm>
+	         </Measurement>       
+	         <Measurement id="3">
+	         	         <_Dfr>3</_Dfr>
+	                  <_Name>Measurement Name</_Name>
+	                  <_Status>Enable</_Status>
+	                  <_Status>Enable</_Status>
+					<_PmuStatus>Enable</_PmuStatus>
+					<_DdrStatus>Enable</_DdrStatus>
+					<_DisturbanceAlarm>Enable</_DisturbanceAlarm>
+	         </Measurement>       
+	         <Measurement id="4">
+	         	         <_Dfr>4</_Dfr>
+	                  <_Name>Measurement Name</_Name>
+	                  <_Status>Enable</_Status>
+					<_PmuStatus>Enable</_PmuStatus>
+	         </Measurement>    
+	         <Measurement id="5">
+	         	         <_Dfr>5</_Dfr>
+	                  <_Name>Measurement Name</_Name>
+					<_ExportStatus>Enable</_ExportStatus>
+	                	<_PmuStatus>Disable</_PmuStatus>
+	         </Measurement>       
+		</Measurements>
+	</SubStation>

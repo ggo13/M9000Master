@@ -1,0 +1,15 @@
+This summary report provides a "Health Check" of the entire 345kV DME system. The master unit at each of the substations has provided a health report of itself based on the following criteria:
+
+			        Individual Station Report Criteria
+			1.	System ON-LINE 
+			2.	Clock SyncCommunications 
+			3.	CommunicationClock Sync 
+			4.	Hardware Power SupplyCheck 
+			5.	Disk Storage 
+			6.	Temperature
+			7.	Analog Channel Self-test
+			8.	Digital Channel Self-test
+
+		*To obtain a "Pass" all it has to meet all the above test criteria successfully.
+
+

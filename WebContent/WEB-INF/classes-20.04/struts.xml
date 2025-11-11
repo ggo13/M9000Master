@@ -1,0 +1,1176 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<constant name="struts.custom.i18n.resources" value="ApplicationResources" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.xwork.chaining.copyErrors" value="true" />
+	<constant name="struts.xwork.chaining.copyFieldErrors" value="true" />
+	<constant name="struts.xwork.chaining.copyMessages" value="true" />
+	<constant name="struts.mapper.action.prefix.enabled" value="true"/>
+	<constant name="struts.convention.default.parent.package" value="M9000"/>
+	<constant name="struts.multipart.maxSize" value="20971520" />
+	<constant name="struts.ognl.autoGrowthCollectionLimit" value="10000"/>
+
+	<package name="M9000" extends="struts-default, json-default, jfreechart-default">
+		<interceptors>
+			<!-- <interceptor name="sessionExpire" class="com.usi.m9000.interceptor.SessionInterceptor"> 
+				</interceptor> <interceptor-stack name="sessionStack"> <interceptor-ref name="sessionExpire" 
+				/> <interceptor-ref name="defaultStack" /> </interceptor-stack> -->
+			<!-- <interceptor name="exception" class="com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor"/> 
+				<interceptor-stack name="defaultStack"> <interceptor-ref name="exception"> 
+				<param name="logEnabled">true</param> <param name="logCategory">com.usi.m9000</param> 
+				<param name="logLevel">WARN</param> </interceptor-ref> <interceptor-ref name="exception"/> 
+				<interceptor-ref name="alias <interceptor-ref name="params"/> <interceptor-ref 
+				name="servletConfig"/> <interceptor-ref name="validation" /> <interceptor-ref 
+				name="workflow" /> </interceptor-stack> -->
+
+
+			<interceptor name="session"
+				class="com.usi.m9000.interceptor.SessionInterceptor" />
+			
+			<interceptor-stack name="exceptionMappingStack">
+				<interceptor-ref name="session" />
+				<interceptor-ref name="i18n" />
+				<interceptor-ref name="params" />
+				<interceptor-ref name="logger" />
+				<interceptor-ref name="exception">
+					<param name="logEnabled">true</param>
+					<param name="logLevel">WARN</param>
+				</interceptor-ref>
+				 <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel</param>
+                </interceptor-ref>
+				<interceptor-ref name="defaultStack">       <!-- include the defaultStack this way -->
+				</interceptor-ref>
+			</interceptor-stack>
+		<interceptor-stack name="jsonWithSessionStack">
+		    <interceptor-ref name="servletConfig"/>
+		    <interceptor-ref name="params"/>
+		    <interceptor-ref name="json"/>
+		</interceptor-stack>
+		</interceptors>
+		<!-- <default-interceptor-ref name="defaultStack"></default-interceptor-ref> -->
+
+		<default-interceptor-ref name="exceptionMappingStack" />
+
+		<global-results>
+			<result name="error">/jsp/error.jsp</result>
+			<result name="sessionexpired">/jsp/login.jsp</result>
+			<result name="securityerror">/jsp/error.jsp</result>
+		</global-results>
+ 		<global-allowed-methods>execute,input,back,cancel,finish</global-allowed-methods>
+		
+		<global-exception-mappings>
+			<exception-mapping exception="com.usi.m9000.Exception.M9000Exception"
+				result="securityerror" />
+			<exception-mapping exception="java.lang.Exception"
+				result="error" />
+			<exception-mapping exception="java.io.IOException"
+				result="error" />
+			<exception-mapping exception="java.lang.Exception" result="error"/>
+			
+		</global-exception-mappings>
+
+
+		<action name="showLogin" class="com.usi.m9000.actions.M9kLogin"
+			method="showLogin">
+			<interceptor-ref name="defaultStack" />
+			<result>/jsp/login.jsp</result>
+		</action>
+		<action name="doLogin" class="com.usi.m9000.actions.M9kLogin">
+			<interceptor-ref name="defaultStack" />
+			<result name="input">jsp/login.jsp</result>
+			<result name="error">jsp/login.jsp</result>
+			<result>/jsp/stationsList.jsp</result>
+		</action>
+
+		<action name="backToStationList" class="com.usi.m9000.actions.M9kLogin"
+			method="back">
+			<result name="input">/jsp/stationsList.jsp</result>
+			<result name="error">/jsp/login.jsp</result>
+			<result>/jsp/stationsList.jsp</result>
+		</action>
+		<action name="NextToCreateOrUpdate" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="createNewStation">
+			<result>/jsp/createRemoteId.jsp</result>
+			<result name="error">/jsp/stationsList.jsp</result>
+			<result name="Cancel">/jsp/login.jsp</result>
+			<allowed-methods>createNewStation</allowed-methods>
+		</action>
+		<action name="logout" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="cancel">
+			<result>/jsp/login.jsp</result>
+			<result name="Cancel">/jsp/login.jsp</result>
+		</action>
+		<action name="updateHeader" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="updateHeaderDetails">
+			<result>/jsp/updatedHeader.jsp</result>
+		</action>
+		<action name="createRemoteId" class="com.usi.m9000.actions.CreateChannelsAction">
+			<interceptor-ref name="defaultStack" />
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result type="chain" name="Back">backToStationList</result>
+			<result>/jsp/configureDFR.jsp</result>
+			<result name="BackToDisplayDFR">/jsp/displayDFR.jsp</result>
+			<result name="Analogs" type="chain">forwardToAnalogs</result>
+			<result name="Events" type="chain">forwardToEventsViaAnalogs</result>
+			<result name="DirectToEvents" type="chain">forwardToEventChannels
+			</result>
+			<result type="chain" name="LineGroups">forwardToLineGroupsViaAnalogs
+			</result>
+			<result type="chain" name="Measurements">forwardToTriggersViaAnalogs</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocViaAnalogs</result>
+			<result type="chain" name="VirtualChannels">forwardToVirtualChannelsViaAnalogs</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurementsViaAnalogs</result>
+			<result name="AddNewUdpPort">/jsp/addNewMeasurement.jsp</result>
+		</action>
+		<action name="backFromStationDetails" class="com.usi.m9000.actions.CreateChannelsAction" method="back">
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result type="chain" name="Back">backToStationList</result>
+			<result>/jsp/displayDFR.jsp</result>
+			<result name="BackToDisplayDFR">/jsp/displayDFR.jsp</result>
+		</action>
+		<action name="forwardToAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result>/jsp/configureAnalogChannels.jsp</result>
+		</action>
+		<action name="forwardToVirtualChannels"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="populateVirtualChannelsDTO">
+			<result>/jsp/displayVirtualChannels.jsp</result>
+		</action>
+		<action name="fetchLineFreq" class="com.usi.m9000.actions.M9kJSON" >
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchSampleRate" class="com.usi.m9000.actions.M9kJSON">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchLtrSampleRate" class="com.usi.m9000.actions.M9kJSON">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchPmuDataRate" class="com.usi.m9000.actions.M9kJSON">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchGlobalExportRate" class="com.usi.m9000.actions.M9kJSON">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchEventDebounce" class="com.usi.m9000.actions.M9kJSON">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchLeafZone" class="com.usi.m9000.actions.M9kJSON" method="getHierarchyLeafZones">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>						
+		<action name="checkSessionStatus" class="com.usi.m9000.actions.M9kJSONSessionCheck"
+			method="getSessionStatus">
+			<result type="json" />
+		</action>
+		
+		<action name="addNewDFR" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="addNewDFR">
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result>/jsp/configureDFR.jsp</result>
+		</action>
+		<action name="deleteRemoteId" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="deleteNewDFR">
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result>/jsp/configureDFR.jsp</result>
+		</action>
+
+		<action name="backToConfigure" class="com.usi.m9000.actions.CreateChannelsAction"
+			method="backToConfigure">
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result>/jsp/configureDFR.jsp</result>
+		</action>
+
+		<action name="configDfr" class="com.usi.m9000.actions.SaveDFRAction">
+			<result name="input">/jsp/configureDFR.jsp</result>
+			<result name="Delete">/jsp/configureDFR.jsp</result>
+			<result>/jsp/displayDFR.jsp</result>
+		</action>
+		<action name="configDfrBack" class="com.usi.m9000.actions.SaveDFRAction" method="back">
+			<result>/jsp/createRemoteId.jsp</result>
+		</action>
+		<action name="configDfrNext" class="com.usi.m9000.actions.SaveDFRAction" method="next">
+			<result name="input">/jsp/configureDFR.jsp</result>
+			<result>/jsp/displayDFR.jsp</result>
+		</action>
+		<action name="configDfrSave" class="com.usi.m9000.actions.SaveDFRAction" method="saveDfrConfig">
+			<result name="input">/jsp/configureDFR.jsp</result>
+			<result type="redirect" name="Save">saveDfrConfig</result>
+			<result>/jsp/displayDFR.jsp</result>
+		</action>
+
+		<action name="saveDfrConfig" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="finish">
+			<result name="Finish">/jsp/displayDFR.jsp</result>
+		</action>
+		
+		<action name="editStationDetails" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="configure">
+			<result>/jsp/createRemoteId.jsp</result>
+		</action>
+		<action name="forwardTostationDetailsViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result>/jsp/createRemoteId.jsp</result>
+		</action>
+		<action name="configureChannels" class="com.usi.m9000.actions.ConfigureChannelsAction">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<!--result name="Analogs">/jsp/configureAnalogChannels.jsp</result -->
+			<result name="Analogs" type="chain">forwardToAnalogs</result>
+			<result name="Events" type="chain">forwardToEventChannels</result>
+			<result name="Back">/jsp/displayDFR.jsp</result>
+			<result type="chain" name="LineGroups">manageLineGroups</result>
+			<result type="chain" name="Measurements">triggerChannels</result>
+			<result type="chain" name="success">backToStationList</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<allowed-methods>configureLineGroups,configureChannels,sendConfiguration</allowed-methods>
+		</action>
+
+		<action name="displayDfrNext" class="com.usi.m9000.actions.ConfigureChannelsAction" method="configureChannels">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<result name="Analogs" type="chain">forwardToAnalogs</result>
+			<result name="Events" type="chain">forwardToEventChannels</result>
+		</action>
+		<action name="displayDfrFinish" class="com.usi.m9000.actions.ConfigureChannelsAction" method="finish">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="Finish">backToStationList</result>
+		</action>
+				
+		<action name="configureAnalogChannels"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="Events">forwardToEventsViaVirtualChannels</result>
+			<result type="chain" name="LineGroups">forwardToLineGroupsViaVirtualChannels</result>
+			<result type="chain" name="VirtualChannels">forwardToVirtualChannels</result>
+			<result type="chain" name="saveAnalogs">saveAnalogs</result>
+			<result type="chain" name="Measurements">forwardToTriggerViaVirtualChannels</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocViaVirtualChannels</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurementsViaVirtualChannels</result>
+			<allowed-methods>next,navigateToEvents</allowed-methods>
+		</action>
+		<action name="analogChannelsNext"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="next">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="VirtualChannels">forwardToVirtualChannels</result>
+			<result type="chain" name="saveAnalogs">saveAnalogs</result>
+		</action>
+		<action name="analogChannelsBack"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="back">
+			<result name="Back">/jsp/createRemoteId.jsp</result>
+		</action>
+		<action name="populatePhaseTypesAction" class="com.usi.m9000.actions.ConfigureAnalogChannelsAction"
+			method="populatePhaseTypes">
+			<result name="input">/jsp/configureAnalogChannels.jsp</result>
+			<result>/jsp/phaseTypes.jsp</result>
+		</action>
+				
+		<action name="configureVirtualChannels"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction">
+			<result name="input">/jsp/displayVirtualChannels.jsp</result>
+			<result name="Back">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="Events">forwardToEventsLineGroups</result>
+			<result type="chain" name="LineGroups">configureLineGroups</result>
+			<result type="chain" name="Measurements">forwardToTriggerLineGroups</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocLineGroups</result>
+			<result type="chain" name="saveVirtualsIntoDB">saveVirtualsIntoDB</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result name="NewVirtualGroupDetails">/jsp/newVirtualChannelDetails.jsp</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurementsLineGroups</result>
+			<result>/jsp/displayVirtualChannels.jsp</result>
+			<allowed-methods>navigateToLineGroups,createVirtualChannel</allowed-methods>
+		</action>
+		<action name="virtualChannelsNext"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="navigateToLineGroups">
+			<result type="chain" name="LineGroups">configureLineGroups</result>
+			<result type="chain" name="saveVirtualsIntoDB">saveVirtualsIntoDB</result>
+		</action>
+		<action name="virtualChannelsBack"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="back">
+			<result name="Back">/jsp/configureAnalogChannels.jsp</result>
+		</action>
+		<action name="virtualChannelsCreate"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="createVirtualChannel">
+			<result>/jsp/displayVirtualChannels.jsp</result>
+		</action>
+		<action name="newVirtualChannelsDialog"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="showNewVirtualChannelDialog">
+			<result>/jsp/NewVirtualChannelDetails.jsp</result>
+			<allowed-methods>showNewVirtualChannelDialog</allowed-methods>
+		</action>
+		<action name="editVirtualChannelsDialog"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="showEditVirtualChannelDialog">
+			<result>/jsp/editVirtualChannelDetails.jsp</result>
+			<allowed-methods>showEditVirtualChannelDialog</allowed-methods>
+		</action>
+		<action name="fetchOptionSelectNew"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="getDfrsSpecificChannels">
+			<result>/jsp/newVirtualOptionSelect.jsp</result>
+			<allowed-methods>getDfrsSpecificChannels</allowed-methods>
+		</action>
+
+		<action name="fetchOptionSelectEdit"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="getDfrsSpecificChannels">
+			<result>/jsp/editVirtualOptionSelect.jsp</result>
+			<allowed-methods>getDfrsSpecificChannels</allowed-methods>
+		</action>
+						
+		<action name="fetchLstOfDFrs" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="fetchLstOfDFrs">
+			<result>/jsp/displayVirtualChannels.jsp</result>
+		</action>
+		<action name="createVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="createVirtualChannel">
+			<result name="input">/jsp/NewVirtualChannelDetails.jsp</result>
+			<result>/jsp/displayVirtualChannels.jsp</result>
+			<allowed-methods>createVirtualChannel</allowed-methods>
+		</action>
+		<action name="saveVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="saveVirtualChannel">
+			<result name="input">/jsp/editVirtualChannelDetails.jsp</result>
+			<result name="error">/jsp/editVirtualChannelDetails.jsp</result>
+			<result>/jsp/displayVirtualChannels.jsp</result>
+			<allowed-methods>saveVirtualChannel</allowed-methods>
+		</action>
+		<action name="deleteVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="deleteVirtualChannel">
+			<result name="input">/jsp/displayVirtualChannels.jsp</result>
+			<result>/jsp/updatedVirtualChannelsTableRow.jsp</result>
+			<allowed-methods>deleteVirtualChannel</allowed-methods>
+		</action>
+		<action name="refreshVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="refreshLstVirtualChannels">
+			<result>/jsp/fetchVirtualChannelsTable.jsp</result>
+		</action>
+		<action name="saveAnalogs" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="finish">
+			<result type="chain" name="Finish">forwardToVirtualChannels</result>
+		</action>
+		<action name="saveVirtualsIntoDB" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="finish">
+			<result type="chain" name="Finish">configureLineGroups</result>
+		</action>
+		
+		<action name="configureLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="configureLineGroups">
+			<result>/jsp/displayLineGroups.jsp</result>
+		</action>
+		<action name="forwardToLineGroupsViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">forwardToLineGroupsViaVirtualChannels</result>
+		</action>
+		<action name="forwardToLineGroupsViaVirtualChannels"
+			class="com.usi.m9000.actions.ConfigureVirtualChannelsAction" method="populateVirtualChannelsDTO">
+			<result type="chain">configureLineGroups</result>
+		</action>
+		<action name="forwardToVirtualChannelsViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">configureVirtualChannels</result>
+		</action>
+		<action name="forwardToEventsViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">forwardToEventsViaVirtualChannels</result>
+		</action>
+		<action name="forwardToTriggersViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">forwardToTriggerViaVirtualChannels</result>
+		</action>
+		<action name="forwardToFaultLocViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">forwardToFaultLocViaVirtualChannels</result>
+		</action>
+		<action name="forwardToEventsViaVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction"
+			method="populateVirtualChannelsDTO">
+			<result type="chain">forwardToEventsLineGroups</result>
+		</action>
+		<action name="forwardToEventsLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction">
+			<result type="redirect" name="Measurements">triggerChannels</result>
+			<result type="chain" name="Events">forwardToEventsTriggerChannels</result>
+		</action>
+		<action name="forwardToTriggerViaVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction"
+			method="populateVirtualChannelsDTO">
+			<result type="redirect">forwardToTriggerLineGroups</result>
+		</action>
+		<action name="forwardToTriggerLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction">
+			<result type="redirect" name="Measurements">triggerChannels</result>
+		</action>
+		<action name="forwardToFaultLocLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction">
+			<result type="redirect" name="Measurements">triggerChannels</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocTriggerChannels</result>
+		</action>
+
+		<action name="forwardToFaultLocViaVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction"
+			method="populateVirtualChannelsDTO">
+			<result type="chain">forwardToFaultLocLineGroups</result>
+		</action>
+		
+		<action name="forwardToEventsTriggerChannels" class="com.usi.m9000.actions.TriggerChannelsAction">
+			<result type="chain" name="Events">forwardToEventChannels</result>
+		</action>
+		<action name="forwardToFaultLocTriggerChannels" class="com.usi.m9000.actions.TriggerChannelsAction">
+			<result type="chain" name="FaultLocation">forwardToFaultLocVirtualMeasurements
+			</result>
+		</action>
+		<action name="forwardToFaultLocEventChannels"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction">
+			<result type="chain" name="FaultLocation">faultLocationDetails</result>
+		</action>
+		<action name="forwardToVirtualMeasurementsViaAnalogs"
+			class="com.usi.m9000.actions.ConfigureAnalogChannelsAction" method="populateAnalogDTO">
+			<result type="chain">forwardToVirtualMeasurementsViaVirtualChannels</result>
+		</action>
+		<action name="forwardToVirtualMeasurementsViaVirtualChannels" class="com.usi.m9000.actions.ConfigureVirtualChannelsAction"
+			method="populateVirtualChannelsDTO">
+			<result type="chain">forwardToVirtualMeasurementsLineGroups</result>
+		</action>
+		<action name="forwardToVirtualMeasurementsLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction">
+			<result type="redirect" name="Measurements">triggerChannels</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurementsTriggerChannels</result>
+		</action>
+		<action name="forwardToVirtualMeasurementsTriggerChannels" class="com.usi.m9000.actions.TriggerChannelsAction">
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurements</result>
+		</action>
+		<action name="forwardToEventsVirtualMeasurements" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction">
+			<result  name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result type="chain" name="Events">forwardToEventChannels</result>
+		</action>
+		<action name="forwardToFaultLocVirtualMeasurements"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction">
+			<result  name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocEventChannels</result>
+		</action>
+		<action name="manageLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction">
+		<result name="back">/jsp/displayVirtualChannels.jsp</result>
+			<result name="Return">/jsp/displayLineGroups.jsp</result>
+			<result name="ManageLineGroups">/jsp/displayLineGroups.jsp</result>
+			<result type="redirect" name="Measurements">triggerChannels</result>
+			<result type="chain" name="SaveLineGroups">saveLineGroups</result>
+			<result name="error">/jsp/NewEditLineGroups.jsp</result>
+			<result type="chain" name="Events">forwardToEventsTriggerChannels
+			</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocTriggerChannels
+			</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result name="BackToTriggers">jsp/configureTriggerChannels.jsp</result>
+			<result name="BackToEvents">jsp/configureEventChannels.jsp</result>
+			<result name="Analogs">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurementsTriggerChannels</result>
+			<allowed-methods>backFromFaultLoc,saveDecisionLogic,saveDecisionLogicAndSend,configureTriggers</allowed-methods>
+		</action>
+		<action name="faultLocDecisionLogicBack" class="com.usi.m9000.actions.ManageLineGroupsAction" method="backFromFaultLoc">
+			<result name="BackToTriggers">jsp/configureTriggerChannels.jsp</result>
+			<result name="BackToEvents">jsp/configureEventChannels.jsp</result>
+		</action>
+		<action name="faultLocDecisionLogicSave" class="com.usi.m9000.actions.ManageLineGroupsAction" method="saveDecisionLogic">
+			<result type="chain" name="Done">backToStationList</result>
+		</action>
+		<action name="faultLocDecisionLogicSaveAndSend" class="com.usi.m9000.actions.ManageLineGroupsAction" method="saveDecisionLogicAndSend">
+			<result type="chain" name="Send">sendConfiguration</result>
+		</action>
+		<action name="lineGroupsNext" class="com.usi.m9000.actions.ManageLineGroupsAction" method="configureTriggers">
+			<result type="redirect" name="Measurements">triggerChannels</result>
+			<result type="chain" name="SaveLineGroups">saveLineGroups</result>			
+		</action>
+		<action name="lineGroupsBack" class="com.usi.m9000.actions.ManageLineGroupsAction" method="back">
+			<result name="back">/jsp/displayVirtualChannels.jsp</result>
+		</action>
+		<action name="newEditLineGroupAction" class="com.usi.m9000.actions.ManageLineGroupsAction">
+			<result name="input">jsp/NewEditLineGroups.jsp</result>
+			<result name="error">jsp/NewEditLineGroups.jsp</result>
+			<result name="LineGroupDetail">/jsp/displayLineGroups.jsp</result>
+			<result name="EditLineGroupDetail">jsp/editLineGroupDetails.jsp</result>
+			<result name="NewLineGroupDetail">jsp/newLineGroupDetails.jsp</result>
+			<result name="Cancel">/jsp/displayLineGroups.jsp</result>
+			<allowed-methods>cancelEdit,configureTriggers,saveLineGroupDetails</allowed-methods> 
+		</action>
+		<action name="backToManageLineGroups" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="back">
+			<result name="back">/jsp/configureAnalogChannels.jsp</result>
+			<result>/jsp/displayLineGroups.jsp</result>
+		</action>
+		<action name="createLineGroup" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="newLineGroup">
+			<result name="error">/jsp/displayLineGroups.jsp</result>
+			<result name="NewLineGroup">jsp/NewEditLineGroups.jsp</result>
+		</action>
+		<action name="editLineGroup" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="editLineGroupDetails">
+			<result name="error">/jsp/displayLineGroups.jsp</result>
+			<result name="EditLineGroup">jsp/NewEditLineGroups.jsp</result>
+		</action>
+		<action name="deleteLineGroup" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="deleteLineGroup">
+			<result name="error">/jsp/displayLineGroups.jsp</result>
+			<result>/jsp/displayLineGroups.jsp</result>
+		</action>
+		<action name="cancelEditLineGroup" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="cancelEdit">
+			<result name="input">jsp/NewEditLineGroups.jsp</result>
+			<result name="Cancel">/jsp/displayLineGroups.jsp</result>
+		</action>
+		<action name="saveLineGroupDetails" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="saveLineGroupDetails">
+			<result name="input">jsp/NewEditLineGroups.jsp</result>
+			<result name="error">jsp/NewEditLineGroups.jsp</result>
+			<result name="LineGroupDetail">/jsp/displayLineGroups.jsp</result>
+		</action>
+		<action name="showLineGroupDetails" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="showLineGroupDetails">
+			<result name="LineGroupDetail">/jsp/displayLineGroups.jsp</result>
+			<result name="EditLineGroupDetail">jsp/editLineGroupDetails.jsp</result>
+			<result name="NewLineGroupDetail">jsp/newLineGroupDetails.jsp</result>
+			
+			<result name="updatedLineGroupList">jsp/updateLineGroupList.jsp</result>
+			<result name="error">/jsp/displayLineGroups.jsp</result>
+			<result>/jsp/displayLineGroups.jsp</result>
+			<allowed-methods>editLineGroupDetails,newLineGroup,showLineGroupDetails,updateLineGroupDetails,saveLineGroupDetails,showFaultLocation,deleteLineGroup,newLineGroup,getUpdatedLineGroupsList</allowed-methods>
+		</action>
+		<action name="manageLineGroupsUpdateList" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="getUpdatedLineGroupsList">
+			<result name="error">/jsp/displayLineGroups.jsp</result>
+			<result name="updatedLineGroupList">jsp/updateLineGroupList.jsp</result>
+		</action>
+		<action name="displayLineGroupDetails" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="showLineGroupDetails">
+			<result name="LineGroupDetail">/jsp/lineGroupDetails.jsp</result>
+		</action>
+		<action name="updateLineGroupDetails" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="updateLineGroupDetails">
+			<result name="EditLineGroupDetail">jsp/editLineGroupDetails.jsp</result>
+			<result name="NewLineGroup">jsp/NewEditLineGroups.jsp</result>
+		</action>
+		<action name="displayDecisionLogic" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="showDecisionLogic">
+			<result>/jsp/decisionLogicTextField.jsp</result>
+		</action>
+
+		<action name="displayDialog" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="showDecisionLogic">
+			<result>/jsp/dialogTextField.jsp</result>
+		</action>
+
+		<action name="saveLineGroups" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="finish">
+			<result type="chain" name="Finish">triggerChannels</result>
+		</action>
+
+		<action name="editConfiguration" class="com.usi.m9000.actions.CreateChannelsAction" method="editStation">
+			<interceptor-ref name="exceptionMappingStack" />
+			<result name="input">/jsp/stationsList.jsp</result>
+			<result type="chain">displayDfrs</result>
+		</action>
+
+		<action name="displayDfrs" class="com.usi.m9000.actions.SaveDFRAction"
+			method="next">
+			<result>/jsp/displayDFR.jsp</result>
+		</action>
+
+		<action name="NextToDfrDisplay" class="com.usi.m9000.actions.CreateChannelsAction">
+			<result name="input">/jsp/createRemoteId.jsp</result>
+			<result name="Next">/jsp/configureDFR.jsp</result>
+		</action>
+		<action name="viewScope" class="com.usi.m9000.actions.M9kScopeAction">
+			<result name="input">/jsp/stationsList.jsp</result>
+			<result name="Back">/jsp/displayDFR.jsp</result>
+			<result>/jsp/m9kScope.jsp</result>
+		</action>
+
+		<action name="viewComtradeDetails" class="com.usi.m9000.actions.M9kComtradeAction">
+			<result name="input">/jsp/stationsList.jsp</result>
+			<result name="Back">/jsp/displayComtradeQuickSummary.jsp</result>
+			<result>/jsp/m9kComtrade.jsp</result>
+		</action>
+
+		<action name="triggerChannels" class="com.usi.m9000.actions.TriggerChannelsAction">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Events">forwardToEventChannels</result>
+			<result type="chain" name="DirectFaultLocation">faultLocationDetails</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocVirtualMeasurements
+			</result>
+			<result name="Back">/jsp/displayLineGroups.jsp</result>
+			<result name="Magnitude">/jsp/magnitudeTrigger.jsp</result>
+			<result name="Finish">/jsp/displayDFR.jsp</result>
+			<result name="Analogs">/jsp/configureAnalogChannels.jsp</result>
+			<result type="chain" name="LineGroups">configureLineGroups</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result>/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="VirtualChannels">manageLineGroups</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurements</result>
+		</action>
+		
+		<action name="triggerChannelsBack" class="com.usi.m9000.actions.TriggerChannelsAction" method="back">
+		<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result name="Back">/jsp/displayLineGroups.jsp</result>
+		</action>
+				
+		<action name="triggerChannelsNext" class="com.usi.m9000.actions.TriggerChannelsAction" method="saveTriggersAndNext">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Save">backToStationList</result>
+			<result type="chain" name="Events">forwardToEventChannels</result>
+			<result type="chain" name="DirectFaultLocation">faultLocationDetails</result>
+			<result type="chain" name="VirtualMeasurements">forwardToVirtualMeasurements</result>
+		</action>
+
+		<action name="triggerChannelsSend" class="com.usi.m9000.actions.TriggerChannelsAction" method="saveTriggersAndSend">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Send">sendConfiguration</result>
+		</action>
+
+		<action name="triggerChannelsFinish" class="com.usi.m9000.actions.TriggerChannelsAction" method="finish">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Save">backToStationList</result>
+		</action>
+		<action name="triggerChannelsAddMeasurements" class="com.usi.m9000.actions.TriggerChannelsAction" method="addNewTriggerChannel">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result name="AddNewMeasurement">/jsp/addNewMeasurement.jsp</result>
+		</action>
+
+		<action name="populateTriggerTypes" class="com.usi.m9000.actions.TriggerChannelsAction"
+			method="populateTriggerTypes">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result name="TriggerTypes">/jsp/triggerTypes.jsp</result>
+		</action>
+		<action name="RefreshMeasurements" class="com.usi.m9000.actions.TriggerChannelsAction"
+			method="refreshMeasurements">
+			<result>/jsp/addNewMeasurement.jsp</result>
+		</action>
+		<action name="ReinitializeMeasurementIds" class="com.usi.m9000.actions.TriggerChannelsAction"
+			method="reinitializeMeasurementIds">
+			<result type="chain">triggerChannels</result>
+		</action>
+		<action name="deleteMeasurementAction" class="com.usi.m9000.actions.TriggerChannelsAction" method="deleteMeasurementRequest">
+		<interceptor-ref name="jsonWithSessionStack"/>
+    		<result type="json">
+            	<param name="root">measurementToDelete</param>
+        </result>
+		</action>
+		<action name="deleteSelectedMeasurementsAction" class="com.usi.m9000.actions.TriggerChannelsAction" method="deleteSelectedMeasurementsRequest">
+		<interceptor-ref name="jsonWithSessionStack"/>
+    		<result type="json">
+            	<param name="root">selectedMeasurementsToDelete</param>
+        </result>
+		</action>
+		
+		<action name="forwardToEventChannels"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction" method="populateEventDTO">
+			<result>jsp/configureEventChannels.jsp</result>
+		</action>
+		<action name="configureEventChannels"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction">
+			<result name="input">jsp/configureEventChannels.jsp</result>
+			 <result type="chain" name="BackToVirtualMeasurements">forwardToVirtualMeasurements</result>
+			<result type="chain" name="Measurements">forwardToTriggerViaVirtualMeasurements</result>
+			<result type="chain" name="Analogs">manageLineGroups</result>
+			<result type="chain" name="VirtualChannels">manageLineGroups</result>
+			<result type="chain" name="FaultLocation">faultLocationDetails</result>			
+			<result type="chain" name="LineGroups">configureLineGroups</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result>jsp/configureEventChannels.jsp</result>
+			<allowed-methods>saveEvents,saveEventsAndSend</allowed-methods>
+			
+		</action>
+		<action name="configureEventChannelsBack"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction" method="back">
+			<result name="Back">jsp/createRemoteId.jsp</result>
+			 <result type="chain" name="BackToVirtualMeasurements">forwardToVirtualMeasurements</result>
+		</action>
+		<action name="configureEventChannelsNext"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction" method="saveEvents">
+			<result name="input">jsp/configureEventChannels.jsp</result>
+			<result type="chain" name="Done">backToStationList</result>
+			<result type="chain" name="FaultLocation">faultLocationDetails</result>
+		</action>
+		<action name="configureEventChannelsSaveAndSend"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction" method="saveEventsAndSend">
+			<result name="input">jsp/configureEventChannels.jsp</result>
+			<result type="chain" name="Send">sendConfiguration</result>
+		</action>
+		<action name="sendConfiguration" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="sendConfiguration">
+			<result type="chain" name="success">backToStationList</result>
+		</action>
+		<action name="faultLocationDetails" class="com.usi.m9000.actions.ManageLineGroupsAction"
+			method="faultLocationDecisionLogic">
+			<result name="FaultLocation">/jsp/decisionLogicFaultLoc.jsp</result>
+		</action>
+		<action name="viewComtrade" class="com.usi.m9000.actions.M9kComtradeDataAction" method="getQuickSummary">
+			<result>jsp/m9kComtradeViewerApplet.jsp</result>
+		</action>
+		<action name="showComtradeFaults" class="com.usi.m9000.actions.M9kComtradeDataAction" method="getQuickSummary">
+			<result>jsp/stationSpecificDataDisplay.jsp</result>
+			<result name="NoStations">jsp/noStationsAvailable.jsp</result>
+			<result name="input">jsp/stationsList.jsp</result>
+			<result name="Back">jsp/displayDFR.jsp</result>
+		</action>
+		<action name="updateComtradeFaults" class="com.usi.m9000.actions.M9kComtradeDataAction" method="updateQuickSummary">
+			<result name="UPDATE_FAULTS">jsp/showMessages.jsp</result>
+			<result name="input">jsp/stationsList.jsp</result>
+		</action>
+		<action name="refreshComtradeQuickSummary" class="com.usi.m9000.actions.M9kComtradeDataAction"
+			method="getQuickSummary">
+			<result>jsp/refreshComtradeQuickSummary.jsp</result>
+		</action>
+
+		<action name="updateStationHealthStatus"
+			class="com.usi.m9000.actions.M9kHealthStatusDisplayAction" method="getHealthStatus">
+			<result name="input">/jsp/healthStatus.jsp</result>
+			<result>/jsp/healthStatus.jsp</result>
+		</action>
+
+		<action name="InitStationHealthStatus"
+			class="com.usi.m9000.actions.M9kHealthStatusDisplayAction">
+			<result name="input">/jsp/stationhealthStatus.jsp</result>
+			<result>/jsp/stationhealthStatus.jsp</result>
+		</action>
+		<!-- Add your actions here -->
+		<action name="updateCircuitNames" class="com.usi.m9000.actions.ConfigureChannelsAction"
+			method="updateAndGetCircuitName">
+			<result type="json">
+				<param name="contentType">text/json-comment-filtered</param>
+				<param name="root">json</param>
+			</result>
+		</action>
+
+		<action name="updateEventDescriptions"
+			class="com.usi.m9000.actions.ConfigureEventChannelsAction" method="updateAndGetEventDescription">
+			<result type="json">
+				<param name="contentType">text/json-comment-filtered</param>
+				<param name="root">json</param>
+			</result>
+		</action>
+
+		<action name="getFile" class="com.usi.m9000.actions.M9kFileServletAction"
+			method="getFile">
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="getZipFile" class="com.usi.m9000.actions.M9kFileServletAction"
+			method="getZipFile">
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<action name="saveConfigFile" class="com.usi.m9000.actions.M9kFileServletAction"
+			method="saveConfigFile">
+			<!-- Commented out to allow session time out-->
+			<!-- interceptor-ref name="defaultStack" /-->
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+
+		<action name="getContinuousDataFile" class="com.usi.m9000.actions.M9kFileServletAction" method="getContinuousDataFileName">
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+
+		<action name="getLtrFileName" class="com.usi.m9000.actions.M9kCreateLTRAction">
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="stream">
+				<param name="contentType">text/plain</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+		
+		<action name="stationConfigReport" class="com.usi.m9000.actions.M9kFileServletAction"
+			method="printStationConfig">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">inline;filename="${fileName}"</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<allowed-methods>printStationConfig</allowed-methods>
+		</action>
+		<action name="deleteFiles" class="com.usi.m9000.actions.M9kFileServletAction"
+			method="deleteFiles">
+			<interceptor-ref name="defaultStack" />
+			<result name="success" type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>		
+		<action name="getSerExports" class="com.usi.m9000.actions.M9kSerDataTableAction"
+			method="createSERExportFile">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">inline;filename="${fileName}"</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<allowed-methods>createSERExportFile</allowed-methods>
+		</action>
+		<action name="serReport" class="com.usi.m9000.actions.M9kSerDataTableAction"
+			method="printSerData">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">inline;filename="${fileName}"</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<allowed-methods>printSerData</allowed-methods>
+		</action>
+		<action name="getAlarmExports" class="com.usi.m9000.actions.M9kAlarmsLogDataTableAction"
+			method="createAlarmsExportFile">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLength}</param>
+				<param name="contentDisposition">inline;filename="${fileName}"</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<allowed-methods>createAlarmsExportFile</allowed-methods>
+		</action>
+		<action name="fetchFaultData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="getFaults">
+			<result type="json" />
+			<result name="error" type="json">
+					<param name="ignoreHierarchy">false</param>
+	  				<param name="includeProperties">^actionErrors.*,^fieldErrors.*</param>
+			</result>
+		</action>
+		<action name="editFaults" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="editFaults">
+			<result type="json" />
+		</action>
+		<action name="fetchDdrAnalogData" class="com.usi.m9000.actions.M9kDDRAnalogDataTableAction"
+			method="getDDRData">
+			<result type="json" />
+		</action>
+		<action name="editDdrAnalogData" class="com.usi.m9000.actions.M9kDDRAnalogDataTableAction"
+			method="editDdrAnalogData">
+			<result type="json" />
+		</action>
+		<action name="fetchDdrMeasurementsData" class="com.usi.m9000.actions.M9kDDRMeasurementsDataTableAction"
+			method="getDDRData">
+			<result type="json" />
+		</action>
+		<action name="editDdrMeasurementsData" class="com.usi.m9000.actions.M9kDDRMeasurementsDataTableAction"
+			method="editDdrMeasurementsData">
+			<result type="json" />
+		</action>
+		<action name="displayFaultsData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayFaultsData">
+			<result>/jsp/faultsTab.jsp</result>
+		</action>
+		<action name="displaySerData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displaySerData">
+			<result>/jsp/serTab.jsp</result>
+		</action>
+		<action name="displayDdrAnalogData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayDdrAnalogData">
+			<result>/jsp/ddrAnalogTab.jsp</result>
+		</action>
+		<action name="displayDdrMeasurementsData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayDdrMeasurementsData">
+			<result>/jsp/ddrMeasurementsTab.jsp</result>
+		</action>
+		<action name="displayContAnalogData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayContAnalogData">
+			<result>/jsp/contAnalogTab.jsp</result>
+		</action>
+		<action name="displayContMeasurementsData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayContMeasurementsData">
+			<result>/jsp/contMeasurementsTab.jsp</result>
+		</action>
+		<action name="displayAlarmsData" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayAlarmsData">
+			<result>/jsp/alarmsTab.jsp</result>
+		</action>
+		<action name="displayHealthMonitor" class="com.usi.m9000.actions.M9kDataTableAction"
+			method="displayHealthMonitor">
+			<result>/jsp/stationhealthStatus.jsp</result>
+		</action>
+		<action name="displayDnp3Config" class="com.usi.m9000.actions.M9kDnp3ConfigurationAction"
+			method="fetchDnp3ConfigData">
+			<result>/jsp/dnp3ConfigTab.jsp</result>
+		</action>
+		<action name="displayAdvancedChannelConfig" class="com.usi.m9000.actions.M9kAdvancedChannelConfigAction"
+			method="fetchDnp3ConfigData">
+			<result>/jsp/advancedChannelConfig.jsp</result>
+		</action>
+		<action name="postDnp3Configuration" 
+        		class="com.usi.m9000.actions.M9kDnp3ConfigurationAction" 
+        		method="postDnp3Configuration">
+    		<result>/jsp/dnp3ConfigTab.jsp</result>
+			<result name="input">/jsp/dnp3ConfigTab.jsp</result>  
+		</action>
+		<action name="displayScopeTab" class="com.usi.m9000.actions.M9kScopeAction"
+			method="displaySCOPETab">
+			<result name="error">/jsp/scope-error.jsp</result>
+			<result>/jsp/scopeTab.jsp</result>
+		</action>
+		<action name="loadScopeTab" class="com.usi.m9000.actions.M9kScopeAction"
+			method="loadSCOPETab">
+			<result>/jsp/loadScopeTab.jsp</result>
+		</action>
+		<action name="displayScopeTabJF" class="com.usi.m9000.actions.M9kScopeAction"
+			method="displaySCOPETabJF">
+			<result>/jsp/scopeTabJF.jsp</result>
+		</action>
+		<action name="fetchContAnalogData" class="com.usi.m9000.actions.M9kContAnalogDataTableAction"
+			method="getContAnalogData">
+			<result type="json" />
+		</action>
+		<action name="editContAnalogData" class="com.usi.m9000.actions.M9kContAnalogDataTableAction"
+			method="editContAnalogsData">
+			<result type="json" />
+		</action>
+		<action name="fetchContAnalogData" class="com.usi.m9000.actions.M9kContAnalogDataTableAction"
+			method="getContAnalogData">
+			<result type="json" />
+		</action>
+		<action name="editContAnalogData" class="com.usi.m9000.actions.M9kContAnalogDataTableAction"
+			method="editContAnalogsData">
+			<result type="json" />
+		</action>
+		<action name="fetchContMeasurementsData" class="com.usi.m9000.actions.M9kContMeasurementsDataTableAction"
+			method="getContMeasurementsData">
+			<result type="json" />
+		</action>
+		<action name="editContMeasurementsData" class="com.usi.m9000.actions.M9kContMeasurementsDataTableAction"
+			method="editContMeasurementsData">
+			<result type="json" />
+		</action>
+		<action name="showContAnalogData" class="com.usi.m9000.actions.M9kContAnalogDataTableAction"
+			method="showContinuousAnalogData">
+			<result>jsp/m9kComtradeViewerApplet.jsp</result>
+			<result name="error">/jsp/error-comtrade-view.jsp</result>
+		</action>
+		<action name="showContMeasurementsData" class="com.usi.m9000.actions.M9kContMeasurementsDataTableAction"
+			method="showContMeasurementsData">
+			<result>jsp/m9kComtradeViewerApplet.jsp</result>
+			<result name="error">/jsp/error-comtrade-view.jsp</result>
+		</action>
+		<action name="fetchMeasurementTypes" class="com.usi.m9000.actions.M9kContMeasurementsDataTableAction" method="fetchMeasurementTypes">
+			<result type="json" />
+		</action>
+		<action name="fetchAlarmsData" class="com.usi.m9000.actions.M9kAlarmsLogDataTableAction"
+			method="getAlarmsData">
+			<result type="json" />
+		</action>
+		<action name="fetchSerData" class="com.usi.m9000.actions.M9kSerDataTableAction"
+			method="getSerData">
+			<result type="json" />
+		</action>
+		<action name="viewSCOPEChart" class="com.usi.m9000.actions.M9kScopeAction" method="getUpdatedScopeChart">
+			<result name="success" type="chart">
+				<param name="width">1000</param>
+				<param name="height">600</param> 
+			</result>
+		</action>
+		<action name="viewJQSCOPEChart" class="com.usi.m9000.actions.M9kScopeAction" method="getUpdatedJQScopeChart">
+			<result name="error">/jsp/scope-error.jsp</result>
+			<result name="success">/jsp/updatedScopeChart.jsp</result>
+		</action>
+		<action name="viewSCOPEDigitalChart" class="com.usi.m9000.actions.M9kScopeAction" method="getUpdatedJQDigitalOnlyScopeChart">
+			<result name="error">/jsp/scope-error.jsp</result>
+			<result name="success">/jsp/updatedScopeDigitalInfo.jsp</result>
+		</action>
+		<action name="getScopeDigitalInfo" class="com.usi.m9000.actions.M9kScopeAction" method="getUpdatedScopeDigitalInfo">
+			<result>/jsp/updatedScopeDigitalInfo.jsp</result>
+		</action>
+		<action name="updateChartForSelectedDfr" class="com.usi.m9000.actions.M9kScopeAction" method="getUpdatedChartDisplay">
+			<result name="input">/jsp/error.jsp</result>
+			<result name="AnalogOnly">/jsp/analogOnlyChart.jsp</result>
+			<result name="DigitalOnly">/jsp/digitalOnlyChart.jsp</result>
+			<result name="Both">/jsp/bothAnalogDigitalChart.jsp</result>
+		</action>		
+		<action name="updateScopeChart" class="com.usi.m9000.actions.M9kScopeAction" method="updateScopeChart">
+			<result>/jsp/updatedScopeChart.jsp</result>
+		</action>
+		<action name="updateScopeDfrsList" class="com.usi.m9000.actions.M9kScopeAction">
+			<result type="json" />
+		</action>
+		<action name="testEvents" class="com.usi.m9000.actions.M9kScopeAction" method="performEventTest">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<interceptor-ref name="execAndWait"/>
+			<result name="wait">/jsp/eventTest-wait.jsp</result>
+			<result name="success">/jsp/eventTest-success.jsp</result>
+	     </action>		
+		<action name="internalCal" class="com.usi.m9000.actions.M9kScopeAction" method="performInternalCalibration">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<interceptor-ref name="execAndWait"/>
+			<result name="wait">/jsp/calibration-wait.jsp</result>
+			<result name="success">/jsp/internalCal-success.jsp</result>
+	     </action>		
+		<action name="applyCal" class="com.usi.m9000.actions.M9kScopeAction" method="applyCalFactors">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<result name="success">/jsp/applyCal-success.jsp</result>
+	     </action>		
+	     <action name="verifyCal" class="com.usi.m9000.actions.M9kScopeAction" method="verifyCalibration">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<interceptor-ref name="execAndWait"/>
+			<result name="wait">/jsp/calibration-wait.jsp</result>
+			<result name="success">/jsp/verifyCal-success.jsp</result>
+	     </action>		
+		<action name="externalCal" class="com.usi.m9000.actions.M9kScopeAction" method="processExternalCalibrationRequest">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<result name="success">/jsp/externalCal-success.jsp</result>
+	     </action>
+	     <action name="resetExternalCal" class="com.usi.m9000.actions.M9kScopeAction" method="processExternalCalibrationRequest">
+			<result name="success">/jsp/resetExternalCal-success.jsp</result>
+	     </action>		
+	    <action name="fetchLastCalDate" class="com.usi.m9000.actions.M9kScopeAction" method="updateLastCalibratedDate">
+			<result>/jsp/lastCalibratedDate.jsp</result>
+		</action>
+	    <action name="fetchLastCalVerifiedDate" class="com.usi.m9000.actions.M9kScopeAction" method="updateLastCalVerifiedDate">
+			<result>/jsp/lastCalVerifiedDate.jsp</result>
+		</action>
+	    <action name="fetchLastEventTestDate" class="com.usi.m9000.actions.M9kScopeAction" method="updateLastEventTestDate">
+			<result>/jsp/lastEventTestDate.jsp</result>
+		</action>
+		<action name="calculateFaultLoc" class="com.usi.m9000.actions.M9kDataTableAction" method="calculateFaultLocation">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<result name="success">/jsp/faultLocation-success.jsp</result>
+	     </action>		
+	     <action name="saveUpdatedFaultLoc" class="com.usi.m9000.actions.M9kDataTableAction" method="saveNewFaultLocationDetails">
+			<interceptor-ref name="exceptionMappingStack"/>
+			<result name="success">/jsp/saveFaultLoc-success.jsp</result>
+	     </action>			     
+	     <action name="fetchAllEvents" class="com.usi.m9000.actions.M9kDataTableAction" method="fetchEventsList">
+			<result name="success">/jsp/eventsList.jsp</result>
+		</action>	 
+	     <action name="fetchLineGroups" class="com.usi.m9000.actions.M9kDataTableAction" method="fetchLinegroups">
+			<result name="success">/jsp/linegroupsList.jsp</result>
+		</action>	 
+		<action name="fetchSerDatesToView" class="com.usi.m9000.actions.M9kSerDataTableAction" method="getSerDatesToView">
+			<result type="json" />
+		</action>
+		<action name="fetchActiveEvents" class="com.usi.m9000.actions.M9kSerDataTableAction" method="getActiveEvents">
+			<result name="success">/jsp/activeEventsList.jsp</result>
+		</action>
+		<action name="fetchAllAvailableSerDates" class="com.usi.m9000.actions.M9kSerDataTableAction" method="getListOfAllAvailableSerDates">
+			<result name="success">/jsp/allAvailableSerDatesList.jsp</result>
+		</action>
+		<action name="forwardToVirtualMeasurements"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction">
+			<result name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/configureVirtualMeasurements.jsp</result>
+		</action>
+		<action name="forwardToTriggerViaVirtualMeasurements"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction">
+			<result name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/configureTriggerChannels.jsp</result>
+			<result name="Back">jsp/configureTriggerChannels.jsp</result>
+		</action>
+		<action name="virtualMeasurementsAction"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction">
+			<result  name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/configureVirtualMeasurements.jsp</result>
+			<result type="chain" name="Events">forwardToEventChannels</result>
+			<result type="chain" name="DirectFaultLocation">faultLocationDetails</result>
+			<result type="chain" name="FaultLocation">forwardToFaultLocEventChannels</result>
+			<result name="Finish">/jsp/displayDFR.jsp</result>
+			<result type="chain" name="Analogs">manageLineGroups</result>
+			<result type="chain" name="LineGroups">configureLineGroups</result>
+			<result name="StationDetails">/jsp/createRemoteId.jsp</result>
+			<result type="chain" name="VirtualChannels">manageLineGroups</result>
+			<result name="Back">jsp/configureTriggerChannels.jsp</result>
+		</action>
+				
+		<action name="newVirtualMeasurementsDialog"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="showNewVirtualMeasurementDialog">
+			<result>/jsp/NewVirtualMeasurementDetails.jsp</result>
+			<allowed-methods>showNewVirtualMeasurementDialog</allowed-methods>
+		</action>
+		<action name="editVirtualMeasurementsDialog"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="showEditVirtualMeasurementDialog">
+			<result>/jsp/editVirtualMeasurementDetails.jsp</result>
+			<allowed-methods>showEditVirtualMeasurementDialog</allowed-methods>
+		</action>
+		<action name="fetchDfrMeasurements" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="getDfrsSpecificMeasurements">
+			<result>/jsp/dfrSpecificMeasurements.jsp</result>
+			<allowed-methods>getDfrsSpecificMeasurements</allowed-methods>
+		</action>
+		<action name="fetchMeasurementsListNew"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="getDfrsSpecificMeasurements">
+			<result>/jsp/newVirtualOptionSelect.jsp</result>
+			<allowed-methods>getDfrsSpecificMeasurements</allowed-methods>
+		</action>
+
+		<action name="fetchMeasurementsListEdit"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="getDfrsSpecificMeasurements">
+			<result>/jsp/editVirtualOptionSelect.jsp</result>
+			<allowed-methods>getDfrsSpecificMeasurements</allowed-methods>
+		</action>
+		<action name="createVirtualMeasurement" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="createVirtualMeasurement">
+			<result name="input">/jsp/NewVirtualMeasurementDetails.jsp</result>
+			<result>/jsp/configureVirtualMeasurements.jsp</result>
+			<allowed-methods>createVirtualMeasurement</allowed-methods>
+		</action>		
+		<action name="saveVirtualMeasurement" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="saveVirtualMeasurements">
+			<result name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/configureVirtualMeasurements.jsp</result>
+			<allowed-methods>saveVirtualMeasurements</allowed-methods>
+		</action>		
+		<action name="saveVirtualMeasurementsAndNext" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="saveVirtualMeasurementsAndNext">
+			<result name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/configureVirtualMeasurements.jsp</result>
+			<result type="chain" name="Save">backToStationList</result>
+			<result type="chain" name="Events">forwardToEventChannels</result>
+			<result type="chain" name="DirectFaultLocation">faultLocationDetails</result>
+			<allowed-methods>saveVirtualMeasurementsAndNext</allowed-methods>
+		</action>
+		<action name="virtualMeasurementsBackToTriggers"
+			class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="back">
+			<result name="Back">jsp/configureTriggerChannels.jsp</result>
+			<allowed-methods>back</allowed-methods>
+		</action>			
+		<action name="virtualMeasurementsSend" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="saveAndSend">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Send">sendConfiguration</result>
+		</action>
+		<action name="virtualMeasurementsFinish" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="finish">
+			<result name="input">/jsp/configureTriggerChannels.jsp</result>
+			<result type="chain" name="Save">backToStationList</result>
+		</action>
+		<action name="deleteVirtualMeasurement" class="com.usi.m9000.actions.ConfigureVirtualMeasurementsAction" method="deleteVirtualMeasurement">
+			<result name="input">/jsp/configureVirtualMeasurements.jsp</result>
+			<result>/jsp/updatedVirtualMeasurementsList.jsp</result>
+			<allowed-methods>deleteVirtualMeasurement</allowed-methods>
+		</action>
+		<action name="admin" class="com.usi.m9000.actions.M9kLogin" method="showAdmin">
+			<result>/jsp/m9kUserSettings.jsp</result>
+		</action>
+		<action name="fetchChildZones" class="com.usi.m9000.actions.M9kLogin" method="getJSONChildZones">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="fetchFilteredStationsList" class="com.usi.m9000.actions.M9kLogin" method="getJSONFilteredStationsList">
+			<result type="json"/>
+			<result name="input" type="json"/>
+		</action>
+		<action name="saveAdvancedSettings" class="com.usi.m9000.actions.M9kAdvancedSettingsAction"
+			method="saveAdvancedSettings">		
+				<result name="input">/jsp/advancedSettings.jsp</result>
+				<result type="chain">backToStationList</result>
+				<allowed-methods>saveAdvancedSettings</allowed-methods>
+		</action>		
+		</package>
+</struts>

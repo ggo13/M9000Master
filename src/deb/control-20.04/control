@@ -1,0 +1,8 @@
+Package: [[name]]
+Version: [[version]]
+Section: base
+Priority: optional
+Architecture: all
+Depends: debconf (>= 0.2.26)
+Maintainer: USI <jgoodson@faultrecorder.com>
+Description: [[description]] 

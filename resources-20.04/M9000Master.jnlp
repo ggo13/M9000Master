@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="6.0+" codebase="http://guinea:8080/M9000Master" href="M9000Master.jnlp">
+  <information>
+    <title>M9000Master</title>
+    <vendor>User:USI</vendor>
+    <homepage href="http://www.faultrecorder.com"/>
+    <description>M9000 Web Application</description>
+    <description kind="short">USI application</description>
+    <icon href="USI-Logo.jpg" width="64" height="64"/>
+    <offline-allowed/>
+    <shortcut>
+      <desktop/>
+    </shortcut>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.7+" java-vm-args="-Xmx512M"/>
+    <jar href="M9kApplet.jar" download="eager" main="true"/>
+  </resources>
+  <applet-desc main-class="com.usi.m9000.applets.M9kComtradeViewerApplet" name="M9000Master" width="625" height="595">
+    <param name="stationId" value="4"/>
+    <param name="userRole" value="admin"/>
+    <param name="userName" value="dfr"/>
+</applet-desc>
+  
+</jnlp>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.usi.com/health" xmlns:ns1="http://www.usi.com/health">
+    <xs:element name="SubStation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:StationMaster"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:DFR"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required" type="xs:int"/>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+            <xs:attribute name="status" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="StationMaster">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ns1:Attribute"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DFR">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element ref="ns1:Status-Info"/>
+                <xs:element maxOccurs="unbounded" ref="ns1:Attribute"/>
+            </xs:choice>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+            <xs:attribute name="status" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Attribute">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ns1:Name"/>
+                <xs:element ref="ns1:Value"/>
+                <xs:element ref="ns1:State"/>
+                <xs:element ref="ns1:Status-Info"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Name" type="xs:string"/>
+    <xs:element name="Value" type="xs:string"/>
+    <xs:element name="State" type="xs:string"/>
+    <xs:element name="Status-Info" type="xs:string"/>
+</xs:schema>

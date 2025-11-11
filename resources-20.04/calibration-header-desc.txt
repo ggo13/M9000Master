@@ -1,0 +1,12 @@
+DESCRIPTION
+Each Analog channel can use any of four Analog gains; X1, X3, X6, & X8.
+This calibration process measures Ground and an internal 1.25V Reference voltage 
+using all four Analog gains for each Analog channel. Compensation values for
+both Offset & Gain are then determined for each Analog channel for each Gain.
+The 'Status' results reported below indicate whether the Analog channel calibrated
+correctly or had an error. The Compensation values are stored in the
+Station Master Database and are used for all subsequent measurements.
+
+Successful completion of Internal Calibration assures published accuracy
+at the V1, V2, & I terminals for all Analog channels.
+Refer to the system manual for specifications and recommendations.

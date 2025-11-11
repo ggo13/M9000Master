@@ -1,0 +1,13 @@
+#!/bin/bash
+
+FILE=/etc/systemd/system/m9k-station.service
+if [ -f  "$FILE" ]
+then
+echo "$FILE already exists..."
+sudo rm -rf /var/lib/tomcat9/webapps/M9000*
+sudo rm -r /var/lib/tomcat9/work/Catalina/localhost/M9000Master/
+sudo systemctl stop m9k-station
+sudo systemctl stop tomcat9
+fi
+
+exit 0

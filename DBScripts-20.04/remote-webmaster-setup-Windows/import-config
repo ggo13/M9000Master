@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]         # Checks for input filename 
+then
+  echo "Usage: ./import-config 'file-name-to-import-with-complete-path'" 
+
+  exit 1
+fi
+
+echo "Please enter the mysql root password below "
+mysql -uroot -p m9000 < $1
+
+if [ $? -ne 0 ]
+then
+  echo "Failed to import the config"
+  exit 1
+else
+  echo "Successfully imported"
+  exit 0
+fi

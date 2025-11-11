@@ -1,0 +1,1128 @@
+<?xml version="1.0" ?>
+
+<project name="M9000Master" basedir="." default="usage">
+	<property file="build.properties" />
+	<property file="resources-20.04/m9k-version.properties" />
+	<property name="src.dir" value="src" />
+	<property name="web.dir" value="WebContent" />
+	<property name="resources.dir" value="resources-20.04" />
+	<property name="src-images.dir" value="images" />
+	<property name="src-themes.dir" value="themes" />
+	<property name="dest-images.dir" value="${web.dir}/images" />
+	<property name="scripts.dir" value="scripts" />
+	<property name="dbscripts.dir" value="DBScripts-20.04" />
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes-20.04" />
+	<property name="dist.dir" value="dist-20.04" />
+	<property name="ubuntu.version" value="20.04" />
+	<property name="signedjars.dir" value="${dist.dir}/singedjars" />
+	<property name="lib.dir" value="${web.dir}/WEB-INF/lib" />
+	<property name="jsp.dir" value="WebContent/jsp" />
+	<property name="js.dir" value="js" />
+	<property name="metainf.dir" value="WebContent/META-INF" />
+	<property name="jnlpinf.dir" value="WebContent/JNLP-INF" />
+	<property name="name" value="M9000Master" />
+	<property name="web.app.version"
+		value="${web-major-version}.${web-minor-version}.${web-build-version}" />
+	<property name="station.app.version"
+		value="${station-major-version}.${station-minor-version}.${station-build-version}" />
+	<property name="m9000.db.script.version"
+			value="${m9000-db-script-major-version}.${m9000-db-script-minor-version}.${m9000-db-script-build-version}" />
+	<property name="m9kdebug.app.version"
+			value="${m9kdebug-major-version}.${m9kdebug-minor-version}.${m9kdebug-build-version}" />
+	<property name="master.comtrade.version"
+		value="${comtradeutil-major-version}.${comtradeutil-minor-version}.${comtradeutil-build-version}" />
+	<!-- taskdef resource="proguard/ant/task.properties" classpath="${lib.dir}/proguard.jar" / -->
+	<property name="m9kbackup.app.version"
+		value="${m9kbackup-major-version}.${m9kbackup-minor-version}.${m9kbackup-build-version}" />
+	<taskdef name="deb" classname="org.vafer.jdeb.ant.DebAntTask" classpath="${lib.dir}\jdeb-1.3.jar"/>
+	<path id="master-classpath">
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="**/M9000XMLConfig.jar" />
+			<include name="**/struts2-core-*.jar" />
+			<include name="**/struts2-convention*.jar" />
+			<include name="**/xmlbeans*.jar"/>
+			<include name="**/xmlunit-core-*.jar"/>
+			<include name="**/commons-configuration-*.jar"/>
+			<include name="**/commons-io-*.jar"/>
+			<include name="**/commons-lang-*.jar"/>
+			<include name="**/activemq*.jar" />
+			<include name="**/jasperreports*.jar"/>
+			<include name="**/dynamicreports*.jar"/>
+			<include name="**/jnlp*.jar"/>
+			<include name="**/jfreechart-*.jar"/>
+			<include name="**/jsch-*.jar"/>
+			<include name="**/Hikari**.jar"/>
+			<include name="**/slf4j*.jar"/>
+			<include name="**/M9kHealthXml.jar"/>
+			<include name="**/javax.mail.jar"/>
+			<include name="**/jaxb-api-*.jar"/>
+			<include name="**/jcommon*.jar"/>
+			<include name="**/json-lib*.jar"/>
+			<include name="**/jcalendar-*.jar"/>
+			<include name="**/jackson-*.jar"/>
+			<include name="**/log4j*.jar"/>
+			<include name="**/servlet*.jar"/>
+		</fileset>
+		<pathelement path="${build.dir}" />
+	</path>
+
+	<target name="usage">
+		<echo message="" />
+		<echo message="${name} build file" />
+		<echo message="-----------------------------------" />
+		<echo message="" />
+		<echo message="Available targets are:" />
+		<echo message="" />
+		<echo message="build     --> Build the application" />
+		<echo message="deploy    --> Deploy application as directory" />
+		<echo message="deploywar --> Deploy application as a WAR file" />
+		<echo message="install   --> Install application in Tomcat" />
+		<echo message="reload    --> Reload application in Tomcat" />
+		<echo message="start     --> Start Tomcat application" />
+		<echo message="stop      --> Stop Tomcat application" />
+		<echo message="list      --> List Tomcat applications" />
+		<echo message="" />
+	</target>
+
+	<target name="build" description="Compile main source tree java files">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${signedjars.dir}" />
+		<javac destdir="${build.dir}" source="11" target="11" debug="true" verbose="true"
+			deprecation="false" optimize="false" failonerror="true" encoding="iso-8859-1">
+			<classpath refid="master-classpath"/>
+			<src path="${src.dir}" />
+			<exclude name="com/usi/m9000/test/" />
+			<compilerarg value="-Xlint:unchecked" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+
+	<target name="deploy" depends="build,buildJar" description="Deploy application">
+		<copy todir="${build.dir}" preservelastmodified="true">
+			<fileset dir="${resources.dir}">
+				<include name="**/struts.xml" />
+				<!-- include name="**/validators.xml"/ -->
+				<include name="**/*.properties" />
+				<include name="**/log4j2-station.xml" />
+				<include name="**/*.txt" />
+				<include name="**/log4j2.xml"/>
+				<include name="**/log4j2-m9kbackup.xml"/>
+			</fileset>
+			<fileset dir="${src-images.dir}">
+				<include name="**/USI-Logo.jpg" />
+				<include name="**/bullet_ball_glass_green.png" />
+				<include name="**/bullet_ball_glass_red.png" />
+				<include name="**/bullet_ball_glass_yellow.png" />
+				<include name="**/bullet_ball_glass_grey.png" />
+
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+		<!--mkdir dir="${deploy.path}/${name}/conf"/> <copy todir="${deploy.path}/${name}/conf" 
+			preservelastmodified="true"> <fileset dir="${resources.dir}"> <include name="**/struts.xml"/> 
+			<include name="**/validators.xml"/> <include name="**/*.properties"/> <include 
+			name="**/log4j2-station.xml"/> </fileset> <tarfileset dir="${build.dir}" fullpath="log4j.properties"> 
+			<include name="log4j-applet.properties"/> </tarfileset> </copy -->
+		<!-- copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true"> 
+			<fileset dir="${web.dir}/WEB-INF" excludes="lib/xercesImpl*.jar"> <include 
+			name="**/web.xml"/> </fileset> </copy -->
+		<mkdir dir="${dest-images.dir}" />
+		<copy todir="${dest-images.dir}" preservelastmodified="true">
+			<fileset dir="${src-images.dir}">
+				<include name="**/dfr*.jpg" />
+				<include name="**/bullet_ball_glass_green.png" />
+				<include name="**/bullet_ball_glass_red.png" />
+				<include name="**/bullet_ball_glass_yellow.png" />
+				<include name="**/bullet_ball_glass_grey.png" />
+			</fileset>
+		</copy>
+		<!--copy todir="${deploy.path}/${name}/conf" preservelastmodified="true"> 
+			<fileset dir="${resources.dir}"> <include name="**/m9k-comtrade-viewer.properties"/> 
+			<include name="**/M9K_COMTRADE.properties"/> <include name="**/db.properties"/> 
+			</fileset> </copy -->
+		<!-- copy todir="${deploy.path}/${name}" preservelastmodified="true"> <fileset 
+			dir="${web.dir}" excludes="WEB-INF/lib/xercesImpl*.jar"> <include name="**/*.*"/> 
+			</fileset> <fileset dir="${resources.dir}"> <include name="**/db.properties"/> 
+			</fileset> </copy >
+		<antcall target="buildJar"></antcall>
+		<antcall target="buildStationTar"></antcall>
+		<antcall target="buildComtradeUtilTar"></antcal -->
+<!--		<antcall target="deploywar"></antcall> -->
+		<!-- signjar destDir="${deploy.path}/${name}" alias="usi" storepass="usidfr" 
+			preservelastmodified="true" lazy="true"> <path> <fileset dir="${web.dir}/WEB-INF/lib" 
+			includes="**/M9kApplet.jar **/activemq-all-5.4.2-fuse-00-00.jar **/commons-logging-1.1.1.jar 
+			**/jcalendar*.jar **/jcommon-1.0.16.jar **/jfreechart-1.0.19.jar **/log4j-1.2-api*.jar 
+			**/M9000XMLConfig.jar **/mysql-connector-java-5.1.13-bin.jar **/xbean.jar" 
+			/> </path> <flattenmapper /> </signjar -->
+	</target>
+
+	<target name="deploywar" depends="buildWar"
+		description="Deploy application as a WAR file">
+		<copy todir="${deploy.path}" preservelastmodified="true">
+			<fileset dir="${dist.dir}">
+				<include name="*${name}.war" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="buildWar" depends="deploy,buildStationTar,buildComtradeUtilTar"
+		description="Deploy application as a WAR file">
+		<!--<signjar alias="usi" storepass="usidfr" preservelastmodified="true" 
+			lazy="true" jar="${lib.dir}/M9kApplet-revised.jar" signedjar="${signedjars.dir}/M9kApplet.jar"> 
+			<path> <fileset dir="${web.dir}/WEB-INF/lib" includes="**/M9kApplet.jar **/activemq-all-5.4.2-fuse-00-00.jar 
+			**/commons-logging-1.1.1.jar **/jcalendar*.jar **/jcommon-1.0.16.jar 
+			**/jfreechart-1.0.19.jar **/log4j-1.2-api*.jar **/M9000XMLConfig.jar **/mysql-connector-java-5.1.13-bin.jar 
+			**/xbean.jar **/google-collections-1.0.jar **/Hikari**jar **/slf4j*.jar" 
+			/> <fileset dir="${lib.dir}" includes="**/M9kApplet-revised.jar"/> </path> 
+			<flattenmapper /> </signjar> -->
+		<!-- signjar destDir="${signedjars.dir}" alias="usi" storepass="usidfr"
+			preservelastmodified="true" lazy="true">
+			<path>
+				<fileset dir="${web.dir}/WEB-INF/lib"
+					includes="**/M9kApplet.jar **/activemq-all-5.4.2-fuse-00-00.jar **/commons-logging-1.1.1.jar **/commons-configuration*.jar **/commons-lang*.jar **/jcalendar*.jar **/jcommon-1.0.16.jar **/jfreechart-1.0.19.jar-1.0.14.jar **/log4j-1.2-api*.jar **/M9000XMLConfig.jar **/mysql-connector-java-5.1.13-bin.jar **/xbean.jar **/google-collections-1.0.jar **/Hikari**jar **/slf4j-api-1.6.4.jar" />
+			</path>
+			<flattenmapper />
+		</signjar -->
+		<war destfile="${dist.dir}/${name}.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<metainf dir="${metainf.dir}">
+			</metainf>
+			<manifest>
+				<attribute name="M9k-web-version" value="${web.app.version}" />
+				<attribute name="java-version" value="${java-version}" />
+				<attribute name="apache-tomcat-version" value="${apache-tomcat-version}" />
+				<attribute name="activemq-version" value="${activemq-version}" />
+			</manifest>
+			<lib dir="${lib.dir}">
+				<exclude name="xercesImpl*.jar" />
+				<exclude name="M9kApplet.jar" />
+				<exclude name="M9kComtradeUtil-${station.app.version}.jar" />
+				<exclude name="M9kStation.jar" />
+				<exclude name="servlet.jar"/>
+				<exclude name="servlet-api*.jar" />
+				<exclude name="jdeb*.jar" />
+				<exclude name="jnlp.jar"/>
+				<exclude name="jta*.jar"/>
+				<exclude name="jencks-amqpool*.jar"/>
+				<exclude name="jnlp-servlet.jar"/>
+				<exclude name="jcalendar*.jar"/>
+				<exclude name="commons-validator*.jar"/>
+				<exclude name="jstl-impl*.jar"/>
+				<exclude name="commons-pool*.jar"/>
+			</lib>
+			<classes dir="${build.dir}" />
+	<!--		<fileset dir="${src-images.dir}">
+				<include name="**/USI-Logo.jpg" />
+				<include name="**/bullet_ball_glass_green.png" />
+				<include name="**/bullet_ball_glass_red.png" />
+				<include name="**/bullet_ball_glass_yellow.png" />
+				<include name="**/bullet_ball_glass_grey.png" />
+
+			</fileset>
+-->
+			<fileset dir="${resources.dir}">
+				<include name="**/db.properties" />
+				<include name="**/m9k-applet.properties" />
+				<include name="**/m9k-version.properties" />
+				<include name="**/m9k-master.properties" />
+				<include name="**/M9000Master.jnlp" />
+			</fileset>
+			<fileset dir="${signedjars.dir}">
+				<include name="**/*.jar" />
+				<include name="**/*.gz" />
+			</fileset>
+			<zipfileset dir="${jsp.dir}" prefix="jsp">
+			</zipfileset>
+			<zipfileset dir="${js.dir}" prefix="js">
+			</zipfileset>
+			<fileset dir="${web.dir}">
+				<include name="index.jsp" />
+			</fileset>
+			<zipfileset dir="${web.dir}/css" prefix="css">
+			</zipfileset>
+
+			<zipfileset dir="${src-images.dir}" prefix="images" />
+			<zipfileset dir="${src-themes.dir}" prefix="themes" />
+			<zipfileset src="${lib.dir}/dynamicreports-core-6.12.1.jar" includes="dynamicreports-messages.properties fonts.xml jasperreports_extension.properties"/>
+		</war>
+	</target>
+
+	
+	<path id="test-classpath">
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+		<pathelement path="${test.dir}" />
+		<pathelement path="${web.dir}/WEB-INF/classes" />
+	</path>
+
+
+	<target name="clean" description="Clean output directories">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.*" />
+			</fileset>
+			<fileset dir="${dist.dir}">
+				<include name="**/*" />
+				<exclude name="**/singedjars/**"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="M9kApplet.jar" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- Not used yet. Use manual xml beans method to create jar -->
+	<target name="buildXMLJar">
+		<delete file="${lib.dir}/M9000XMLConfig.jar"></delete>
+		<xmlbean schema="resources/RinzoSource1.2.xsd" destfile="${lib.dir}/M9000XMLConfig.jar" />
+	</target>
+	<path id="m9kStation.classpath">
+		<fileset dir="${lib.dir}"
+			includes="activemq*.jar commons-logging*.jar xmlbeans*.jar M9000XMLConfig.jar commons-configuration*.jar commons-lang*.jar commons-collections*.jar jsch*.jar mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar jencks-amqpool*.jar M9kHealthXml.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar javax.mail.jar activation.jar" />
+	</path>
+	<path id="comtrade-util.classpath">
+		<fileset dir="${lib.dir}"
+			includes="mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar struts2-core*.jar servlet.jar" />
+	</path>
+	<path id="m9k-applet.classpath">
+		<!-- fileset dir="${lib.dir}"
+			includes="M9kApplet.jar dynamicreports-core-4.1.0.jar jasperreports-6.2.0.jar poi-3.10.1.jar itext-2.1.7.js4.jar jdtcore-3.1.0.jar" / -->
+		<fileset dir="${lib.dir}"
+			includes="M9kApplet.jar" />
+	</path>
+	<path id="m9kBackup.classpath">
+		<fileset dir="${lib.dir}"
+			includes="commons-logging*.jar xmlbeans*.jar M9000XMLConfig.jar commons-configuration*.jar commons-lang*.jar commons-collections*.jar mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar  Hikari**.jar slf4j*.jar google-collections-1.0.jar activemq*.jar javax.mail.jar" />
+	</path>
+	<path id="m9k-faultLocation.classpath">
+			<fileset dir="${lib.dir}"
+				includes="commons-logging*.jar xmlbeans*.jar M9000XMLConfig.jar commons-configuration*.jar commons-lang*.jar commons-collections*.jar mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar" />
+		</path>
+	<property name="main.class" value="com.usi.m9000.station.M9kStationLaunch" />
+	<target name="buildJar" depends="build">
+		<!--delete file="${lib.dir}M9kMaster.jar"></delete -->
+		<!--jar destfile="${lib.dir}M9kMaster.jar"> <fileset dir="${build.dir}"> 
+			<include name="**/*.*"/> <exclude name="**/struts.xml"/> f <exclude name="**/validators.xml"/> 
+			</fileset> </jar -->
+		<manifestclasspath property="jar.classpath"
+			jarfile="${lib.dir}/M9kStation.jar">
+			<classpath refid="m9kStation.classpath" />
+		</manifestclasspath>
+		<jar destfile="${lib.dir}/M9kStation.jar">
+			<manifest>
+				<attribute name="M9k-station-version" value="${station.app.version}" />
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value="${jar.classpath} . conf/." />
+			</manifest>
+			<fileset dir="${build.dir}"
+				includes="com/usi/m9000/common/ com/usi/m9000/station/ com/usi/m9000/Exception/ com/usi/m9000/data/ com/usi/m9000/dto/DfrDTO* com/usi/m9000/dto/EventChannelDTO* com/usi/m9000/dto/ComtradeDataDTO* com/usi/m9000/dto/CalibrationDTO* com/usi/m9000/dto/AnalogChannelDTO* com/usi/m9000/dto/AlarmLogsDTO* com/usi/m9000/dto/LineGroupChannelsDTO* com/usi/m9000/dto/StationDTO* com/usi/m9000/dto/Email* com/usi/m9000/dto/M9kStatusReportDTO* com/usi/m9000/dto/StationReportDTO* com/usi/m9000/dto/LcItemDTO* com/usi/m9000/dao/ com/usi/m9000/config/ com/usi/m9000/xml/ com/usi/m9000/util/M9kScp* com/usi/m9000/util/M9kConstants* com/usi/m9000/util/Pair* com/usi/m9000/util/M9kUtils* com/usi/m9000/util/M9kReportUtil* com/usi/m9000/xml/util/M9kXMLUtils* com/usi/m9000/triggers/LineGroupsAlgorithm* com/usi/m9000/chart/ChannelsUtil* com/usi/m9000/station/util/M9kStationDBUtil*"
+				excludes="com/usi/m9000/xml/util/SubStation*">
+				<!--include name="**/jndi.properties"/> <include name="**/station.properties"/ -->
+			</fileset>
+		</jar>
+		<!-- antcall target="buildComtradeUtilJar"></antcall>
+		<antcall target="buildM9kAppletJar"></antcall -->
+		<!-- <antcall target="obfuscate"></antcall> -->
+	</target>
+	<target name="buildComtradeUtilJar" depends="build,buildJar">
+
+		<manifestclasspath property="comtrade-util-jar.classpath"
+			jarfile="${lib.dir}/M9kComtradeUtil.jar">
+			<classpath refid="comtrade-util.classpath" />
+		</manifestclasspath>
+		<!--delete file="${lib.dir}/M9kComtradeUtil.jar"></delete -->
+		<jar destfile="${lib.dir}/M9kComtradeUtil.jar">
+			<manifest>
+				<attribute name="M9k-Master-Comtrade-version" value="${master.comtrade.version}" />
+				<attribute name="Main-Class"
+					value="com.usi.m9000.Master.M9kMasterCreateComtradeFilesFromDB" />
+				<attribute name="Class-Path"
+					value="${comtrade-util-jar.classpath} . config/." />
+
+			</manifest>
+			<fileset dir="${build.dir}"
+				includes="com/usi/m9000/common/ com/usi/m9000/Master/M9kMasterCreateComtradeFilesFromDB* com/usi/m9000/Exception/ com/usi/m9000/data/ com/usi/m9000/dao/ com/usi/m9000/util/M9kConstants* com/usi/m9000/util/M9kUtils* com/usi/m9000/util/Pair* com/usi/m9000/dto/ComtradeDataDTO* com/usi/m9000/config/M9kMySqlDatabase* com/usi/m9000/config/*Info* com/usi/m9000/config/M9kComtradeParser* com/usi/m9000/chart/ChannelsUtil* com/usi/m9000/station/util/M9kStationDBUtil*"
+				excludes="com/usi/m9000/xml/util/">
+				<!--include name="**/*.*"/ -->
+				<!--exclude name="**/db.properties"/> <exclude name="**/log4j.properties"/> 
+					<exclude name="**/M9K_COMTRADE.properties"/> <exclude name="**/quartz.properties"/ -->
+				<exclude name="**/*.properties" />
+				<exclude name="**/struts.xml" />
+				<exclude name="**/validators.xml" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="buildTestJar" depends="build">
+
+		<!--delete file="${lib.dir}/M9kComtradeUtil.jar"></delete -->
+		<jar destfile="${lib.dir}/M9kTest.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.usi.m9000.test.M9kCrossTrigger" />
+				<attribute name="Class-Path" value="${jar.classpath} ." />
+			</manifest>
+			<fileset dir="${build.dir}"
+				includes="com/usi/m9000/station/commands/M9kCommandThreads* com/usi/m9000/station/net/M9kStationCommandClient* com/usi/m9000/Exception/M9000Exception* com/usi/m9000/station/util/M9kStationConstants*">
+				<!--include name="**/*.*"/ -->
+				<!--exclude name="**/db.properties"/> <exclude name="**/log4j.properties"/> 
+					<exclude name="**/M9K_COMTRADE.properties"/> <exclude name="**/quartz.properties"/ -->
+				<exclude name="**/*.properties" />
+				<exclude name="**/struts.xml" />
+				<exclude name="**/validators.xml" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="buildM9kFaultLocationJar" depends="build,buildJar">
+
+			<manifestclasspath property="m9k-faultLocation-jar.classpath"
+				jarfile="${lib.dir}/M9kFaultLocation.jar">
+				<classpath refid="m9k-faultLocation.classpath" />
+			</manifestclasspath>
+			<!--delete file="${lib.dir}/M9kComtradeUtil.jar"></delete -->
+			<jar destfile="${lib.dir}/M9kFaultLocation.jar">
+				<manifest>
+					<attribute name="M9k-Master-Comtrade-version" value="${master.comtrade.version}" />
+					<attribute name="Main-Class"
+						value="com.usi.m9000.station.faultLocation.M9kFaultLocation" />
+					<attribute name="Class-Path"
+						value="${m9k-faultLocation-jar.classpath} . config/." />
+
+				</manifest>
+				<fileset dir="${build.dir}"
+					includes=" com/usi/m9000/triggers/LineGroupsAlgorithm* com/usi/m9000/xml/M9000XmlConfig* com/usi/m9000/common/ com/usi/m9000/station/faultLocation/ com/usi/m9000/Exception/ com/usi/m9000/data/ com/usi/m9000/dao/ com/usi/m9000/util/M9kConstants* com/usi/m9000/util/M9kUtils* com/usi/m9000/util/Pair* com/usi/m9000/dto/AnalogChannelDTO* com/usi/m9000/station/dto/ProcessDatDTO* com/usi/m9000/dto/LineGroupChannelsDTO* com/usi/m9000/config/M9kMySqlDatabase* com/usi/m9000/config/*Info* com/usi/m9000/config/M9kComtradeParser* com/usi/m9000/station/util/LineChannels* com/usi/m9000/util/M9kXMLConstants* com/usi/m9000/station/util/ com/usi/m9000/chart/ChannelsUtil*">
+					<!--include name="**/*.*"/ -->
+					<!--exclude name="**/db.properties"/> <exclude name="**/log4j.properties"/> 
+						<exclude name="**/M9K_COMTRADE.properties"/> <exclude name="**/quartz.properties"/ -->
+					<include name="**/M9K_COMTRADE.properties" />
+					<exclude name="**/struts.xml" />
+					<exclude name="**/validators.xml" />
+				</fileset>
+			</jar>
+		</target>
+	<target name="buildM9kFaultLocationTar" depends="buildM9kFaultLocationJar">
+		<tar destfile="${dist.dir}/M9kFaultLocation-1.0.0.tar"
+			longfile="gnu">
+			<tarfileset dir="${lib.dir}" prefix="M9kFaultLocation/lib"
+				preserveLeadingSlashes="true"
+				includes="mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar"></tarfileset>
+			<tarfileset dir="${lib.dir}" prefix="M9kFaultLocation/lib/"
+				preserveLeadingSlashes="true">
+				<include name="M9kFaultLocation.jar" />
+				<include name="xmlbeans*.jar"/>
+				<include name="M9000XMLConfig.jar"/>
+			</tarfileset>
+			<tarfileset dir="${build.dir}" fullpath="M9kFaultLocation/lib/log4j.properties"
+				preserveLeadingSlashes="true">
+				<include name="log4j-faultLocation.properties" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" prefix="M9kFaultLocation/lib"
+				preserveLeadingSlashes="true">
+				<include name="**/M9K_COMTRADE.properties" />
+			</tarfileset>
+			<tarfileset dir="${scripts.dir}" prefix="M9kFaultLocation/scripts"
+				preserveLeadingSlashes="true" filemode="755" username="dfr" group="dfr"
+				includes="**/M9kCalculateFaultLocation.bat **/m9k-calculate-faultLocation.sh">
+			</tarfileset>
+		</tar>
+	</target>
+	
+	<target name="buildComtradeUtilTar" depends="buildComtradeUtilJar">
+		<tar destfile="${dist.dir}/M9kComtradeUtil-${master.comtrade.version}.tar"
+			longfile="gnu">
+			<tarfileset dir="${lib.dir}" prefix="M9kComtradeUtil/lib"
+				preserveLeadingSlashes="true"
+				includes="mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar struts2-core*.jar servlet.jar"></tarfileset>
+			<tarfileset dir="${resources.dir}" prefix="M9kComtradeUtil/lib"
+				preserveLeadingSlashes="true" includes="wrapper.dll wrapper.jar"></tarfileset>
+			<tarfileset dir="${resources.dir}" prefix="M9kComtradeUtil/conf"
+				preserveLeadingSlashes="true" includes="wrapper.conf"></tarfileset>
+			<tarfileset dir="${resources.dir}" prefix="M9kComtradeUtil/bin"
+				preserveLeadingSlashes="true"
+				includes="InstallM9kComtradeCreate-NT.bat UninstallM9kComtradeCreate-NT.bat"></tarfileset>
+			<tarfileset dir="${web.dir}/WEB-INF/lib" fullpath="M9kComtradeUtil/lib/M9kComtradeUtil.jar"
+				preserveLeadingSlashes="true">
+				<include name="M9kComtradeUtil.jar" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" fullpath="M9kComtradeUtil/lib/log4j.properties"
+				preserveLeadingSlashes="true">
+				<include name="log4j-station.properties" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" fullpath="M9kComtradeUtil/lib/db.properties"
+				preserveLeadingSlashes="true">
+				<include name="db-station.properties" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" prefix="M9kComtradeUtil/lib"
+				preserveLeadingSlashes="true">
+				<include name="**/M9K_COMTRADE.properties" />
+			</tarfileset>
+			<tarfileset dir="${scripts.dir}" prefix="M9kComtradeUtil/scripts"
+				preserveLeadingSlashes="true" filemode="755" username="dfr" group="dfr"
+				includes="**/CreateComtradeFiles.* **/m9k-station-create-comtrade.sh">
+			</tarfileset>
+		</tar>
+	</target>
+
+	<target name="m9k-build-all-deb-package" depends="m9k-software-deb-package,m9k-station-software-deb-package,m9k-station-db-deb-package,m9k-station-db-upgrade-deb-package,m9k-master-deb-package,m9kdebug-deb-package,m9k-backup-deb-package,m9k-build-db-windows-master-zip,m9k-remote-master-db-setup-deb-package, m9k-remote-master-upgrade-db-deb-package">
+	</target>
+	  <target name="m9k-station-software-deb-package" depends="deploy">
+	    <copy todir="${dist.dir}/deb/control-station">
+	      <fileset dir="${src.dir}/deb/control-station"/>
+	      <filterset begintoken="[[" endtoken="]]">
+	        <filter token="version" value="${station.app.version}"/>
+	        <filter token="description" value="M9k Station Master software"/>
+	        <filter token="name" value="m9k-station"/>
+	      </filterset>
+	    </copy>
+	    <deb destfile="${dist.dir}/m9k-station-${station.app.version}.deb" control="${dist.dir}/deb/control-station" verbose="true">
+
+	      <data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" >
+	      	<exclude name="**/m9k-station-launch.sh"/>
+	      	<exclude name="**/M9kStationListeners.sh"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	    	             user="dfr"
+	    	                group="dfr"/>
+	      </data>
+	    	
+	    <!-- <data src="${scripts.dir}" type="directory">
+	    	<include name="**/m9k-station.conf"/>
+  		    <mapper type="perm" prefix="/etc/init"/>
+		</data> -->
+	    <data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" conffile="true">
+	    	<include name="**/station.properties"/>
+	    	<include name="**/M9K_COMTRADE.properties"/>
+	    	<include name="**/M9000.properties"/>
+	    	<include name="**/log4j.xml"/>
+	    	<include name="**/db.properties"/>
+	    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+	    	<data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" >
+	    		    	<include name="**/m9k-station-launch.sh"/>
+	    				<include name="**/M9kStationListeners.sh"/>
+		    		    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="755"
+	    		    		    	             user="dfr"
+	    		    		    	                group="dfr"/>
+	    		    </data>
+	    <!-- START -->
+	    <!-- Uncomment for 12.04 and comment for 20.04 -->
+	    <!-- data src="${scripts.dir}/m9k-station.conf" type="file" conffile="true">
+	    	<mapper type="perm" prefix="/etc/init" />
+	    </data -->
+	    <!-- Uncomment for 20.04 and comment for 12.04 -->
+	    <data src="${scripts.dir}/m9k-station.service" type="file" conffile="true">
+	    		    	<mapper type="perm" prefix="/etc/systemd/system" />
+	   	</data>
+	    <!-- END -->
+	    <!-- <tarfileset  dir="${dist.dir}/M9kStation-${station.app.version}.tar"
+	    	               prefix="/home/dfr/m9k"
+	    	             filemode="600"
+	    	             username="dfr"
+	    	                group="dfr"/> -->
+
+	    </deb>
+
+	  </target>
+	<target name="m9k-station-db-deb-package">
+	  	<copy todir="${dist.dir}/deb/control-db">
+	  		      <fileset dir="${src.dir}/deb/control-db"/>
+	  		      <filterset begintoken="[[" endtoken="]]">
+	  		        <filter token="version" value="${m9000.db.script.version}"/>
+	  		        <filter token="description" value="Initial set up of the complete database"/>
+	  		        <filter token="name" value="m9k-database-setup"/>
+	  		      <filter token="db-script-version" value="${m9000.db.script.version}"/>
+	  		      </filterset>
+	  		    </copy>
+
+	    <deb destfile="${dist.dir}/m9k-station-db-setup-${m9000.db.script.version}.deb" control="${dist.dir}/deb/control-db" verbose="true">
+		      <data src="${dbscripts.dir}" type="directory" excludes="remote-webmaster-setup-Windows db-patch-for-1.0.7/** Archived/** DB-Setup/** DB-Upgrade/**">
+		      	<include name="M9k-StationMaster-Create-Tables.sql"/>
+		      	<include name="M9k-StationMaster-Local-Util.sql"/>
+		      	<include name="create-new-events.sql"/>	
+		      	<include name="create-sp-to-remove-old-data.sql"/>
+		      	<include name="create-partitions.sql"/>
+		      	<include name="drop-partitions.sql"/>
+		        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-setup-${m9000.db.script.version}" filemode="644"
+		    	             user="dfr"
+		    	                group="dfr"/>
+		    </data>
+
+	      <data src="${dbscripts.dir}/DB-Setup" type="directory" excludes="m9k-setup-db-complete.sh">
+	        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-setup-${m9000.db.script.version}" filemode="644"
+	    	             user="dfr"
+	    	                group="dfr"/>
+	    </data>
+	    <data src="${dbscripts.dir}/DB-Setup/m9k-setup-db-complete.sh" type="file" >
+	        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-setup-${m9000.db.script.version}" filemode="755"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+
+	    </deb>
+
+		</target>
+	
+	<target name="m9k-station-db-upgrade-deb-package">
+	  	<copy todir="${dist.dir}/deb/control-db-upgrade">
+	  		      <fileset dir="${src.dir}/deb/control-db-upgrade"/>
+	  		      <filterset begintoken="[[" endtoken="]]">
+	  		        <filter token="version" value="${m9000.db.script.version}"/>
+	  		        <filter token="description" value="Upgrade already installed database"/>
+	  		        <filter token="name" value="m9k-database-upgrade"/>
+	  		      <filter token="db-script-version" value="${m9000.db.script.version}"/>
+	  		      </filterset>
+	  		    </copy>
+
+
+		<deb destfile="${dist.dir}/m9k-station-db-upgrade-local-${m9000.db.script.version}.deb" control="${dist.dir}/deb/control-db-upgrade" verbose="true">
+
+			<data src="${dbscripts.dir}" type="directory" excludes="remote-webmaster-setup-Windows db-patch-for-1.0.7/** Archived/** DB-Setup/** DB-Upgrade/**">
+				<include name="create-new-events.sql" />
+				<include name="create-sp-to-remove-old-data.sql" />
+				<include name="create-hierarchy-table.sql" />
+				<include name="alter-contAnalog_Users.sql" />
+				<include name="create-partitions.sql"/>
+				<include name="drop-partitions.sql"/>
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade" type="directory" excludes="db-upgrade-local/**  db-upgrade-remote/**">
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade/db-upgrade-local" type="directory" excludes="m9k-upgrade-db.sh">
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade/db-upgrade-local/m9k-upgrade-db.sh" type="file">
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="755" user="dfr" group="dfr" />
+			</data>
+
+		</deb>
+
+		<deb destfile="${dist.dir}/m9k-station-db-upgrade-remote-${m9000.db.script.version}.deb" control="${dist.dir}/deb/control-db-upgrade" verbose="true">
+
+			<data src="${dbscripts.dir}" type="directory" excludes="remote-webmaster-setup-Windows db-patch-for-1.0.7/** Archived/** DB-Setup/** DB-Upgrade/**">
+				<include name="create-new-events.sql" />
+				<include name="create-sp-to-remove-old-data.sql" />
+				<include name="create-hierarchy-table.sql" />
+				<include name="alter-contAnalog_Users.sql" />
+				<include name="create-partitions.sql"/>
+				<include name="drop-partitions.sql"/>
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade" type="directory" excludes="db-upgrade-remote/**  db-upgrade-local/**">
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade/db-upgrade-remote" type="directory" excludes="m9k-upgrade-db.sh">
+							<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+			<data src="${dbscripts.dir}/DB-Upgrade/db-upgrade-remote/m9k-upgrade-db.sh" type="file">
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/db-upgrade-${m9000.db.script.version}" filemode="755" user="dfr" group="dfr" />
+			</data>
+
+	    </deb>
+
+		</target>
+	
+	<target name="m9k-remote-master-db-setup-deb-package">
+	  	<copy todir="${dist.dir}/deb/control-remote-master-setup-db">
+	  		      <fileset dir="${src.dir}/deb/control-remote-master-setup-db"/>
+	  		      <filterset begintoken="[[" endtoken="]]">
+	  		        <filter token="version" value="${m9000.db.script.version}"/>
+	  		        <filter token="description" value="Initial set up of the complete database"/>
+	  		        <filter token="name" value="m9k-UbuntuRemoteMaster-database-setup"/>
+	  		      <filter token="db-script-version" value="${m9000.db.script.version}"/>
+	  		      </filterset>
+	  		    </copy>
+
+	    <deb destfile="${dist.dir}/m9k-remote-master-db-setup-${m9000.db.script.version}.deb" control="${dist.dir}/deb/control-remote-master-setup-db" verbose="true">
+		      <data src="${dbscripts.dir}/remote-webmaster-Ubuntu/Remote-DB-Setup/" type="directory">
+		      	<exclude name="m9k-remote-master-db-setup.sh"/>
+		      	<exclude name="m9k-remove-db.sh"/>
+		        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-setup-${m9000.db.script.version}" filemode="644"
+		    	             user="dfr"
+		    	                group="dfr"/>
+		    </data>
+	    	<data src="${dbscripts.dir}/m9k-utils" type="file" >
+	    		<include name="m9k-utils" />
+	    			        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-setup-${m9000.db.script.version}" filemode="644"
+	    			    	             user="dfr"
+	    			    	                group="dfr"/>
+	    			    </data>
+	    <data src="${dbscripts.dir}/remote-webmaster-Ubuntu/Remote-DB-Setup/" type="directory" >
+	    	<include name="m9k-remote-master-db-setup.sh"/>
+	    	<include name="m9k-remove-db.sh"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-setup-${m9000.db.script.version}" filemode="755"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+
+	    </deb>
+		</target>
+
+	<target name="m9k-remote-master-upgrade-db-deb-package">
+	  	<copy todir="${dist.dir}/deb/control-remote-master-upgrade-db">
+	  		      <fileset dir="${src.dir}/deb/control-remote-master-upgrade-db"/>
+	  		      <filterset begintoken="[[" endtoken="]]">
+	  		        <filter token="version" value="${m9000.db.script.version}"/>
+	  		        <filter token="description" value="Upgrade to database"/>
+	  		        <filter token="name" value="m9k-UbuntuRemoteMaster-database-upgrade"/>
+	  		      <filter token="db-script-version" value="${m9000.db.script.version}"/>
+	  		      </filterset>
+	  		    </copy>
+
+	    <deb destfile="${dist.dir}/m9k-remote-master-db-upgrade-${m9000.db.script.version}.deb" control="${dist.dir}/deb/control-remote-master-upgrade-db" verbose="true">
+		      <data src="${dbscripts.dir}/remote-webmaster-Ubuntu/Remote-DB-Upgrade/" type="directory">
+		      	<exclude name="m9k-remote-master-upgrade-db.sh"/>
+		        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-upgrade-${m9000.db.script.version}" filemode="644"
+		    	             user="dfr"
+		    	                group="dfr"/>
+		    </data>
+	    <data src="${dbscripts.dir}/remote-webmaster-Ubuntu/Remote-DB-Upgrade/" type="directory" >
+	    	<include name="m9k-remote-master-upgrade-db.sh"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-upgrade-${m9000.db.script.version}" filemode="755"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+	    	<data src="${dbscripts.dir}" type="directory" excludes="remote-webmaster-setup-Windows db-patch-for-1.0.7/** Archived/** DB-Setup/** DB-Upgrade/**">
+				<include name="MySql-RemoteMaster-upgrade-db.sql" />
+				<mapper type="perm" prefix="/home/dfr/m9k/deliverables/remote-master-db-upgrade-${m9000.db.script.version}" filemode="644" user="dfr" group="dfr" />
+			</data>
+	    </deb>
+
+		</target>
+
+	<target name="m9k-master-deb-package" depends="buildWar">
+		<copy todir="${dist.dir}/deb/control-war-20.04">
+			      <fileset dir="${src.dir}/deb/control-war-20.04"/>
+			      <filterset begintoken="[[" endtoken="]]">
+			        <filter token="version" value="${station.app.version}"/>
+			        <filter token="description" value="M9k Web Master Software"/>
+			        <filter token="name" value="m9k-web-master"/>
+			      </filterset>
+			    </copy>
+	    <deb destfile="${dist.dir}/m9k-web-master-${web.app.version}.deb" control="${dist.dir}/deb/control-war-20.04" verbose="true">
+
+	      <data src="${dist.dir}/${name}.war" type="file" >
+	        <mapper type="perm" prefix="/var/lib/tomcat9/webapps" filemode="644"
+	    	             user="dfr"
+	    	                group="dfr"/>
+	    </data>
+	    </deb>
+
+		</target>
+	
+	  <target name="m9kdebug-deb-package" depends="deploy,buildStationTar">
+	    <copy todir="${dist.dir}/deb/control-debug">
+	      <fileset dir="${src.dir}/deb/control-debug"/>
+	      <filterset begintoken="[[" endtoken="]]">
+	        <filter token="version" value="${m9kdebug.app.version}"/>
+	        <filter token="description" value="M9k Station Debugging software"/>
+	        <filter token="name" value="m9k-debug"/>
+	      </filterset>
+	    </copy>
+	    <deb destfile="${dist.dir}/m9k-debug-${m9kdebug.app.version}.deb" control="${dist.dir}/deb/control-debug" verbose="true">
+	      <data src="${dist.dir}/M9kStationDfrDebugger-${m9kdebug.app.version}.tar" type="archive">
+	      	<include name="**/lib/*.*"/>
+	        <exclude name="**/scripts/*.*"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k" filemode="644" user="dfr" group="dfr"/>
+	      </data>
+
+	      <data src="${dist.dir}/M9kStationDfrDebugger-${m9kdebug.app.version}.tar" type="archive" >
+	      	<exclude name="**/lib/*.*"/>
+	      	<include name="**/scripts/*.*"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k" filemode="755"
+	    	             user="dfr"
+	    	                group="dfr"/>
+	      </data>
+
+		    <!-- START -->
+		    <!-- Uncomment for 12.04 and comment for 20.04 -->
+		    <!-- data src="${scripts.dir}/m9k-station.conf" type="file" conffile="true">
+		    	<mapper type="perm" prefix="/etc/init" />
+		    </data -->
+		    <!-- Uncomment for 20.04 and comment for 12.04 -->
+		    <data src="${scripts.dir}/m9k-station.service" type="file" conffile="true">
+		    		    	<mapper type="perm" prefix="/etc/systemd/system" />
+		   	</data>
+		    <!-- END -->
+
+	    <data src="${dist.dir}/M9kStationDfrDebugger-${m9kdebug.app.version}.tar" type="archive" conffile="true">
+	    	<include name="**/station-debug.properties"/>
+	    	<include name="**/log4j.xml"/>
+	    	<include name="**/db.properties"/>
+	    	<include name="**/M9K_COMTRADE"/>
+	    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+	    	
+	    <!-- <tarfileset  dir="${dist.dir}/M9kStation-${station.app.version}.tar"
+	    	               prefix="/home/dfr/m9k"
+	    	             filemode="600"
+	    	             username="dfr"
+	    	                group="dfr"/> -->
+
+	    </deb>
+	  </target>
+	
+	
+	  <target name="m9k-software-deb-package" depends="buildWar">
+	    
+	    <copy todir="${dist.dir}/deb/control-20.04">
+	      <fileset dir="${src.dir}/deb/control-20.04"/>
+	      <filterset begintoken="[[" endtoken="]]">
+	        <filter token="version" value="${station.app.version}"/>
+	        <filter token="description" value="M9k Software - both web and station master combined for 20.04"/>
+	        <filter token="name" value="m9k-software"/>
+	      </filterset>
+	    </copy>
+	    <deb destfile="${dist.dir}/m9k-software-${station.app.version}.deb" control="${dist.dir}/deb/control-20.04" verbose="true">
+
+	      <data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" >
+	      	<exclude name="**/m9k-station-launch.sh"/>
+	      	<exclude name="**/M9kStationListeners.sh"/>
+	        <mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	    	             user="dfr"
+	    	                group="dfr"/>
+	      </data>
+	    	
+	    <!-- <data src="${scripts.dir}" type="directory">
+	    	<include name="**/m9k-station.conf"/>
+		    <mapper type="perm" prefix="/etc/init"/>
+		</data> -->
+	    <data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" conffile="true">
+	    	<include name="**/station.properties"/>
+	    	<include name="**/M9K_COMTRADE.properties"/>
+	    	<include name="**/M9000.properties"/>
+	    	<include name="**/log4j.xml"/>
+	    	<include name="**/db.properties"/>
+	    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+	    	<data src="${dist.dir}/M9kStation-${station.app.version}.tar" type="archive" >
+	    		    	<include name="**/m9k-station-launch.sh"/>
+	    				<include name="**/M9kStationListeners.sh"/>
+		    		    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="755"
+	    		    		    	             user="dfr"
+	    		    		    	                group="dfr"/>
+	    		    </data>
+		    <!-- START -->
+		    <!-- Uncomment for 12.04 and comment for 20.04 -->
+		    <!-- data src="${scripts.dir}/m9k-station.conf" type="file" conffile="true">
+		    	<mapper type="perm" prefix="/etc/init" />
+		    </data -->
+		    <!-- Uncomment for 20.04 and comment for 12.04 -->
+		    <data src="${scripts.dir}/m9k-station.service" type="file" conffile="true">
+		    		    	<mapper type="perm" prefix="/etc/systemd/system" />
+		   	</data>
+		    <!-- END -->
+	    	
+		<data src="${dist.dir}/${name}.war" type="file" >
+		        <mapper type="perm" prefix="/var/lib/tomcat9/webapps" filemode="644"
+		    	             user="dfr"
+		    	                group="dfr"/>
+		</data>
+	
+	    <!-- <tarfileset  dir="${dist.dir}/M9kStation-${station.app.version}.tar"
+	    	               prefix="/home/dfr/m9k"
+	    	             filemode="600"
+	    	             username="dfr"
+	    	                group="dfr"/> -->
+
+	    </deb>
+
+	  </target>
+
+	<target name="buildStationTar" depends="build,buildJar">
+		<tar destfile="${dist.dir}/M9kStationDfrDebugger-${m9kdebug.app.version}.tar"
+			longfile="gnu">
+
+			<tarfileset dir="${lib.dir}" prefix="M9kDfrDebug/lib"
+				preserveLeadingSlashes="true"
+				includes="**/activemq*.jar **/commons-collections*.jar **/commons-configuration*.jar **/commons-lang*.jar **/commons-logging*.jar **/log4j-1.2-api*.jar **/log4j-api*.jar **/log4j-core*.jar log4j-web*.jar "></tarfileset>
+			<tarfileset dir="${web.dir}/WEB-INF/lib" fullpath="M9kDfrDebug/lib/M9kStation.jar"
+				preserveLeadingSlashes="true">
+				<include name="M9kStation.jar" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" prefix="M9kDfrDebug/lib"
+				preserveLeadingSlashes="true">
+				<include name="**/db.properties" />
+				<include name="**/station-debug.properties"/>
+				<include name="**/station.properties"/>
+				<include name="**/M9K_COMTRADE.properties" />
+			</tarfileset>
+			<!-- tarfileset dir="${build.dir}" prefix="M9kDfrDebug/lib/"
+				preserveLeadingSlashes="true">
+				<include name="**/station-debug.properties" />
+			</tarfileset-->
+			<tarfileset dir="${build.dir}" fullpath="M9kDfrDebug/lib/log4j2.xml"
+				preserveLeadingSlashes="true">
+				<include name="log4j2-station.xml" />
+			</tarfileset>
+			<tarfileset dir="${scripts.dir}" prefix="M9kDfrDebug/scripts"
+				preserveLeadingSlashes="true" filemode="755" username="dfr" group="dfr"
+				includes="**/*" excludes="M9kStationListeners.* **/m9k-station-launch* **/m9kdebug">
+			</tarfileset>
+		</tar>
+		<tar destfile="${dist.dir}/M9kStation-${station.app.version}.tar"
+			longfile="gnu">
+			<tarfileset dir="${lib.dir}" prefix="M9kStation/lib"
+				preserveLeadingSlashes="true"
+				includes="**/activemq*.jar **/mysql-connector*.jar **/commons-collections*.jar **/commons-configuration*.jar **/commons-lang*.jar **/commons-logging*.jar **/log4j-1.2-api*.jar **/log4j-api*.jar **/log4j-core*.jar log4j-web*.jar **/jsch*.jar **/xmlbeans*.jar **/M9000XMLConfig.jar **/jencks-amqpool*.jar **/M9kHealthXml.jar **/Hikari**.jar **/slf4j*.jar **/google-collections-1.0.jar **/javax.mail.jar **/activation.jar"></tarfileset>
+			<tarfileset dir="${web.dir}/WEB-INF/lib" fullpath="M9kStation/lib/M9kStation.jar"
+				preserveLeadingSlashes="true">
+				<include name="M9kStation.jar" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" prefix="M9kStation/lib"
+				preserveLeadingSlashes="true">
+				<include name="**/station.properties" />
+				<include name="**/db.properties" />
+				<include name="**/M9000.properties" />
+				<include name="**/M9K_COMTRADE.properties" />
+				<include name="**/calibration-header-desc.txt" />
+				<include name="**/calibration-verify-desc.txt" />
+				<include name="**/eventtest-header-desc.txt" />
+				<include name="**/m9k-master.properties" />
+				<include name="**/m9k-version.properties" />
+			</tarfileset>
+			<tarfileset dir="${resources.dir}" prefix="M9kStation/"
+				preserveLeadingSlashes="true">
+				<include name="**/m9k-version.properties" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" fullpath="M9kStation/lib/log4j2.xml"
+				preserveLeadingSlashes="true">
+				<!-- include name="log4j-station.properties"/ -->
+				<include name="log4j2-station.xml" />
+			</tarfileset>
+			<tarfileset dir="${scripts.dir}" prefix="M9kStation/scripts"
+				preserveLeadingSlashes="true" filemode="755" username="dfr" group="dfr"
+				includes="**/M9kStationListeners.* **/m9k-station-launch*">
+			</tarfileset>
+		</tar>
+		<!--tar destfile="M9kComtradeUtil.tar" longfile="gnu" > <tarfileset dir="${lib.dir}" 
+			prefix="M9kComtradeUtil/lib" preserveLeadingSlashes="true" includes="quartz-all-1.8.3.jar 
+			mysql-connector-java-5.1.13-bin.jar slf4j*.jar 
+			log4j-1.2.14.jar commons-logging-1.1.1.jar"></tarfileset> <tarfileset dir="${web.dir}/WEB-INF/lib" 
+			fullpath="M9kComtradeUtil/lib/M9kComtradeUtil.jar" preserveLeadingSlashes="true" 
+			> <include name="M9kComtradeUtil.jar"/> </tarfileset> <tarfileset dir="${build.dir}" 
+			prefix="M9kComtradeUtil/lib" preserveLeadingSlashes="true"> <include name="**/db.properties"/> 
+			<include name="**/log4j.properties"/> <include name="**/M9K_COMTRADE.properties"/> 
+			<include name="**/quartz.properties"/> </tarfileset> <tarfileset dir="${scripts.dir}" 
+			prefix="M9kComtradeUtil/scripts" preserveLeadingSlashes="true" filemode="755" 
+			username="dfr" group="dfr" includes="**/CreateComtradeFiles.* **/CreateComtradeFiles-RunOnce*"> 
+			</tarfileset> </tar -->
+	</target>
+
+	<target name="buildM9kBackupJar" depends="deploy">
+
+		<manifestclasspath property="m9kBackup-jar.classpath"
+			jarfile="${lib.dir}/M9kBackup.jar">
+			<classpath refid="m9kBackup.classpath" />
+		</manifestclasspath>
+		<!--delete file="${lib.dir}/M9kComtradeUtil.jar"></delete -->
+		<jar destfile="${lib.dir}/M9kBackup.jar">
+			<manifest>
+				<attribute name="M9kBackup-version" value="${m9kbackup.app.version}" />
+				<attribute name="Main-Class"
+					value="com.usi.m9000.backup.M9kBackup" />
+				<attribute name="Class-Path"
+					value="${m9kBackup-jar.classpath} . lib/. " />
+
+			</manifest>
+			<fileset dir="${build.dir}"
+				includes="com/usi/m9000/backup/ com/usi/m9000/Exception/ com/usi/m9000/data/ com/usi/m9000/dao/ com/usi/m9000/dto/StationDTO* com/usi/m9000/dto/AnalogChannelDTO* com/usi/m9000/dto/EventChannelDTO* com/usi/m9000/dto/DfrDTO* com/usi/m9000/dto/LineGroupChannelsDTO* com/usi/m9000/triggers/LineGroupsAlgorithm* com/usi/m9000/station/util/LineChannels* com/usi/m9000/util/M9kConstants* com/usi/m9000/util/M9kUtils* com/usi/m9000/station/util/M9kStationConstants* com/usi/m9000/station/util/M9kBackupUtil* com/usi/m9000/station/util/M9kStationXMLUtil* com/usi/m9000/util/M9kConstants* com/usi/m9000/station/threads/M9kExport* com/usi/m9000/dto/ComtradeDataDTO* com/usi/m9000/config/M9kMySqlDatabase* com/usi/m9000/config/*Info* com/usi/m9000/config/M9kComtradeParser* com/usi/m9000/chart/ChannelsUtil* com/usi/m9000/station/util/M9kStationDBUtil* com/usi/m9000/station/Exception/M9kThreadExceptionHandler* com/usi/m9000/station/commands/M9kCreateContinuousComtradeFilesFromDB* com/usi/m9000/dto/StationDTO* com/usi/m9000/dto/EventChannelDTO* com/usi/m9000/station/util/M9kKeyValuePair* com/usi/m9000/station/util/M9kStationComtradeUtil* com/usi/m9000/station/util/M9kStationConstants* com/usi/m9000/station/util/M9kStationDBUtil* com/usi/m9000/station/util/M9kStationUtil* com/usi/m9000/station/faultLocation/M9kLineLogicFilter* com/usi/m9000/station/util/M9kStationXMLUtil* com/usi/m9000/xml/M9000XmlConfig* "
+				excludes="com/usi/m9000/xml/util/">
+				<exclude name="**/*.properties" />
+				<include name="**/m9k-backup.properties"/>
+				<include name="**/m9k-master.properties"/>
+				<include name="**/db.properties"/>
+				<exclude name="**/struts.xml" />
+				<exclude name="**/validators.xml" />
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="buildM9kBackupTar" depends="buildM9kBackupJar">
+		<tar destfile="${dist.dir}/M9kBackUp-${m9kbackup.app.version}.tar"
+			longfile="gnu">
+			<tarfileset dir="${lib.dir}" prefix="M9kBackup/lib"
+				preserveLeadingSlashes="true"
+				includes="commons-logging*.jar xmlbeans*.jar M9000XMLConfig.jar commons-configuration*.jar commons-lang*.jar commons-collections*.jar mysql-connector*.jar log4j-1.2-api*.jar log4j-api*.jar log4j-core*.jar log4j-web*.jar Hikari**.jar slf4j*.jar google-collections-1.0.jar servlet.jar activemq*.jar javax.mail.jar">
+			</tarfileset>
+			<tarfileset dir="${web.dir}/WEB-INF/lib" fullpath="M9kBackup/lib/M9kBackup.jar"
+				preserveLeadingSlashes="true">
+				<include name="M9kBackup.jar" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" fullpath="M9kBackup/lib/log4j2.xml"
+				preserveLeadingSlashes="true">
+				<include name="**/log4j2-m9kbackup.xml" />
+			</tarfileset>
+			<tarfileset dir="${build.dir}" prefix="M9kBackup/lib"
+				preserveLeadingSlashes="true">
+				<include name="**/db.properties" />
+				<include name="**/M9K_COMTRADE.properties" />
+				<include name="**/m9k-backup.properties" />
+				<include name="**/station.properties" />
+				<include name="**/M9000.properties" />
+				<include name="**/m9k-master.properties" />
+				<include name="**/m9k-version.properties" />
+			</tarfileset>
+			<tarfileset dir="${scripts.dir}" prefix="M9kBackup/scripts"
+				preserveLeadingSlashes="true" filemode="755" username="dfr" group="dfr"
+				includes="**/m9k-backup-launch.sh">
+			</tarfileset>
+		</tar>
+	</target>
+	
+	  <target name="m9k-backup-deb-package" depends="buildM9kBackupTar">
+	    
+	    <copy todir="${dist.dir}/deb/control-m9kBackup">
+	      <fileset dir="${src.dir}/deb/control-m9kBackup"/>
+	      <filterset begintoken="[[" endtoken="]]">
+	        <filter token="version" value="${m9kbackup.app.version}"/>
+	        <filter token="description" value="M9k Backup - Utility to export continuous comtrade files"/>
+	        <filter token="name" value="m9k-backup"/>
+	      </filterset>
+	    </copy>
+	    <deb destfile="${dist.dir}/m9k-backup-${m9kbackup.app.version}.deb" control="${dist.dir}/deb/control-m9kBackup" verbose="true">
+
+	      <data src="${dist.dir}/M9kBackup-${m9kbackup.app.version}.tar" type="archive" >
+	      	<exclude name="**/m9k-backup.properties"/>
+	      					<exclude name="**/M9K_COMTRADE.properties"/>
+	      					<exclude name="**/log4j.properties"/>
+	      					<exclude name="**/db.properties"/>
+	      					<mapper type="perm" prefix="/home/dfr/m9k" filemode="644"
+	      		    	             user="dfr"
+	      		    	                group="dfr"/>
+	      </data>
+	    	
+	    <!-- <data src="${scripts.dir}" type="directory">
+	    	<include name="**/m9k-station.conf"/>
+		    <mapper type="perm" prefix="/etc/init"/>
+		</data> -->
+	    <data src="${dist.dir}/M9kBackup-${m9kbackup.app.version}.tar" type="archive" conffile="true">
+	    	<include name="**/m9k-backup.properties"/>
+	    	<include name="**/M9K_COMTRADE.properties"/>
+	    	<include name="**/log4j2.xml"/>
+	    	<include name="**/db.properties"/>
+	    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="755"
+	    		    	             user="dfr"
+	    		    	                group="dfr"/>
+	    </data>
+	    	<data src="${dist.dir}/M9kBackup-${m9kbackup.app.version}.tar" type="archive" >
+	    				<include name="**/m9k-backup-launch.sh"/>
+		    		    	<mapper type="perm" prefix="/home/dfr/m9k" filemode="755"
+	    		    		    	             user="dfr"
+	    		    		    	                group="dfr"/>
+	    		    </data>
+	    <data src="${scripts.dir}/m9k-backup.service" type="file" conffile="true">
+	    		    		    	<mapper type="perm" prefix="/etc/systemd/system" />
+	    </data>
+	    </deb>
+
+	  </target>
+
+	<target name="m9k-build-db-windows-master-zip">
+		<zip destfile="${dist.dir}/db-windows-master-setup.zip"  >
+			<zipfileset dir="${dbscripts.dir}/remote-webmaster-setup-Windows" prefix="m9k-db-windows-setup">
+				<include name="**/m9k-setup-db-windows-master.bat"/>
+				<include name="**/MySql-Windows-Master-Setup.sql"/>
+				<include name="**/Create_Users.sql"/>
+				<include name="**/m9k-insert-user-details.sql"/>
+				<include name="**/M9k-Remote-Web-Master-Create-Tables.sql"/>
+			</zipfileset>
+			<zipfileset dir="${dbscripts.dir}" prefix="m9k-db-windows-setup">
+				<include name="**/create-sp-to-remove-old-data.sql"/>
+			</zipfileset>
+		</zip>
+		<zip destfile="${dist.dir}/db-windows-master-update.zip">
+			<zipfileset dir="${dbscripts.dir}/remote-webmaster-setup-Windows" prefix="m9k-db-windows-upgrade">
+				<include name="**/m9k-update-db-windows-master.bat"/>
+				<include name="**/MySql-Windows-Master-Upgrade.sql"/>
+				<include name="**/M9k-Remote-Web-Master-Create-Tables.sql"/>
+				<include name="**/m9k-alter-tables-Windows.sql"/>
+				<include name="**/m9k-alter-ser-Windows.sql"/>
+			</zipfileset>
+			<zipfileset dir="${dbscripts.dir}" prefix="m9k-db-windows-upgrade">
+				<include name="**/create-sp-to-remove-old-data.sql"/>
+			</zipfileset>
+		</zip>
+	</target>
+	<target name="m9k-clean-db-windows-master-zip">
+		<delete file="${dist.dir}/db-windows-master-setup.zip" />
+		<delete file="${dist.dir}/db-windows-master-update.zip" />
+	</target>
+
+	<target name="undeploy" description="Un-Deploy application">
+		<delete>
+			<fileset dir="${deploy.path}/${name}">
+				<include name="**/*.*" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="obfuscate">
+		<proguard optimize="false" printseeds="obfuscateseeds.txt"
+			printusage="obfuscateusage.txt" printmapping="obfuscatemapping.txt">
+
+			<!-- specify which jar files should be obfuscated -->
+			<injar name="${lib.dir}/M9kApplet.jar" />
+
+			<!-- java libraries my java application depends on -->
+			<libraryjar name="${java.home}/lib/rt.jar" />
+			<libraryjar name="${java.home}/lib/javaws.jar" />
+			<libraryjar name="${lib.dir}/activemq*.jar" />
+			<libraryjar name="${lib.dir}/commons-logging*.jar" />
+			<libraryjar name="${lib.dir}/jcalendar*.jar" />
+			<libraryjar name="${lib.dir}/jcommon*.jar" />
+			<libraryjar name="${lib.dir}/jfreechart-1.0.19.jar" />
+			<libraryjar name="${lib.dir}/log4j-1.2-api*.jar" />
+			<libraryjar name="${lib.dir}/log4j-api*.jar" />
+			<libraryjar name="${lib.dir}/log4j-core*.jar" />
+			<libraryjar name="${lib.dir}/log4j-web*.jar" />
+			<libraryjar name="${lib.dir}/M9000XMLConfig.jar" />
+			<libraryjar name="${lib.dir}/mysql-connector*.jar" />
+			<libraryjar name="${lib.dir}/xmlbeans*.jar" />
+			<libraryjar name="${lib.dir}/google-collections-1.0.jar" />
+			<libraryjar name="${lib.dir}/Hikari**.jar" />
+			<libraryjar name="${lib.dir}/jsch*.jar" />
+			<libraryjar name="${lib.dir}/commons-configuration*.jar" />
+			<libraryjar name="${lib.dir}/commons-lang*.jar" />
+
+			<!-- the output jar file that should be created with the obfuscated java 
+				class files -->
+			<outjar name="${lib.dir}/M9kApplet-revised.jar" />
+
+			<!-- don't obfuscate this method -->
+			<keep access="public" extends="java.applet.Applet" />
+			<keeppackagename name="org.apache.log4j" />
+
+			<keepclassmembers implements="java.io.Serializable">
+				<field access="static final" type="long" name="serialVersionUID" />
+				<field access="static final" type="java.io.ObjectStreamField[]"
+					name="serialPersistentFields" />
+				<method access="private" type="void" name="writeObject"
+					parameters="java.io.ObjectOutputStream" />
+				<method access="private" type="void" name="readObject"
+					parameters="java.io.ObjectInputStream" />
+				<method type="java.lang.Object" name="writeReplace"
+					parameters="" />
+				<method type="java.lang.Object" name="readResolve"
+					parameters="" />
+			</keepclassmembers>
+
+		</proguard>
+
+		<!-- delete the "injars" when obfuscation is complete -->
+		<delete>
+			<fileset dir="${lib.dir}">
+				<include name="M9kApplet.jar" />
+			</fileset>
+		</delete>
+
+	</target>
+</project>

@@ -1,0 +1,12 @@
+Calibration VERIFICATION Report
+
+Summary:   A self-calibration is run to produce Calibration Factors required to
+           bring the DFR into calibration. These Calibration Factors are compared
+           to the Calibration Factors that have been applied. The purpose is to
+           determine whether the applied Calibration Factors are still valid.
+
+           (The Calibration Factors that are produced during the self-calibration
+           are not applied to the DFR.)
+
+           There are four possible gains available: x1, x3, x6, & x8. A gain
+           scale factor and offset factor are determined and verified for all four gains.
