@@ -23,8 +23,6 @@
 </s:url>
 <s:url var="displayHierarchyTab" action="displayHierarchy">
 </s:url>
-<s:url var="displayDnp3Configuration" action="displayDnp3Configuration">
-</s:url>
 <!--   
 <s:url var="displaySystemSettingsTab" action="displaySystemSettings">
 </s:url>
@@ -33,7 +31,6 @@
 
   <sj:tab id="users" href="%{#displayUserTab}" label="Manage Users"/>
   <sj:tab id="emails" href="%{#displayEmailSettingsTab}" label="Manage Email Settings"/>
-  <sj:tab id="dnp3" href="%{#displayDnp3Configuration}" label="DNP3 Config"/>
   <!-- sj:tab id="hierarchy" href="%{#displayHierarchyTab}" label="Manage Hierarchy"/ -->
   <!--  sj:tab id="system" href="%{#displaySystemSettingsTab}" label="Manage Email Settings"/ -->
 

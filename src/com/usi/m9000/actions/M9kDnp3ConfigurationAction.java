@@ -3,6 +3,7 @@ package com.usi.m9000.actions;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -87,10 +88,11 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
     }
 
     @Action(value = "postDnp3Configuration", results = {
-            @Result(name = SUCCESS, type = "json", params = {
-                    "includeProperties",
-                    "lstDnp3SourceTypes.*,exportList.*,lstDnp3Configurations.*"
-            })
+        @Result(name = SUCCESS, type = "redirectAction", params = {
+            "actionName", "editConfiguration",
+            "stationId", "${stationDetails.systemStationId}"
+        }),
+        @Result(name = ERROR, location = "/jsp/error.jsp")
     })
     public String postDnp3Configuration() {
         // TODO: List does not bind and lstDnp3Configurations is empty here
@@ -128,7 +130,7 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
             .collect(Collectors.toList());
 
             dnp3ConfigurationDAO.addDnp3Configuration(dnp3Configurations);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return ERROR;
         }
@@ -183,6 +185,10 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
 
     public List<ExportMeasurementDTO> getExportList() {
         return exportList.getExports();
+    }
+
+    public StationDTO getStationDetails() {
+        return stationDetailDto;
     }
 
     private static String extractExportsTag(String xmlContent) {
