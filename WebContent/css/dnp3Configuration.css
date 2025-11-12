@@ -25,6 +25,7 @@
     align-items: center;
     background-color: #9999CC;
     padding: 0 2rem;
+    height: 10%;
 }
 
 .dnp3-configuration-header button {
@@ -33,14 +34,51 @@
 }
 
 .dnp3-configuration-form {
-    overflow: auto;
-    padding: 2rem;
+    padding: 0 2rem;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.form-body{
-    height:70%;
+.dnp3-configuration-form h3 {
+    text-align: left;
+    margin-top: 0;
+}
+
+.outstation-form-body {
+    text-align: left;
+    display: flex;
+    gap: 3rem;
+}
+
+.outstation-form-item {
+    margin-bottom: 10px;
+}
+
+.outstation-form-item input[type="checkbox"] {
+    margin: 0 2px 0 0;
+}
+
+.outstation-form-item label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.outstation-checkbox {
+    margin-bottom: 5px;
+}
+
+/* .outstation-detail-container{
+} */
+
+.channel-form-container{
+    height:60%;
+}
+
+.form-body {
     overflow: auto;
-    margin-bottom:25px;
+    height:80%;
 }
 
 .form-label-container,
@@ -62,11 +100,11 @@
     width: 20%;
 }
 
-.form-label-container span{
+.form-label-container span {
     text-align: left;
 }
 
-#delete-row-btn button{
+#delete-row-btn button {
     background-color: red;
 }
 
@@ -87,11 +125,5 @@
     display: flex;
     align-items: center;
     gap: 20px;
-}
-
-/* TODO: DELETE */
-.measurement-container{
-    border: 1px solid green;
-    margin-bottom: 15px;
-    padding:5px;
+    height: 10%;
 }

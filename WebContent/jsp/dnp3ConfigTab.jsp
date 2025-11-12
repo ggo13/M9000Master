@@ -21,37 +21,74 @@
                         method="post"
                         cssClass="dnp3-configuration-form"
                         theme="simple">
-                    <div class="form-label-container">
-                        <div class="dnp3-index-value">Index</div>
-                        <span>Channel</span>
-                        <span>Source Type</span>
-                    </div>
-                    <div class="form-body">
-                        <s:iterator value="lstDnp3Configurations"
-                                    status="rowStatus">
-                            <div class="form-input-row"
-                                 id="dnp3-configuration-item">
-                                <s:textfield name="lstDnp3Configurations[%{#rowStatus.index}].dnpIndex"
-                                             cssClass="dnp3-index-value"
-                                             value="%{dnpIndex}" />
-                                <s:select name="lstDnp3Configurations[%{#rowStatus.index}].dnpChannel"
-                                          list="exportList"
-                                          listKey="id"
-                                          listValue="exportName"
-                                          headerKey=""
-                                          headerValue=""
-                                          value="%{dnpChannel}" />
-                                <s:select name="lstDnp3Configurations[%{#rowStatus.index}].sourceType"
-                                          list="lstDnp3SourceTypes"
-                                          listKey="sourceType"
-                                          listValue="sourceType"
-                                          headerKey=""
-                                          headerValue=""
-                                          value="%{sourceType}" />
-                                <button class="delete-row-btn"
-                                        type="button">Delete</button>
+                    <div class="outstation-detail-container">
+                        <h3>Outstation Details</h3>
+                        <div class="outstation-form-body">
+                            <div class="outstation-form-item">
+                                <label>Transport Method</label>
+                                <div class="outstation-checkbox-container">
+                                    <div class="outstation-checkbox">
+                                        <input type="checkbox" />
+                                        <span>TCP/IP</span>
+                                    </div>
+                                    <div class="outstation-checkbox">
+                                        <input type="checkbox" />
+                                        <span>Serial</span>
+                                    </div>
+                                </div>
                             </div>
-                        </s:iterator>
+                            <div class="outstation-form-item">
+                                <label>Port Number</label>
+                                <input type="number" />
+                            </div>
+                            <div class="outstation-form-item">
+                                <label>Fault Location Time Limit</label>
+                                <select>
+                                    <option>5 minutes</option>
+                                    <option>10 minutes</option>
+                                    <option>30 minutes</option>
+                                    <option>1 hour</option>
+                                    <option>6 hours</option>
+                                    <option>12 hours</option>
+                                    <option>24 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="channel-form-container">
+                        <h3>Channel Assignment</h3>
+                        <div class="form-label-container">
+                            <div class="dnp3-index-value">Index</div>
+                            <span>Channel</span>
+                            <span>Source Type</span>
+                        </div>
+                        <div class="form-body">
+                            <s:iterator value="lstDnp3Configurations"
+                                        status="rowStatus">
+                                <div class="form-input-row"
+                                     id="dnp3-configuration-item">
+                                    <s:textfield name="lstDnp3Configurations[%{#rowStatus.index}].dnpIndex"
+                                                 cssClass="dnp3-index-value"
+                                                 value="%{dnpIndex}" />
+                                    <s:select name="lstDnp3Configurations[%{#rowStatus.index}].dnpChannel"
+                                              list="exportList"
+                                              listKey="id"
+                                              listValue="exportName"
+                                              headerKey=""
+                                              headerValue=""
+                                              value="%{dnpChannel}" />
+                                    <s:select name="lstDnp3Configurations[%{#rowStatus.index}].sourceType"
+                                              list="lstDnp3SourceTypes"
+                                              listKey="sourceType"
+                                              listValue="sourceType"
+                                              headerKey=""
+                                              headerValue=""
+                                              value="%{sourceType}" />
+                                    <button class="delete-row-btn"
+                                            type="button">Delete</button>
+                                </div>
+                            </s:iterator>
+                        </div>
                     </div>
                     <div class="form-footer">
                         <button id="add-row-btn"
