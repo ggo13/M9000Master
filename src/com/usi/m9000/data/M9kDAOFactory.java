@@ -13,6 +13,7 @@ import com.usi.m9000.dao.M9kSerDAO;
 import com.usi.m9000.dao.StationDAO;
 import com.usi.m9000.dao.UsersDAO;
 import com.usi.m9000.dao.interfaces.Dnp3ConfigurationDAO;
+import com.usi.m9000.dao.interfaces.Dnp3OutstationDetailDAO;
 import com.usi.m9000.dao.interfaces.Dnp3SourceTypeDAO;
 import com.usi.m9000.util.M9kConstants;
 
@@ -35,6 +36,7 @@ public abstract class M9kDAOFactory {
 	  public abstract HierarchyDAO getM9kHierarchyDAO();
 	  public abstract Dnp3ConfigurationDAO getDnp3ConfigurationDAO();
 	  public abstract Dnp3SourceTypeDAO getDnp3SourceTypeDAO();
+	  public abstract Dnp3OutstationDetailDAO getDnp3OutstationDetailDAO();
 	  
 	  public static M9kDAOFactory getDAOFactory(
 	      int whichFactory) {

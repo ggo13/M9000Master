@@ -16,6 +16,7 @@ import com.usi.m9000.dao.MySqlComtradeContDAO;
 import com.usi.m9000.dao.MySqlComtradeDetailsDAO;
 import com.usi.m9000.dao.MySqlContinuousComtradeDAO;
 import com.usi.m9000.dao.MySqlDnp3ConfigurationDAO;
+import com.usi.m9000.dao.MySqlDnp3OutstationDetailDAO;
 import com.usi.m9000.dao.MySqlDnp3SourceTypeDAO;
 import com.usi.m9000.dao.MySqlEmailDAO;
 import com.usi.m9000.dao.MySqlHierarchyDAO;
@@ -27,6 +28,7 @@ import com.usi.m9000.dao.MySqlUsersDAO;
 import com.usi.m9000.dao.StationDAO;
 import com.usi.m9000.dao.UsersDAO;
 import com.usi.m9000.dao.interfaces.Dnp3ConfigurationDAO;
+import com.usi.m9000.dao.interfaces.Dnp3OutstationDetailDAO;
 import com.usi.m9000.dao.interfaces.Dnp3SourceTypeDAO;
 
 public class MysqlDAOFactory extends M9kDAOFactory {
@@ -109,5 +111,10 @@ public class MysqlDAOFactory extends M9kDAOFactory {
 	@Override
 	public Dnp3SourceTypeDAO getDnp3SourceTypeDAO() {
 		return new MySqlDnp3SourceTypeDAO();
+	}
+
+	@Override 
+	public Dnp3OutstationDetailDAO getDnp3OutstationDetailDAO() {
+		return new MySqlDnp3OutstationDetailDAO();
 	}
 }

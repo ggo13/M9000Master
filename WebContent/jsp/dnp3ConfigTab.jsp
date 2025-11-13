@@ -25,33 +25,32 @@
                         <h3>Outstation Details</h3>
                         <div class="outstation-form-body">
                             <div class="outstation-form-item">
-                                <label>Transport Method</label>
-                                <div class="outstation-checkbox-container">
-                                    <div class="outstation-checkbox">
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.transportMethod">Transport Method</label>
+                                <div class="outstation-radio-container">
+                                    <s:radio name="dnp3OutstationDetail.transportMethod"
+                                            list="{'TCP/IP', 'Serial'}"
+                                            label="Transport Method" />
+                                    <!-- <div class="outstation-checkbox">
                                         <input type="checkbox" />
                                         <span>TCP/IP</span>
                                     </div>
                                     <div class="outstation-checkbox">
                                         <input type="checkbox" />
                                         <span>Serial</span>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="outstation-form-item">
-                                <label>Port Number</label>
-                                <input type="number" />
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.portNumber">Port Number</label>
+                                <s:textfield name="dnp3OutstationDetail.portNumber" label="Port Number" />
                             </div>
                             <div class="outstation-form-item">
-                                <label>Fault Location Time Limit</label>
-                                <select>
-                                    <option>5 minutes</option>
-                                    <option>10 minutes</option>
-                                    <option>30 minutes</option>
-                                    <option>1 hour</option>
-                                    <option>6 hours</option>
-                                    <option>12 hours</option>
-                                    <option>24 hours</option>
-                                </select>
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.faultLocationTimeLimitInSeconds">Fault Location Time Limit</label>
+                                <s:select 
+                                    name="dnp3OutstationDetail.faultLocationTimeLimitInSeconds"
+                                    label="Fault Location Time Limit"
+                                    list="#{'300':'5 minutes','600':'10 minutes','1800':'30 minutes','3600':'1 hour','21600':'6 hours','43200':'12 hours','86400':'24 hours'}"
+                                />
                             </div>
                         </div>
                     </div>

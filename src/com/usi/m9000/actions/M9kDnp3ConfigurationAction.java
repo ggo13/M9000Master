@@ -37,9 +37,11 @@ import org.xml.sax.SAXException;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import com.usi.m9000.dao.interfaces.Dnp3ConfigurationDAO;
+import com.usi.m9000.dao.interfaces.Dnp3OutstationDetailDAO;
 import com.usi.m9000.dao.interfaces.Dnp3SourceTypeDAO;
 import com.usi.m9000.data.M9kDAOFactory;
 import com.usi.m9000.dto.Dnp3ConfigurationDTO;
+import com.usi.m9000.dto.Dnp3OutstationDetailDTO;
 import com.usi.m9000.dto.Dnp3SourceTypeDTO;
 import com.usi.m9000.dto.ExportMeasurementDTO;
 import com.usi.m9000.dto.ExportMeasurementListDTO;
@@ -50,10 +52,12 @@ import com.usi.m9000.util.M9kConstants;
 public class M9kDnp3ConfigurationAction extends ActionSupport implements Preparable {
     private List<Dnp3ConfigurationDTO> lstDnp3Configurations;
     private List<Dnp3SourceTypeDTO> lstDnp3SourceTypes;
+    private Dnp3OutstationDetailDTO dnp3OutstationDetail;
     private final StationDTO stationDetailDto;
     private final M9kDAOFactory m9kDAOFactory;
     private final Dnp3ConfigurationDAO dnp3ConfigurationDAO;
     private final Dnp3SourceTypeDAO dnp3SourceTypeDAO;
+    private final Dnp3OutstationDetailDAO dnp3OutstationDetailDAO;
     private ExportMeasurementListDTO exportList;
 
     @Override
@@ -72,6 +76,7 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
         m9kDAOFactory = M9kDAOFactory.getDAOFactory(M9kConstants.MYSQL);
         dnp3ConfigurationDAO = m9kDAOFactory.getDnp3ConfigurationDAO();
         dnp3SourceTypeDAO = m9kDAOFactory.getDnp3SourceTypeDAO();
+        dnp3OutstationDetailDAO = m9kDAOFactory.getDnp3OutstationDetailDAO();
         stationDetailDto = M9kStationDBUtil.getLocalStationDetails();
     }
 
@@ -102,8 +107,9 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
     // GET handler
     public String fetchDnp3ConfigData() {
         try {
-            // Fetch data via HTTP or service
             lstDnp3Configurations = dnp3ConfigurationDAO.getDnp3Configurations();
+            lstDnp3SourceTypes = dnp3SourceTypeDAO.getSourceTypes();
+            dnp3OutstationDetail = dnp3OutstationDetailDAO.getDnp3OutstationDetailByStationId(stationDetailDto.getSystemStationId());
 
             // 💡 Auto-add one blank row if list is empty
             if (lstDnp3Configurations == null || lstDnp3Configurations.isEmpty()) {
@@ -111,7 +117,6 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
                 lstDnp3Configurations.add(new Dnp3ConfigurationDTO());
             }
 
-            lstDnp3SourceTypes = dnp3SourceTypeDAO.getSourceTypes();
             String exportXml = extractExportsTag(stationDetailDto.getConfigXml());
             exportList = parseExportXmlToDataModel(exportXml);
         } catch (Exception e) {
@@ -124,11 +129,13 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
     // POST handler
     public String saveDnp3Configuration(List<Dnp3ConfigurationDTO> dnp3Configurations) {
         try {
-        // Remove null entries from the list
-        dnp3Configurations = dnp3Configurations.stream()
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-
+            dnp3OutstationDetail.setStationId(stationDetailDto.getSystemStationId());
+            dnp3OutstationDetailDAO.addDnp3OutstationDetail(dnp3OutstationDetail);
+            
+            // Remove null entries from the list
+            dnp3Configurations = dnp3Configurations.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
             dnp3ConfigurationDAO.addDnp3Configuration(dnp3Configurations);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,6 +180,14 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
 
     public void setLstDnp3Configurations(List<Dnp3ConfigurationDTO> lstDnp3Configurations) {
         this.lstDnp3Configurations = lstDnp3Configurations;
+    }
+
+    public Dnp3OutstationDetailDTO getDnp3OutstationDetail() {
+        return dnp3OutstationDetail;
+    }
+
+    public void setDnp3OutstationDetail(Dnp3OutstationDetailDTO dnp3OutstationDetail) {
+        this.dnp3OutstationDetail = dnp3OutstationDetail;
     }
 
     public List<Dnp3SourceTypeDTO> getLstDnp3SourceTypes() {

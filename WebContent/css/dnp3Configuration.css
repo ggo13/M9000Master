@@ -56,17 +56,18 @@
     margin-bottom: 10px;
 }
 
-.outstation-form-item input[type="checkbox"] {
+.outstation-radio-container input[type="radio"] {
     margin: 0 2px 0 0;
 }
 
-.outstation-form-item label {
+.outstation-form-item-label {
     display: block;
     margin-bottom: 5px;
 }
 
-.outstation-checkbox {
-    margin-bottom: 5px;
+.outstation-radio-container {
+    display: flex;
+    gap:3px;
 }
 
 /* .outstation-detail-container{
