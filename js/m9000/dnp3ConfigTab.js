@@ -1,4 +1,21 @@
 $(document).ready(function () {
+    // Show/hide TCP/Serial fields when transport method changes
+    $('.outstation-form-body').on('change', 'input[name$=".transportMethod"]', function () {
+        var transportVal = $(this).val();
+        var $container = $(this).closest('.outstation-form-body');
+
+        if (transportVal === 'TCP/IP') {
+            $container.find('.tcp-port-container').show();
+            $container.find('.serial-port-container').hide();
+        } else if (transportVal === 'Serial') {
+            $container.find('.tcp-port-container').hide();
+            $container.find('.serial-port-container').show();
+        }
+    });
+
+    // Trigger the change event on page load to set correct initial visibility
+    $('.outstation-form-body input[name$=".transportMethod"]:checked').trigger('change');
+    
     function reindexFormRows() {
         $('.form-input-row').each(function (index) {
             // Don't change the value of the index field — allow user input

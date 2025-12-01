@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import com.usi.m9000.dao.interfaces.Dnp3ConfigurationDAO;
@@ -52,6 +54,7 @@ import com.usi.m9000.util.M9kConstants;
 public class M9kDnp3ConfigurationAction extends ActionSupport implements Preparable {
     private List<Dnp3ConfigurationDTO> lstDnp3Configurations;
     private List<Dnp3SourceTypeDTO> lstDnp3SourceTypes;
+    private List<SerialPort> lstSerialPorts;
     private Dnp3OutstationDetailDTO dnp3OutstationDetail;
     private final StationDTO stationDetailDto;
     private final M9kDAOFactory m9kDAOFactory;
@@ -100,13 +103,14 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
         @Result(name = ERROR, location = "/jsp/error.jsp")
     })
     public String postDnp3Configuration() {
-        // TODO: List does not bind and lstDnp3Configurations is empty here
         return saveDnp3Configuration(lstDnp3Configurations);
     }
 
     // GET handler
     public String fetchDnp3ConfigData() {
         try {
+            System.setProperty("jSerialComm.library.randomizeNativeName", "true");
+            lstSerialPorts = Arrays.asList(SerialPort.getCommPorts());
             lstDnp3Configurations = dnp3ConfigurationDAO.getDnp3Configurations();
             lstDnp3SourceTypes = dnp3SourceTypeDAO.getSourceTypes();
             dnp3OutstationDetail = dnp3OutstationDetailDAO.getDnp3OutstationDetailByStationId(stationDetailDto.getSystemStationId());
@@ -120,6 +124,7 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
             String exportXml = extractExportsTag(stationDetailDto.getConfigXml());
             exportList = parseExportXmlToDataModel(exportXml);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         // System.out.println("XML: " + stationDetailDto.getConfigXml());
 
@@ -192,6 +197,10 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
 
     public List<Dnp3SourceTypeDTO> getLstDnp3SourceTypes() {
         return lstDnp3SourceTypes;
+    }
+
+    public List<SerialPort> getLstSerialPorts() {
+        return lstSerialPorts;
     }
 
     public String getConfigXml() {

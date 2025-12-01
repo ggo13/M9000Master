@@ -30,19 +30,21 @@
                                     <s:radio name="dnp3OutstationDetail.transportMethod"
                                             list="{'TCP/IP', 'Serial'}"
                                             label="Transport Method" />
-                                    <!-- <div class="outstation-checkbox">
-                                        <input type="checkbox" />
-                                        <span>TCP/IP</span>
-                                    </div>
-                                    <div class="outstation-checkbox">
-                                        <input type="checkbox" />
-                                        <span>Serial</span>
-                                    </div> -->
                                 </div>
                             </div>
-                            <div class="outstation-form-item">
+                            <div class="outstation-form-item tcp-port-container">
                                 <label class="outstation-form-item-label" for="dnp3OutstationDetail.portNumber">Port Number</label>
                                 <s:textfield name="dnp3OutstationDetail.portNumber" label="Port Number" />
+                            </div>
+                            <div class="outstation-form-item serial-port-container">
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.serialPort">Serial Port</label>
+                                <s:select name="dnp3OutstationDetail.serialPort"
+                                        list="lstSerialPorts"
+                                        listKey="systemPortPath"
+                                        listValue="descriptivePortName"
+                                        headerKey=""
+                                        headerValue=""
+                                        value="%{serialPort}" />
                             </div>
                             <div class="outstation-form-item">
                                 <label class="outstation-form-item-label" for="dnp3OutstationDetail.faultLocationTimeLimitInSeconds">Fault Location Time Limit</label>

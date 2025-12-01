@@ -62,6 +62,7 @@
 			<include name="**/jackson-*.jar"/>
 			<include name="**/log4j*.jar"/>
 			<include name="**/servlet*.jar"/>
+			<include name="**/jSerialComm-*.jar"/>
 		</fileset>
 		<pathelement path="${build.dir}" />
 	</path>
