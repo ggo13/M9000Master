@@ -37,14 +37,21 @@
                                 <s:textfield name="dnp3OutstationDetail.portNumber" label="Port Number" />
                             </div>
                             <div class="outstation-form-item serial-port-container">
-                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.serialPort">Serial Port</label>
-                                <s:select name="dnp3OutstationDetail.serialPort"
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.serialPortPath">Serial Port</label>
+                                <s:select name="dnp3OutstationDetail.serialPortPath"
                                         list="lstSerialPorts"
                                         listKey="systemPortPath"
                                         listValue="descriptivePortName"
-                                        headerKey=""
-                                        headerValue=""
-                                        value="%{serialPort}" />
+                                />
+                            </div>
+                            <div class="outstation-form-item serial-port-container">
+                                <label class="outstation-form-item-label" for="dnp3OutstationDetail.baudRate">Baud Rate</label>
+                                <s:select 
+                                    name="dnp3OutstationDetail.baudRate"
+                                    label="Baud Rate"
+                                    list="#{'300':'300','600':'600','1200':'1200','2400':'2400','4800':'4800','9600':'9600',
+                                            '19200':'19200','28800':'28800','38400':'38400','57600':'57600','115200':'115200'}"
+                                />
                             </div>
                             <div class="outstation-form-item">
                                 <label class="outstation-form-item-label" for="dnp3OutstationDetail.faultLocationTimeLimitInSeconds">Fault Location Time Limit</label>

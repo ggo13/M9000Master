@@ -114,6 +114,11 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
             lstDnp3Configurations = dnp3ConfigurationDAO.getDnp3Configurations();
             lstDnp3SourceTypes = dnp3SourceTypeDAO.getSourceTypes();
             dnp3OutstationDetail = dnp3OutstationDetailDAO.getDnp3OutstationDetailByStationId(stationDetailDto.getSystemStationId());
+            if(dnp3OutstationDetail.getTransportMethod() == null){
+                dnp3OutstationDetail.setTransportMethod("TCP/IP");
+            } if(dnp3OutstationDetail.getBaudRate() == 0){
+                dnp3OutstationDetail.setBaudRate(9600);
+            }   
 
             // 💡 Auto-add one blank row if list is empty
             if (lstDnp3Configurations == null || lstDnp3Configurations.isEmpty()) {
@@ -135,6 +140,9 @@ public class M9kDnp3ConfigurationAction extends ActionSupport implements Prepara
     public String saveDnp3Configuration(List<Dnp3ConfigurationDTO> dnp3Configurations) {
         try {
             dnp3OutstationDetail.setStationId(stationDetailDto.getSystemStationId());
+            if(dnp3OutstationDetail.getPortNumber() == 0){
+                dnp3OutstationDetail.setPortNumber(20000);
+            }
             dnp3OutstationDetailDAO.addDnp3OutstationDetail(dnp3OutstationDetail);
             
             // Remove null entries from the list

@@ -5,6 +5,8 @@ public class Dnp3OutstationDetailDTO {
     private String transportMethod;
     private int portNumber;
     private int faultLocationTimeLimitInSeconds;
+    private String serialPortPath;
+    private int baudRate;
 
     public int getStationId() {
         return stationId;
@@ -30,4 +32,17 @@ public class Dnp3OutstationDetailDTO {
     public void setFaultLocationTimeLimitInSeconds(int faultLocationTimeLimitInSeconds) {
         this.faultLocationTimeLimitInSeconds = faultLocationTimeLimitInSeconds;
     }
+    public String getSerialPortPath() {
+        return serialPortPath;
+    }
+    public void setSerialPortPath(String serialPortPath) {
+        this.serialPortPath = serialPortPath;
+    }
+    public int getBaudRate() {
+        return baudRate;
+    }
+    public void setBaudRate(int baudRate) {
+        this.baudRate = baudRate;
+    }
+    
 }
